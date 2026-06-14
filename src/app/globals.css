@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* Tailwind v4: make the `dark:` variant respond to a `.dark` class (or any
+   ancestor with it) instead of the OS `prefers-color-scheme`. This is what
+   makes the next-themes toggle and our per-page forced-dark wrappers work. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+:root {
+  --primary: #1c6ef2;
+  --secondary: #f4f6fa;
+  --accent: #ffb800;
+  --text-primary: #1d1d1d;
+  --text-secondary: #4b4b4b;
+  --success: #4ad77c;
+  --danger: #ff4d4d;
+  --border: #e5e7eb;
+  --white: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  font-family: "Inter", "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--secondary);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Dark mode base (driven by the `.dark` class on <html> via next-themes). */
+.dark body {
+  background: #09090b;
+  color: #ededed;
+}
+
+/* Hide scrollbar for horizontal sections */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}

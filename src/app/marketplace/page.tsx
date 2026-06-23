@@ -19,6 +19,15 @@ export default function Home(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 40;
 
+  const categories = [
+    { id: 'all', label: 'All' },
+    { id: 'electronics', label: 'Electronics' },
+    { id: 'books', label: 'Books' },
+    { id: 'furniture', label: 'Furniture' },
+    { id: 'clothing', label: 'Clothing' },
+    { id: 'sports', label: 'Sports' },
+  ];
+
   useEffect(() => {
     fetchProducts();
 
@@ -84,14 +93,6 @@ export default function Home(): JSX.Element {
       }
   };
 
-  const categories = [
-    { id: 'all', label: 'All Products' },
-    { id: 'electronics', label: 'Electronics' },
-    { id: 'books', label: 'Books' },
-    { id: 'furniture', label: 'Furniture' },
-    { id: 'clothing', label: 'Clothing' },
-    { id: 'sports', label: 'Sports' }
-  ];
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -118,12 +119,6 @@ export default function Home(): JSX.Element {
             />
           </div>
         </div>
-
-        <CategoryNav
-          categories={categories}
-          currentCategory={currentCategory}
-          onSelectCategory={setCurrentCategory}
-        />
 
         {/* Flash Sales Section */}
         {products.length > 0 && currentCategory === 'all' && !searchQuery.trim() && (

@@ -33,7 +33,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
     const mainClass = isHomeFeed
         ? 'w-full overflow-hidden mt-[70px] mb-[65px] h-[calc(100dvh-135px)] md:mt-0 md:mb-0 md:h-[100dvh] md:pl-[72px]'
         : isChatPage
-        ? 'mt-[70px] mb-[65px] md:mt-0 md:mb-0 w-full overflow-hidden h-[calc(100vh-135px)] md:h-screen md:pl-[72px]'
+        ? 'mb-[65px] md:mb-0 w-full overflow-hidden h-[calc(100dvh-65px)] md:h-screen md:pl-[72px]'
         : 'mt-[70px] mb-[65px] md:mt-0 md:mb-0 w-full min-h-[calc(100vh-135px)] md:min-h-screen md:pl-[72px]';
 
     return (

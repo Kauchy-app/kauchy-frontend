@@ -38,6 +38,21 @@ body {
   color: #ededed;
 }
 
+/* Chat page — liquid glass backdrop that the frosted panels sit on top of. */
+.chat-bg {
+  background:
+    radial-gradient(900px 500px at 0% 0%, rgba(99, 102, 241, 0.06), transparent 55%),
+    radial-gradient(900px 500px at 100% 100%, rgba(139, 92, 246, 0.05), transparent 55%),
+    #eef1f6;
+}
+
+.dark .chat-bg {
+  background:
+    radial-gradient(900px 500px at 0% 0%, rgba(99, 102, 241, 0.12), transparent 55%),
+    radial-gradient(900px 500px at 100% 100%, rgba(139, 92, 246, 0.10), transparent 55%),
+    #0a0a0f;
+}
+
 /* Hide scrollbar for horizontal sections */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;

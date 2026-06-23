@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { Zap } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import { useAuthGate } from '../context/AuthGateContext';
@@ -79,11 +81,15 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
     const { showToast } = useToast();
     const { user } = useAuth();
     const { requireAuth } = useAuthGate();
+    const router = useRouter();
 
     // Like state
     const [liked, setLiked] = useState(false);
     const [likesCount, setLikesCount] = useState(0);
     const [likeLoading, setLikeLoading] = useState(false);
+
+    // Buy Now state
+    const [buyingNow, setBuyingNow] = useState(false);
 
     // Review state
     const [reviews, setReviews] = useState<Review[]>([]);
@@ -206,6 +212,55 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
         addToCart(product, quantity);
         onClose();
         setQuantity(1); // Reset
+    };
+
+    const handleBuyNow = async () => {
+        if (!requireAuth('buy this item')) return;
+        if (buyingNow) return;
+        setBuyingNow(true);
+        const API = process.env.NEXT_PUBLIC_API_URL;
+        const auth = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.access}` };
+        try {
+            const prodId = product._id || product.id;
+
+            // 1. Add to cart.
+            const addRes = await fetch(`${API}/cart/cart-items/${prodId}`, {
+                method: 'POST', headers: auth, body: JSON.stringify({ quantity }),
+            });
+            if (!addRes.ok) {
+                const d = await addRes.json().catch(() => ({}));
+                showToast(d.message || d.error || 'Could not start purchase', 'error');
+                return;
+            }
+
+            // 2. Find the cart item.
+            const cartRes = await fetch(`${API}/cart/cart-items/`, { headers: auth });
+            if (!cartRes.ok) { showToast('Could not load cart', 'error'); return; }
+            const cartItems = await cartRes.json();
+            const cartItem = Array.isArray(cartItems) ? cartItems.find((ci: any) => {
+                const pId = ci.product_id || (ci.product && (ci.product.id || ci.product._id));
+                return String(pId) === String(prodId);
+            }) : null;
+            if (!cartItem) { showToast('Could not find cart item', 'error'); return; }
+
+            // 3. Create order (wallet payment).
+            const orderRes = await fetch(`${API}/payment/create-order/`, {
+                method: 'POST', headers: auth,
+                body: JSON.stringify({ cart_id: [cartItem.id], payment_method: 'wallet' }),
+            });
+            const orderData = await orderRes.json();
+            if (orderRes.ok) {
+                showToast('Order placed successfully!', 'success');
+                onClose();
+                router.push('/orders');
+            } else {
+                showToast(orderData.error || orderData.message || 'Payment failed', 'error');
+            }
+        } catch {
+            showToast('Network error', 'error');
+        } finally {
+            setBuyingNow(false);
+        }
     };
 
     const images = product.image_url && product.image_url.length > 0 ? product.image_url : ['/placeholder.svg'];
@@ -438,7 +493,18 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
 
                         {/* Action Buttons */}
                         <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-gray-100 dark:border-zinc-800 sticky bottom-0 bg-white dark:bg-zinc-900 pb-2 md:relative md:border-t-0 md:bg-transparent md:pb-0">
-                            <button className="w-full py-3 px-6 bg-amber-400 text-white rounded-lg font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,184,0,0.3)] text-sm border-none cursor-pointer" onClick={handleAddToCart}>Add to Cart</button>
+                            <div className="flex gap-2 w-full">
+                                <button className="flex-1 py-3 px-6 bg-amber-400 text-white rounded-lg font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,184,0,0.3)] text-sm border-none cursor-pointer" onClick={handleAddToCart}>Add to Cart</button>
+                                <button
+                                    className="flex-1 flex items-center justify-center gap-1.5 py-3 px-6 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white rounded-lg font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(5,150,105,0.3)] text-sm border-none cursor-pointer"
+                                    onClick={handleBuyNow}
+                                    disabled={buyingNow}
+                                >
+                                    {buyingNow
+                                        ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        : <><Zap size={16} /> Buy Now</>}
+                                </button>
+                            </div>
                             <div className="flex gap-2 w-full">
                                 <button className="flex-1 py-3 px-6 bg-blue-600 text-white rounded-lg font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(28,110,242,0.3)] text-sm border border-blue-600 cursor-pointer" onClick={() => {
                                     const productUrl = new URL(window.location.origin);

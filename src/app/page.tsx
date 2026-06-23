@@ -47,8 +47,8 @@ function FeedContent() {
     const swiperRef = useRef<SwiperType | null>(null);
     const viewedItemsRef = useRef<Set<string>>(new Set());
 
-    // Bookmarks live client-side only (no backend), persisted to localStorage.
-    const [bookmarks, setBookmarks] = useState<number[]>([]);
+    // Bookmarks are server-side — toggled via the Kauch API so they sync across devices.
+    // The per-post fields `is_bookmarked_by_user` and `bookmarks_count` come from the feed response.
     // Which post id currently shows the double-tap heart burst.
     const [burstId, setBurstId] = useState<number | null>(null);
 
@@ -59,22 +59,36 @@ function FeedContent() {
     const pressStart = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
     const lastTap = useRef<{ t: number; id: number | null }>({ t: 0, id: null });
 
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem('kauch_bookmarks');
-            if (stored) setBookmarks(JSON.parse(stored));
-        } catch { /* ignore */ }
-    }, []);
+    const toggleBookmark = useCallback(async (feedObj: { type: 'kauch'; item: any }) => {
+        const postId = feedObj.item.id;
+        if (!postId) return;
+        if (!requireAuth('save posts')) return;
 
-    const toggleBookmark = useCallback((item: any) => {
-        // Side effects (toast, storage) must stay OUT of the state updater — React
-        // calls updaters twice in dev StrictMode, which double-fired the toast.
-        const exists = bookmarks.includes(item.id);
-        const next = exists ? bookmarks.filter(id => id !== item.id) : [...bookmarks, item.id];
-        setBookmarks(next);
-        try { localStorage.setItem('kauch_bookmarks', JSON.stringify(next)); } catch { /* ignore */ }
-        showToast(exists ? 'Removed from bookmarks' : 'Saved to bookmarks', 'success');
-    }, [bookmarks, showToast]);
+        const wasBookmarked = feedObj.item.is_bookmarked_by_user;
+        // Optimistic update
+        setFeedItems(prev => prev.map(f =>
+            f.item.id === postId
+                ? { ...f, item: { ...f.item, is_bookmarked_by_user: !wasBookmarked, bookmarks_count: Math.max(0, (f.item.bookmarks_count || 0) + (wasBookmarked ? -1 : 1)) } }
+                : f
+        ));
+
+        try {
+            const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+            if (user?.access) headers['Authorization'] = `Bearer ${user.access}`;
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/kauch/posts/${postId}/bookmark/`, { method: 'POST', headers });
+            if (!res.ok) throw new Error('Failed');
+            const data = await res.json();
+            showToast(data.bookmarked ? 'Saved to bookmarks' : 'Removed from bookmarks', 'success');
+        } catch {
+            // Revert on failure
+            setFeedItems(prev => prev.map(f =>
+                f.item.id === postId
+                    ? { ...f, item: { ...f.item, is_bookmarked_by_user: wasBookmarked, bookmarks_count: Math.max(0, (f.item.bookmarks_count || 0) + (wasBookmarked ? 1 : -1)) } }
+                    : f
+            ));
+            showToast('Failed to update bookmark', 'error');
+        }
+    }, [user, requireAuth, showToast]);
 
     const prevUidRef = useRef<any>(undefined);
     useEffect(() => {
@@ -127,8 +141,10 @@ function FeedContent() {
                     created_at: p.created_at,
                     likes_count: p.likes_count,
                     comments_count: p.comments_count,
-                    shares_count: 0,
+                    shares_count: p.shares_count || 0,
+                    bookmarks_count: p.bookmarks_count || 0,
                     is_liked_by_user: p.is_liked_by_user,
+                    is_bookmarked_by_user: p.is_bookmarked_by_user || false,
                     products: p.tagged_products || [],
                 },
             }));
@@ -292,7 +308,7 @@ function FeedContent() {
         if (pressTimer.current) clearTimeout(pressTimer.current);
         pressTimer.current = setTimeout(() => {
             longPressFired.current = true;
-            toggleBookmark(item);
+            toggleBookmark({ type: 'kauch', item });
         }, 500);
     };
 
@@ -471,11 +487,11 @@ function FeedContent() {
                                     </button>
 
                                     {/* Bookmark Button (also triggered by long-press on the media) */}
-                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-lg group" onClick={(e) => { e.stopPropagation(); toggleBookmark(feedObj.item); }}>
-                                        <div className={`p-2 rounded-full transition-all group-hover:bg-white/10 ${bookmarks.includes(feedObj.item.id) ? 'text-amber-400' : 'text-white'}`}>
-                                            <Bookmark size={30} fill={bookmarks.includes(feedObj.item.id) ? 'currentColor' : 'none'} />
+                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-lg group" onClick={(e) => { e.stopPropagation(); toggleBookmark(feedObj); }}>
+                                        <div className={`p-2 rounded-full transition-all group-hover:bg-white/10 ${feedObj.item.is_bookmarked_by_user ? 'text-amber-400' : 'text-white'}`}>
+                                            <Bookmark size={30} fill={feedObj.item.is_bookmarked_by_user ? 'currentColor' : 'none'} />
                                         </div>
-                                        <span className="text-xs font-semibold">Save</span>
+                                        <span className="text-xs font-semibold">{feedObj.item.bookmarks_count || 0}</span>
                                     </button>
                                 </div>
 
@@ -616,9 +632,9 @@ function FeedContent() {
                         <button onClick={() => { handleShare(ctxMenu.item); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">
                             <Share2 size={18} /> Share
                         </button>
-                        <button onClick={() => { toggleBookmark(ctxMenu.item); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">
-                            <Bookmark size={18} className={bookmarks.includes(ctxMenu.item.id) ? 'text-amber-400' : ''} fill={bookmarks.includes(ctxMenu.item.id) ? 'currentColor' : 'none'} />
-                            {bookmarks.includes(ctxMenu.item.id) ? 'Saved' : 'Save'}
+                        <button onClick={() => { toggleBookmark({ type: 'kauch', item: ctxMenu.item }); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">
+                            <Bookmark size={18} className={ctxMenu.item.is_bookmarked_by_user ? 'text-amber-400' : ''} fill={ctxMenu.item.is_bookmarked_by_user ? 'currentColor' : 'none'} />
+                            {ctxMenu.item.is_bookmarked_by_user ? 'Saved' : 'Save'}
                         </button>
                         {Array.isArray(ctxMenu.item.products) && ctxMenu.item.products.length > 0 && (
                             <button onClick={() => { setProductSheetOpen(true); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">

@@ -198,6 +198,7 @@ export default function Navbar() {
     // (it's `hidden md:flex`) and these two bars are the navigation instead.
     const hideHeaderOnDesktop = 'md:hidden';
     const hideBottomNavOnDesktop = 'md:hidden';
+    const isChatMobile = pathname === '/chat'; // On chat, hide the top header; the page is a full-height messenger
     const navIconClass = isDarkNav ? 'text-gray-200 hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100';
     const bnActive = isDarkNav ? 'text-blue-500' : 'text-blue-600';
     const bnInactive = isDarkNav ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900';
@@ -209,7 +210,8 @@ export default function Navbar() {
 
     return (
         <>
-        {/* TOP HEADER */}
+        {/* TOP HEADER — hidden on chat page (full-height messenger) */}
+        {!isChatMobile && (
         <header className={`fixed top-0 left-0 right-0 backdrop-blur-md border-b z-[100] py-[12px] px-[20px] shadow-legacy-nav h-[70px] ${hideHeaderOnDesktop} ${isDarkNav ? 'bg-black border-gray-800' : 'bg-[#f4f6fa] border-gray-200'}`}>
             <div className={`${isFullWidthPage ? '' : 'max-w-[1400px]'} mx-auto flex items-center justify-between gap-5 h-full`}>
                 {/* Left Section: Logo */}
@@ -389,6 +391,7 @@ export default function Navbar() {
                 </div>
             </div>
         </header>
+        )}
 
         {/* BOTTOM NAVIGATION BAR */}
         <nav className={`fixed bottom-0 left-0 right-0 border-t z-[100] pb-safe ${hideBottomNavOnDesktop} ${isDarkNav ? 'bg-black border-gray-800 shadow-[0_-4px_10px_rgba(0,0,0,0.4)]' : 'bg-white border-gray-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]'}`}>

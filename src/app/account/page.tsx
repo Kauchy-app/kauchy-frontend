@@ -70,7 +70,7 @@ export default function AccountPage() {
                     <div className="h-24 bg-gradient-to-r from-indigo-500 via-violet-500 to-blue-500 relative">
                         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(600px_200px_at_20%_0%,rgba(255,255,255,0.4),transparent_60%)]" />
                     </div>
-                    <div className="px-6 pb-6 -mt-12 flex flex-col items-center text-center">
+                    <div className="relative z-10 px-6 pb-6 -mt-12 flex flex-col items-center text-center">
                         <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-white dark:ring-zinc-900 bg-gray-100 dark:bg-zinc-800 shadow-lg">
                             <Image src={avatar} alt={username} width={96} height={96} className="w-full h-full object-cover" />
                         </div>

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Zap } from 'lucide-react';
+import Image from 'next/image';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import { useAuthGate } from '../context/AuthGateContext';
@@ -309,14 +310,16 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-10">
                     {/* Image Gallery */}
                     <div className="flex flex-col gap-3">
-                        <div className="w-full h-[300px] bg-gray-50 dark:bg-zinc-800 rounded-xl overflow-hidden">
-                            <img src={mainImage} alt={product.product_name} className="w-full h-full object-cover" />
+                        <div className="relative w-full h-[300px] bg-gray-50 dark:bg-zinc-800 rounded-xl overflow-hidden">
+                            <Image src={mainImage} alt={product.product_name} fill sizes="(max-width: 768px) 100vw, 450px" className="object-cover" />
                         </div>
                         <div className="flex flex-wrap gap-3 p-1">
                             {images.map((img, i) => (
-                                <img
+                                <Image
                                     key={i}
                                     src={img}
+                                    width={60}
+                                    height={60}
                                     className={`w-[60px] h-[60px] rounded-md cursor-pointer object-cover border-2 transition-all duration-200 hover:opacity-80 ${i === activeImage ? 'border-amber-400' : 'border-transparent'}`}
                                     alt={`Thumbnail ${i}`}
                                     onClick={() => setActiveImage(i)}
@@ -476,7 +479,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                                 <h3 className="text-base text-gray-900 dark:text-white mb-3 font-semibold">Seller Information</h3>
                                 <div className="flex justify-between items-center p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
                                     <div className="flex items-center gap-3">
-                                        <img src={product.pfp || '/placeholder.svg'} alt="Vendor" className="w-[60px] h-[60px] rounded-full object-cover" />
+                                        <Image src={product.pfp || '/placeholder.svg'} alt="Vendor" width={60} height={60} className="w-[60px] h-[60px] rounded-full object-cover" />
                                         <div className="flex flex-col">
                                             <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">{product.vendor_username || 'Unknown Vendor'}</h4>
                                             <div className="flex items-center">

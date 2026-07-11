@@ -6,7 +6,10 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Image as ImageIcon, X, Reply, Check, CheckCheck } from 'lucide-react';
 import LoadingModal from '@/components/LoadingModal';
-import VoiceRecorder from '@/components/VoiceRecorder';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+
+const VoiceRecorder = dynamic(() => import('@/components/VoiceRecorder'), { ssr: false });
 
 interface ReplyDetails {
     id: number;
@@ -122,7 +125,7 @@ const ProductLinkPreview = ({ url }: { url: string }) => {
     return (
         <div className="mt-2 text-gray-900 dark:text-gray-100 bg-white/80 dark:bg-white/[0.06] backdrop-blur-sm rounded-xl border border-black/[0.04] dark:border-white/[0.04] cursor-pointer max-w-[260px] overflow-hidden transition-all hover:shadow-md" onClick={() => window.open(url, '_blank')}>
             <div className="h-[120px] bg-black/[0.02] dark:bg-white/[0.03] overflow-hidden relative">
-               <img src={(product.image_url && product.image_url[0]) || '/placeholder.svg'} className="w-full h-full object-cover" alt="Product" />
+               <Image src={(product.image_url && product.image_url[0]) || '/placeholder.svg'} fill sizes="260px" className="object-cover" alt="Product" />
                <div className="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">
                    ₦{product.price}
                </div>
@@ -533,7 +536,7 @@ export default function ChatPage() {
                                 onClick={() => selectConversation(conv)}
                             >
                                 <div className="relative">
-                                    <img src={conv.other_user.profile_picture || '/placeholder.svg'} alt={conv.other_user.username} className="w-12 h-12 rounded-full object-cover shrink-0" />
+                                    <Image src={conv.other_user.profile_picture || '/placeholder.svg'} alt={conv.other_user.username} width={48} height={48} className="w-12 h-12 rounded-full object-cover shrink-0" />
                                     {conv.other_user.status && (
                                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border border-white rounded-full shadow-sm" />
                                     )}
@@ -583,7 +586,7 @@ export default function ChatPage() {
                                 </button>
                                 <div className="flex items-center gap-3 cursor-pointer flex-1 min-w-0 hover:opacity-90 transition-opacity" onClick={() => router.push(`/vendor-profile?vendorId=${activeConv?.other_user.id}`)}>
                                     <div className="relative">
-                                        <img src={activeConv?.other_user.profile_picture || '/placeholder.svg'} alt="User" className="w-10 h-10 rounded-full object-cover shrink-0 sm:w-9 sm:h-9" />
+                                        <Image src={activeConv?.other_user.profile_picture || '/placeholder.svg'} alt="User" width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0 sm:w-9 sm:h-9" />
                                         {activeConv?.other_user.status && (
                                             <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border border-white dark:border-zinc-900 rounded-full" />
                                         )}

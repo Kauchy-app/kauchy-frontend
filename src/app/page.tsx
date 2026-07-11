@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { useAuthGate } from '@/context/AuthGateContext';
 import FeedSidebar from '@/components/FeedSidebar';
+import Image from 'next/image';
 
 // Swiper integration
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -450,9 +451,9 @@ function FeedContent() {
                                         className="relative mb-2 cursor-pointer group hover:scale-105 transition-transform"
                                         onClick={(e) => { e.stopPropagation(); if (feedObj.item.kauch_id) router.push(`/kauch/${feedObj.item.kauch_id}`); }}
                                     >
-                                        <div className="w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-zinc-800 shadow-lg">
+                                        <div className="relative w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-zinc-800 shadow-lg">
                                             {feedObj.item.vendor_avatar ? (
-                                                <img src={feedObj.item.vendor_avatar} alt="Vendor" className="w-full h-full object-cover" />
+                                                <Image src={feedObj.item.vendor_avatar} alt="Vendor" fill sizes="48px" className="object-cover" />
                                             ) : (
                                                 <UserCircle className="w-full h-full text-gray-400" />
                                             )}
@@ -522,9 +523,11 @@ function FeedContent() {
                                                         onClick={(e) => { e.stopPropagation(); openProduct(product, feedObj.item.products); }}
                                                         className="shrink-0 w-[170px] flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-xl p-1.5 shadow-lg hover:bg-white active:scale-[0.98] transition-all text-left"
                                                     >
-                                                        <img
+                                                        <Image
                                                             src={product.image_url?.[0] || '/placeholder.svg'}
                                                             alt={product.product_name}
+                                                            width={48}
+                                                            height={48}
                                                             className="w-12 h-12 rounded-lg object-cover shrink-0 bg-gray-100"
                                                         />
                                                         <div className="min-w-0 flex-1 pr-1">
@@ -595,9 +598,11 @@ function FeedContent() {
                                 onClick={() => { setProductSheetOpen(false); openProduct(product, activeItem.item.products); }}
                                 className="w-full flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-white active:scale-[0.99] transition-all text-left"
                             >
-                                <img
+                                <Image
                                     src={product.image_url?.[0] || '/placeholder.svg'}
                                     alt={product.product_name}
+                                    width={64}
+                                    height={64}
                                     className="w-16 h-16 rounded-lg object-cover shrink-0 bg-gray-100"
                                 />
                                 <div className="min-w-0 flex-1">
@@ -732,10 +737,13 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
         if (images.length === 1) {
             return (
                 <div className="w-full h-full relative md:w-auto md:h-auto">
-                    <img
+                    <Image
                         src={images[0]}
                         alt={content.caption || 'Post'}
-                        className="w-full h-full object-contain md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw] md:rounded-2xl md:shadow-2xl"
+                        fill
+                        sizes="100vw"
+                        priority
+                        className="object-contain md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw] md:rounded-2xl md:shadow-2xl"
                     />
                 </div>
             );
@@ -792,7 +800,9 @@ function ImageCarousel({ images, caption }: { images: string[]; caption?: string
             >
                 {images.map((src, i) => (
                     <SwiperSlide key={`${src}-${i}`}>
-                        <img src={src} alt={caption || `Image ${i + 1}`} className="w-full h-full object-contain" />
+                        <div className="relative w-full h-full">
+                            <Image src={src} alt={caption || `Image ${i + 1}`} fill sizes="100vw" className="object-contain" />
+                        </div>
                     </SwiperSlide>
                 ))}
             </Swiper>

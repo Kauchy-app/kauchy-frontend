@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Bookmark, Play, ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
 
 interface BookmarkedPost {
     id: number;
@@ -107,7 +108,7 @@ export default function BookmarksPage() {
                                     className="relative bg-gray-100 dark:bg-zinc-900 rounded-xl overflow-hidden cursor-pointer group transition-all hover:scale-[1.02] aspect-[3/4]"
                                 >
                                     {thumb ? (
-                                        <img src={thumb} alt="" className="w-full h-full object-cover" />
+                                        <Image src={thumb} alt="" fill sizes="(max-width: 768px) 50vw, 240px" className="object-cover" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-zinc-800 text-gray-400">
                                             <Bookmark size={32} />

@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useToast } from '@/context/ToastContext';
 import LoadingModal from '@/components/LoadingModal';
 import { UserProfile, University } from '@/types';
 import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Camera, Pencil, Mail, Phone, GraduationCap, User as UserIcon } from 'lucide-react';
 
 
 export default function ProfilePage() {
@@ -154,156 +155,170 @@ export default function ProfilePage() {
     if (!user) return <AuthWall reason="view your profile" loading={authLoading} />;
     if (loading && !profile) return <LoadingModal />;
 
+    const inputBase = "w-full px-3.5 py-3 rounded-xl text-sm text-gray-900 dark:text-white transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500/60 border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-sm dark:placeholder-gray-500";
+    const inputDisabled = "w-full px-3.5 py-3 rounded-xl text-sm text-gray-500 dark:text-gray-400 border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.03] dark:bg-white/[0.02] cursor-not-allowed";
+
     return (
-        <div className="dark contents">
-        <main className="max-w-[640px] mx-auto px-4 py-6 flex flex-col gap-6">
-            {loading && <LoadingModal />}
+        <main className="relative min-h-[calc(100dvh-135px)] md:min-h-screen chat-bg overflow-hidden">
+            <div className="relative max-w-[640px] mx-auto px-4 py-6 sm:py-8 flex flex-col gap-5">
+                {loading && <LoadingModal />}
 
-            {/* Profile Header Card */}
-            <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 sm:p-6 shadow-legacy-card flex flex-col items-center text-center gap-5">
-                <div className="flex flex-col items-center gap-3">
-                    <div
-                        className="w-[120px] h-[120px] rounded-full overflow-hidden bg-[#f4f6fa] dark:bg-zinc-800 cursor-pointer transition-transform duration-300 hover:scale-105"
-                        onClick={() => document.getElementById('photoInput')?.click()}
-                    >
-                        <img
-                            src={profile?.profile_url || profile?.pfp || "/placeholder.svg"}
-                            alt="Profile"
-                            className="w-full h-full object-cover"
-                        />
+                {/* Profile Header Card */}
+                <div className="relative rounded-3xl overflow-hidden border border-black/5 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-xl shadow-sm">
+                    <div className="h-28 bg-gradient-to-r from-indigo-500 via-violet-500 to-blue-500 relative">
+                        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(600px_200px_at_20%_0%,rgba(255,255,255,0.4),transparent_60%)]" />
                     </div>
-                    <button
-                        className="bg-[#1c6ef2] text-white px-4 py-2 text-xs rounded-lg hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(28,110,242,0.3)] transition-all font-semibold"
-                        onClick={() => document.getElementById('photoInput')?.click()}
-                    >
-                        Change Photo
-                    </button>
-                    <input type="file" id="photoInput" hidden onChange={handlePhotoChange} accept="image/*" />
+                    <div className="px-6 pb-6 -mt-14 flex flex-col items-center text-center">
+                        <div className="relative">
+                            <div
+                                className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-white dark:ring-zinc-900 bg-gray-100 dark:bg-zinc-800 shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105"
+                                onClick={() => document.getElementById('photoInput')?.click()}
+                            >
+                                <Image
+                                    src={profile?.profile_url || profile?.pfp || "/placeholder.svg"}
+                                    alt="Profile"
+                                    width={112}
+                                    height={112}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <button
+                                onClick={() => document.getElementById('photoInput')?.click()}
+                                aria-label="Change photo"
+                                className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-indigo-500 hover:bg-indigo-600 text-white flex items-center justify-center shadow-md ring-2 ring-white dark:ring-zinc-900 transition-colors"
+                            >
+                                <Camera size={16} />
+                            </button>
+                            <input type="file" id="photoInput" hidden onChange={handlePhotoChange} accept="image/*" />
+                        </div>
+
+                        <h1 className="mt-3 text-2xl font-bold text-gray-900 dark:text-white">{profile?.username}</h1>
+                        {profile?.role && (
+                            <span className="inline-block mt-1.5 bg-indigo-500/10 dark:bg-indigo-400/10 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20 dark:border-indigo-400/20 px-3 py-0.5 rounded-full text-xs font-semibold capitalize">
+                                {profile.role}
+                            </span>
+                        )}
+                    </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-2">
-                    <h1 className="text-2xl font-bold text-[#1d1d1d] dark:text-white mb-2">{profile?.username}</h1>
-                    <span className="inline-block bg-[#1c6ef2] text-white px-3 py-1.5 rounded-full text-xs font-semibold">{profile?.role}</span>
-                </div>
-            </div>
+                {/* Account Information Card */}
+                <div className="rounded-3xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6 shadow-sm">
+                    <div className="flex items-center justify-between mb-5">
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Account Information</h2>
+                        {!isEditing && (
+                            <button
+                                onClick={startEdit}
+                                className="flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-300 bg-indigo-500/10 dark:bg-indigo-400/10 border border-indigo-500/20 dark:border-indigo-400/20 px-3 py-1.5 rounded-lg hover:bg-indigo-500/15 transition-colors"
+                            >
+                                <Pencil size={13} /> Edit
+                            </button>
+                        )}
+                    </div>
 
-            {/* Account Information Card */}
-            <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 sm:p-6 shadow-legacy-card">
-                <h2 className="text-lg font-semibold text-[#1d1d1d] dark:text-white mb-5">Account Information</h2>
+                    <div className="mb-4">
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                            <UserIcon size={14} className="text-gray-400" /> Username
+                        </label>
+                        <input type="text" className={inputDisabled} value={profile?.username || ''} disabled />
+                    </div>
 
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-[#1d1d1d] dark:text-gray-100 mb-2">Username</label>
-                    <input
-                        type="text"
-                        className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-[#1d1d1d] dark:text-white transition-all duration-300 focus:outline-none focus:border-[#1c6ef2] focus:ring-4 focus:ring-[#1c6ef2]/10 disabled:bg-[#f4f6fa] dark:disabled:bg-zinc-800 disabled:cursor-not-allowed bg-white dark:bg-zinc-800 dark:placeholder-gray-500"
-                        value={profile?.username || ''}
-                        disabled
-                    />
-                </div>
+                    <div className="mb-4">
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                            <Mail size={14} className="text-gray-400" /> Email
+                        </label>
+                        <input type="email" className={inputDisabled} value={profile?.email || ''} disabled />
+                    </div>
 
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-[#1d1d1d] dark:text-gray-100 mb-2">Email</label>
-                    <input
-                        type="email"
-                        className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-[#1d1d1d] dark:text-white transition-all duration-300 focus:outline-none focus:border-[#1c6ef2] focus:ring-4 focus:ring-[#1c6ef2]/10 disabled:bg-[#f4f6fa] dark:disabled:bg-zinc-800 disabled:cursor-not-allowed bg-white dark:bg-zinc-800 dark:placeholder-gray-500"
-                        value={profile?.email || ''}
-                        disabled
-                    />
-                </div>
+                    <div className="mb-4">
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                            <Phone size={14} className="text-gray-400" /> Phone Number
+                        </label>
+                        <input type="text" className={inputDisabled} value={profile?.phone || ''} disabled />
+                    </div>
 
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-[#1d1d1d] dark:text-gray-100 mb-2">Phone Number</label>
-                    <input
-                        type="text"
-                        className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-[#1d1d1d] dark:text-white transition-all duration-300 focus:outline-none focus:border-[#1c6ef2] focus:ring-4 focus:ring-[#1c6ef2]/10 disabled:bg-[#f4f6fa] dark:disabled:bg-zinc-800 disabled:cursor-not-allowed bg-white dark:bg-zinc-800 dark:placeholder-gray-500"
-                        value={profile?.phone || ''}
-                        disabled
-                    />
-                </div>
+                    <div className="mb-4">
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                            <Pencil size={14} className="text-gray-400" /> Bio
+                        </label>
+                        {isEditing ? (
+                            <textarea
+                                className={`${inputBase} min-h-[88px] max-h-[300px] leading-relaxed`}
+                                placeholder="Tell others a bit about yourself…"
+                                value={editForm.bio}
+                                onChange={e => setEditForm({ ...editForm, bio: e.target.value })}
+                            />
+                        ) : (
+                            <p className="w-full px-3.5 py-3 rounded-xl text-sm text-gray-600 dark:text-gray-300 border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.03] dark:bg-white/[0.02] min-h-[88px] leading-relaxed whitespace-pre-wrap">
+                                {profile?.bio || <span className="text-gray-400 dark:text-gray-500">No bio added yet.</span>}
+                            </p>
+                        )}
+                    </div>
 
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-[#1d1d1d] dark:text-gray-100 mb-2">Bio</label>
-                    {isEditing ? (
-                        <textarea
-                            className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-[#1d1d1d] dark:text-white transition-all duration-300 focus:outline-none focus:border-[#1c6ef2] focus:ring-4 focus:ring-[#1c6ef2]/10 min-h-[88px] max-h-[300px] leading-relaxed dark:bg-zinc-800 dark:placeholder-gray-500"
-                            value={editForm.bio}
-                            onChange={e => setEditForm({ ...editForm, bio: e.target.value })}
-                        />
-                    ) : (
-                        <textarea
-                            className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-[#1d1d1d] dark:text-white transition-all duration-300 disabled:bg-[#f4f6fa] dark:disabled:bg-zinc-800 disabled:cursor-not-allowed bg-white dark:bg-zinc-800 min-h-[88px] max-h-[300px] leading-relaxed dark:placeholder-gray-500"
-                            value={profile?.bio || ''}
-                            disabled
-                        />
+                    <div className="mb-1">
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                            <GraduationCap size={14} className="text-gray-400" /> University
+                        </label>
+                        {isEditing ? (
+                            <select
+                                className={inputBase}
+                                value={editForm.institute}
+                                onChange={e => setEditForm({ ...editForm, institute: e.target.value })}
+                            >
+                                <option value="">Select University</option>
+                                {universities.map((u, i) => <option key={i} value={u.name}>{u.name}</option>)}
+                            </select>
+                        ) : (
+                            <input type="text" className={inputDisabled} value={profile?.institute || ''} placeholder="Not set" disabled />
+                        )}
+                    </div>
+
+                    {isEditing && (
+                        <div className="flex flex-col-reverse sm:flex-row gap-3 mt-5">
+                            <button
+                                className="flex-1 py-3 px-6 rounded-xl text-sm font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-gray-700 dark:text-gray-200 hover:bg-black/[0.07] dark:hover:bg-white/[0.1] transition-colors"
+                                onClick={() => setIsEditing(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="flex-1 py-3 px-6 rounded-xl text-sm font-semibold bg-indigo-500 text-white hover:bg-indigo-600 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/25 transition-all"
+                                onClick={handleSave}
+                            >
+                                Save Changes
+                            </button>
+                        </div>
                     )}
                 </div>
 
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-[#1d1d1d] dark:text-gray-100 mb-2">University</label>
-                    {isEditing ? (
-                        <select
-                            className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-[#1d1d1d] dark:text-white transition-all duration-300 focus:outline-none focus:border-[#1c6ef2] focus:ring-4 focus:ring-[#1c6ef2]/10 bg-white dark:bg-zinc-800 dark:placeholder-gray-500"
-                            value={editForm.institute}
-                            onChange={e => setEditForm({ ...editForm, institute: e.target.value })}
-                        >
-                            <option value="">Select University</option>
-                            {universities.map((u, i) => <option key={i} value={u.name}>{u.name}</option>)}
-                        </select>
-                    ) : (
-                        <input
-                            type="text"
-                            className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-[#1d1d1d] dark:text-white transition-all duration-300 disabled:bg-[#f4f6fa] dark:disabled:bg-zinc-800 disabled:cursor-not-allowed bg-white dark:bg-zinc-800 dark:placeholder-gray-500"
-                            value={profile?.institute || ''}
-                            disabled
-                        />
-                    )}
-                </div>
-
-                {isEditing ? (
-                    <div className="flex flex-col gap-3 mt-5">
-                        <button
-                            className="w-full py-3 px-6 bg-[#ffb800] text-white rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,184,0,0.3)] transition-all duration-300"
-                            onClick={handleSave}
-                        >
-                            Save Changes
-                        </button>
-                        <button
-                            className="w-full py-3 px-6 bg-gray-100 dark:bg-zinc-800 text-[#1d1d1d] dark:text-white rounded-lg text-sm font-semibold hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all duration-300"
-                            onClick={() => setIsEditing(false)}
-                        >
-                            Cancel
-                        </button>
+                {/* Preferences Card */}
+                <div className="rounded-3xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6 shadow-sm">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Preferences</h2>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 dark:bg-indigo-400/10 flex items-center justify-center shrink-0">
+                                {mounted && currentTheme === 'dark'
+                                    ? <Sun size={18} className="text-amber-500" />
+                                    : <Moon size={18} className="text-indigo-600 dark:text-indigo-300" />}
+                            </div>
+                            <div>
+                                <p className="text-sm font-semibold text-gray-800 dark:text-white">Dark Mode</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Toggle dark mode appearance</p>
+                            </div>
+                        </div>
+                        {mounted && (
+                            <button
+                                onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
+                                role="switch"
+                                aria-checked={currentTheme === 'dark'}
+                                aria-label="Toggle dark mode"
+                                className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${currentTheme === 'dark' ? 'bg-indigo-500' : 'bg-gray-300'}`}
+                            >
+                                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${currentTheme === 'dark' ? 'translate-x-5' : ''}`} />
+                            </button>
+                        )}
                     </div>
-                ) : (
-                    <button
-                        className="w-full py-3 px-6 bg-[#ffb800] text-white rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,184,0,0.3)] transition-all duration-300 mt-5"
-                        onClick={startEdit}
-                    >
-                        Edit Profile
-                    </button>
-                )}
-            </div>
-
-            {/* Preferences Card */}
-            <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 sm:p-6 shadow-legacy-card">
-                <h2 className="text-lg font-semibold text-[#1d1d1d] dark:text-white mb-5">Preferences</h2>
-                <div className="flex items-center justify-between py-2">
-                    <div>
-                        <p className="text-sm font-medium text-[#1d1d1d] dark:text-white">Dark Mode</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Toggle dark mode appearance</p>
-                    </div>
-                    {mounted && (
-                        <button 
-                            onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
-                            className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-300 transition-colors shadow-sm"
-                            title="Toggle Dark Mode"
-                        >
-                            {currentTheme === 'dark' ? <Sun size={24} className="text-amber-500" /> : <Moon size={24} />}
-                        </button>
-                    )}
                 </div>
             </div>
         </main>
-        </div>
     );
 }

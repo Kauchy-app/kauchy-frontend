@@ -4,7 +4,10 @@ import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useToast } from '@/context/ToastContext';
 import { useRouter } from 'next/navigation';
-import VideoModal from '@/components/VideoModal';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+
+const VideoModal = dynamic(() => import('@/components/VideoModal'), { ssr: false });
 
 export default function InventoryPage() {
     const { user, loading: authLoading } = useAuth();
@@ -305,7 +308,9 @@ export default function InventoryPage() {
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4 sm:gap-6">
                     {activeTab === 'inventory' && products.map(p => (
                         <div key={p.id} className="bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-legacy-card hover:shadow-legacy-hover hover:-translate-y-1 transition-all duration-300">
-                            <img src={p.image_url?.[0] || '/placeholder.svg'} className="w-full h-40 object-cover bg-gray-50 dark:bg-zinc-800" alt={p.product_name} />
+                            <div className="relative w-full h-40 bg-gray-50 dark:bg-zinc-800 overflow-hidden">
+                                <Image src={p.image_url?.[0] || '/placeholder.svg'} fill sizes="(max-width: 768px) 50vw, 240px" className="object-cover" alt={p.product_name} />
+                            </div>
                             <div className="p-4">
                                 <div className="font-semibold text-[#1d1d1d] dark:text-white mb-1 truncate">{p.product_name}</div>
                                 <div className="text-[#ffb800] font-bold mb-2">₦{p.price}</div>
@@ -461,7 +466,7 @@ export default function InventoryPage() {
                                         <div className="flex flex-wrap gap-2 mt-3">
                                             {imagePreviews.map((src, idx) => (
                                                 <div key={idx} className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-800 group">
-                                                    <img src={src} className="w-full h-full object-cover bg-gray-50 dark:bg-zinc-800" alt={`Preview ${idx}`} />
+                                                    <Image src={src} fill sizes="96px" className="object-cover bg-gray-50 dark:bg-zinc-800" alt={`Preview ${idx}`} />
                                                     <button type="button" onClick={() => removeImage(idx)} className="absolute top-1 right-1 w-5 h-5 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
                                                 </div>
                                             ))}

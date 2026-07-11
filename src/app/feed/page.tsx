@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { useAuthGate } from '@/context/AuthGateContext';
 import FeedSidebar from '@/components/FeedSidebar';
+import Image from 'next/image';
 
 // Swiper integration
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -346,12 +347,16 @@ function ProductFeedView({ product, isActive }: { product: any, isActive: boolea
             >
                 {images.map((img: any, idx: number) => (
                     <SwiperSlide key={idx} className="w-full h-full flex items-center justify-center">
-                        <img 
-                            src={img} 
-                            alt={`${product.product_name} - ${idx + 1}`} 
-                            className="w-full h-full object-cover sm:object-contain transition-opacity duration-500 ease-in-out"
-                            style={{ opacity: isActive ? 1 : 0 }}
-                        />
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={img}
+                                alt={`${product.product_name} - ${idx + 1}`}
+                                fill
+                                sizes="100vw"
+                                className="object-cover sm:object-contain transition-opacity duration-500 ease-in-out"
+                                style={{ opacity: isActive ? 1 : 0 }}
+                            />
+                        </div>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -402,10 +407,13 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
     if (isPicture) {
         return (
             <div className="w-full h-full relative flex items-center justify-center bg-zinc-900 overflow-hidden">
-                <img
+                <Image
                     src={content.pictures}
                     alt={content.caption || 'content'}
-                    className="w-full h-full object-cover sm:object-contain"
+                    fill
+                    sizes="100vw"
+                    priority
+                    className="object-cover sm:object-contain"
                 />
             </div>
         );

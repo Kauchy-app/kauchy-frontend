@@ -3,7 +3,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useRouter } from 'next/navigation';
-import ProductModal from '@/components/ProductModal';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+
+const ProductModal = dynamic(() => import('@/components/ProductModal'), { ssr: false });
 
 interface CartItem {
     id: number;
@@ -295,12 +298,16 @@ export default function CartPage(): JSX.Element {
                                     className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-legacy-card hover:shadow-legacy-hover group transition-all duration-300 grid grid-cols-[100px_1fr] md:grid-cols-[200px_1fr_auto] gap-4 cursor-pointer hover:-translate-y-1"
                                     onClick={() => handleProductClick(item.product)}
                                 >
-                                    <img
-                                        src={imageSrc}
-                                        alt={name}
-                                        className="w-full h-[100px] md:h-[200px] rounded-lg object-cover bg-gray-50 dark:bg-zinc-800"
-                                        onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                                    />
+                                    <div className="relative w-full h-[100px] md:h-[200px] rounded-lg overflow-hidden bg-gray-50 dark:bg-zinc-800">
+                                        <Image
+                                            src={imageSrc}
+                                            alt={name}
+                                            fill
+                                            sizes="(max-width: 768px) 50vw, 240px"
+                                            className="object-cover"
+                                            onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                                        />
+                                    </div>
                                     <div className="flex flex-col justify-between py-1">
                                         <div>
                                             <div className="text-base font-semibold text-[#1d1d1d] dark:text-white mb-1">{name}</div>

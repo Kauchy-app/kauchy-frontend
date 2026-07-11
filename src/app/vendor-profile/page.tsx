@@ -3,6 +3,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useAuthGate } from '@/context/AuthGateContext';
+import Image from 'next/image';
 
 
 function VendorProfileContent() {
@@ -118,9 +119,11 @@ function VendorProfileContent() {
                     {/* Profile Card */}
                     <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 sm:p-8 shadow-legacy-card">
                         <div className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-6 items-center mb-8 pb-8 border-b border-gray-200 dark:border-zinc-800 text-center md:text-left">
-                            <img
+                            <Image
                                 src={vendor.info?.profile_url || '/placeholder.svg?height=120&width=120'}
                                 alt="Vendor"
+                                width={120}
+                                height={120}
                                 className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full object-cover mx-auto md:mx-0 bg-gray-100 dark:bg-zinc-800"
                             />
                             <div className="flex flex-col gap-1">
@@ -195,7 +198,9 @@ function VendorProfileContent() {
                             <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
                                 {products.length > 0 ? products.map(p => (
                                     <div key={p._id || p.id} className="bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-legacy-card cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-legacy-hover animate-fadeIn" onClick={() => router.push(`/feed?type=product&id=${p._id || p.id}&vendorId=${vendorId}`)}>
-                                        <img src={p.image_url?.[0] || '/placeholder.svg'} className="w-full h-[180px] object-cover bg-gray-50 dark:bg-zinc-800" alt={p.product_name} />
+                                        <div className="relative w-full h-[180px] bg-gray-50 dark:bg-zinc-800 overflow-hidden">
+                                            <Image src={p.image_url?.[0] || '/placeholder.svg'} fill sizes="(max-width: 768px) 50vw, 240px" className="object-cover" alt={p.product_name} />
+                                        </div>
                                         <div className="p-4">
                                             <div className="text-sm font-semibold text-gray-900 dark:text-white mb-1.5">{p.product_name}</div>
                                             <div className="text-base font-bold text-amber-400">₦{p.price}</div>

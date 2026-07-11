@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { Home, Store, MessageSquare, PlusSquare, ShoppingCart, Wallet, User, LogIn, UserPlus, Search } from 'lucide-react';
@@ -39,22 +40,22 @@ export default function LeftNav() {
                     setWalletBalance(typeof d.balance === 'string' ? parseFloat(d.balance) : d.balance);
                 }
             })
-            .catch(() => {});
+            .catch(() => { });
 
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/cart-items/`, { headers })
             .then(r => (r.ok ? r.json() : null))
             .then(d => { if (d) setCartCount(d?.length || 0); })
-            .catch(() => {});
+            .catch(() => { });
 
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/users/me/`, { headers })
             .then(r => (r.ok ? r.json() : null))
             .then(d => { if (d) setProfileAvatar(d?.profile_url || d?.pfp || ''); })
-            .catch(() => {});
+            .catch(() => { });
 
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/kauch/following/`, { headers })
             .then(r => (r.ok ? r.json() : null))
             .then(d => { if (Array.isArray(d)) setFollowing(d); })
-            .catch(() => {});
+            .catch(() => { });
     }, [user]);
 
     const navItems = [
@@ -75,7 +76,7 @@ export default function LeftNav() {
                 <img src="/logo.png" alt="Kauchy" className="h-9 w-9 object-contain group-hover:hidden" />
                 <div className="hidden group-hover:flex w-[144px] h-[48px] overflow-hidden items-center">
                     <img
-                        src="/kauchy_logo_dark.png"
+                        src="/inverted_logo.png"
                         alt="Kauchy"
                         className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none"
                     />
@@ -126,7 +127,7 @@ export default function LeftNav() {
                             >
                                 <span className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 shrink-0 flex items-center justify-center">
                                     {k.avatar_url
-                                        ? <img src={k.avatar_url} alt={k.name} className="w-full h-full object-cover" />
+                                        ? <Image src={k.avatar_url} alt={k.name} width={32} height={32} className="w-full h-full object-cover" />
                                         : <span className="text-xs font-bold text-gray-200">{k.name.charAt(0).toUpperCase()}</span>}
                                 </span>
                                 <span className="whitespace-nowrap text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -162,7 +163,7 @@ export default function LeftNav() {
                 >
                     <span className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 shrink-0 flex items-center justify-center">
                         {profileAvatar
-                            ? <img src={profileAvatar} alt="Profile" className="w-full h-full object-cover" />
+                            ? <Image src={profileAvatar} alt="Profile" width={32} height={32} className="w-full h-full object-cover" />
                             : <User size={18} className="text-gray-300" />}
                     </span>
                     <span className="whitespace-nowrap text-sm font-medium text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-200">

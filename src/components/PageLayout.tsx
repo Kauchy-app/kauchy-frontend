@@ -18,7 +18,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
     // Pages that should always render in a dark theme. We put `dark` on <main> so all
     // descendant `dark:` variants activate, and paint the full content area dark so no
     // light body background shows through the gutters.
-    const darkPages = ['/marketplace', '/vendor-profile', '/chat', '/profile', '/wallet', '/cart', '/inventory', '/orders', '/analytics'];
+    const darkPages = ['/marketplace', '/vendor-profile', '/chat', '/wallet', '/cart', '/inventory', '/orders', '/analytics'];
     const isDarkPage = darkPages.includes(pathname) || pathname.startsWith('/kauch');
     const darkMainClass = isDarkPage ? ' dark bg-zinc-950' : '';
 

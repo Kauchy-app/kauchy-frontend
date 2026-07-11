@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 const API = process.env.NEXT_PUBLIC_API_URL;
@@ -87,9 +88,9 @@ export default async function SharedPostPage({ params }: { params: { id: string 
           href={post.kauch ? `/kauch/${post.kauch.id}` : '/'}
           className="flex items-center gap-3 mb-4"
         >
-          <span className="w-10 h-10 rounded-full overflow-hidden bg-zinc-800 shrink-0 flex items-center justify-center">
+          <span className="relative w-10 h-10 rounded-full overflow-hidden bg-zinc-800 shrink-0 flex items-center justify-center">
             {post.kauch?.avatar_url
-              ? <img src={post.kauch.avatar_url} alt={kauchName} className="w-full h-full object-cover" />
+              ? <Image src={post.kauch.avatar_url} alt={kauchName} fill sizes="48px" className="object-cover" />
               : <span className="font-bold text-gray-300">{kauchName.charAt(0).toUpperCase()}</span>}
           </span>
           <span className="font-bold">{kauchName}</span>
@@ -104,12 +105,18 @@ export default async function SharedPostPage({ params }: { params: { id: string 
             // which keeps this page a pure server component.
             <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
               {images.map((src, i) => (
-                <img
+                <div
                   key={`${src}-${i}`}
-                  src={src}
-                  alt={`Image ${i + 1}`}
-                  className="w-full shrink-0 snap-center aspect-square object-cover"
-                />
+                  className="relative w-full shrink-0 snap-center aspect-square overflow-hidden"
+                >
+                  <Image
+                    src={src}
+                    alt={`Image ${i + 1}`}
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                  />
+                </div>
               ))}
             </div>
           ) : null}

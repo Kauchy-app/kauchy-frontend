@@ -245,7 +245,7 @@ function OrdersPageContent() {
                         orders.map(order => (
                             <div
                                 key={order.id}
-                                className={`p-4 border-b border-gray-100 dark:border-zinc-800 cursor-pointer transition-colors duration-200 hover:bg-[#f4f6fa] ${selectedOrder?.id === order.id ? 'bg-[#f4f6fa] dark:bg-zinc-950 border-l-[3px] border-l-[#1c6ef2]' : ''}`}
+                                className={`p-4 border-b border-gray-100 dark:border-zinc-800 cursor-pointer transition-colors duration-200 hover:bg-[#f4f6fa] dark:hover:bg-zinc-800 ${selectedOrder?.id === order.id ? 'bg-[#f4f6fa] dark:bg-zinc-950 border-l-[3px] border-l-[#1c6ef2]' : ''}`}
                                 onClick={() => handleOrderClick(order)}
                             >
                                 <div className="flex justify-between mb-1.5">

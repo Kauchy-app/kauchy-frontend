@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import Image from 'next/image';
 
 interface Comment {
   id: number;
@@ -282,8 +283,8 @@ export default function KauchProfile() {
   const profileCard = (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-8 sm:p-10">
       <div className="flex flex-col items-center text-center gap-5">
-        <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-800 ring-4 ring-gray-100 dark:ring-zinc-800 shrink-0">
-          <img src={kauch.avatar_url || '/placeholder.svg'} alt={kauch.name} className="w-full h-full object-cover" />
+        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-800 ring-4 ring-gray-100 dark:ring-zinc-800 shrink-0">
+          <Image src={kauch.avatar_url || '/placeholder.svg'} alt={kauch.name} fill sizes="48px" className="object-cover" />
         </div>
         <div className="w-full">
           <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-2">{kauch.name}</h2>
@@ -386,7 +387,7 @@ export default function KauchProfile() {
                 if (images.length === 1) {
                   return (
                     <div className="w-full bg-black flex justify-center">
-                      <img src={images[0]} alt="Post media" className="w-full h-auto max-h-[85vh] object-contain" />
+                      <Image src={images[0]} alt="Post media" width={1080} height={1080} className="w-full h-auto max-h-[85vh] object-contain" />
                     </div>
                   );
                 }
@@ -399,8 +400,8 @@ export default function KauchProfile() {
                       className="w-full h-full kauch-post-carousel"
                     >
                       {images.map((src, i) => (
-                        <SwiperSlide key={`${src}-${i}`}>
-                          <img src={src} alt={`Post media ${i + 1}`} className="w-full h-full object-contain" />
+                        <SwiperSlide key={`${src}-${i}`} className="relative">
+                          <Image src={src} alt={`Post media ${i + 1}`} fill sizes="100vw" className="object-contain" />
                         </SwiperSlide>
                       ))}
                     </Swiper>
@@ -474,8 +475,8 @@ export default function KauchProfile() {
                         };
                         const renderRow = (c: Comment, isReply: boolean) => (
                           <div key={c.id} className="flex gap-3">
-                            <div className={`${isReply ? 'w-7 h-7' : 'w-8 h-8'} rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0`}>
-                              <img src={c.user?.avatar_url || '/placeholder.svg'} alt="" className="w-full h-full object-cover" />
+                            <div className={`relative ${isReply ? 'w-7 h-7' : 'w-8 h-8'} rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0`}>
+                              <Image src={c.user?.avatar_url || '/placeholder.svg'} alt="" fill sizes="48px" className="object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="bg-white dark:bg-zinc-900 rounded-2xl px-3 py-2 border border-gray-100 dark:border-zinc-800">
@@ -540,7 +541,7 @@ export default function KauchProfile() {
                         className="min-w-[140px] max-w-[140px] bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 overflow-hidden cursor-pointer snap-start hover:border-blue-500 transition-all shadow-sm group"
                       >
                         <div className="h-[120px] bg-gray-100 dark:bg-zinc-800 relative">
-                          <img src={product.image_url?.[0] || '/placeholder.svg'} alt={product.product_name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <Image src={product.image_url?.[0] || '/placeholder.svg'} alt={product.product_name} fill sizes="240px" className="object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                         <div className="p-2.5">
                           <p className="text-xs font-medium text-gray-900 dark:text-white truncate" title={product.product_name}>{product.product_name}</p>

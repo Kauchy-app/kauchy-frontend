@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Search, ArrowLeft, X, Users, Store as StoreIcon, Clock } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
+import Image from 'next/image';
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 const TABS = ['Top', 'Products', 'Kauch', 'Vendors'] as const;
@@ -79,8 +80,8 @@ function SearchContent() {
 
     const VendorRow = ({ v }: { v: Vendor }) => (
         <button onClick={() => goVendor(v)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-left">
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
-                {v.profile_picture ? <img src={v.profile_picture} alt={v.username} className="w-full h-full object-cover" /> : <StoreIcon size={20} className="text-gray-400" />}
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
+                {v.profile_picture ? <Image src={v.profile_picture} alt={v.username} fill sizes="48px" className="object-cover" /> : <StoreIcon size={20} className="text-gray-400" />}
             </div>
             <div className="flex-1 min-w-0">
                 <p className="font-semibold text-gray-900 dark:text-white truncate">{v.username}</p>
@@ -91,8 +92,8 @@ function SearchContent() {
 
     const KauchRow = ({ k }: { k: Kauch }) => (
         <button onClick={() => goKauch(k)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-left">
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
-                {k.avatar_url ? <img src={k.avatar_url} alt={k.name} className="w-full h-full object-cover" /> : <span className="font-bold text-gray-500">{k.name.charAt(0).toUpperCase()}</span>}
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
+                {k.avatar_url ? <Image src={k.avatar_url} alt={k.name} fill sizes="48px" className="object-cover" /> : <span className="font-bold text-gray-500">{k.name.charAt(0).toUpperCase()}</span>}
             </div>
             <div className="flex-1 min-w-0">
                 <p className="font-semibold text-gray-900 dark:text-white truncate">{k.name}</p>

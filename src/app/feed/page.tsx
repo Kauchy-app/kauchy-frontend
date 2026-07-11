@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { useAuthGate } from '@/context/AuthGateContext';
 import FeedSidebar from '@/components/FeedSidebar';
+import Image from 'next/image';
 
 // Swiper integration
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -15,6 +16,21 @@ import type { Swiper as SwiperType } from 'swiper';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/virtual';
+
+// Files that should never surface on the feed (audio-only uploads occasionally
+// land in the `video` field). The feed is pictures + videos only.
+const AUDIO_EXT = /\.(mp3|wav|m4a|aac|ogg|oga|flac|opus|weba|mid|midi|amr)(\?.*)?$/i;
+
+// A content item is displayable only if it is a picture or a real video.
+function isDisplayableContent(item: any): boolean {
+    if (item?.content_type === 'picture' || (item?.pictures && !item?.video)) {
+        return !!item.pictures;
+    }
+    const video: string | undefined = item?.video;
+    if (!video) return false;            // no media at all
+    if (AUDIO_EXT.test(video)) return false; // audio masquerading as a video
+    return true;
+}
 
 function FeedContent() {
     const searchParams = useSearchParams();
@@ -91,10 +107,13 @@ function FeedContent() {
                 console.warn('Feed fetch failed:', feedRes.status, feedRes.statusText);
             }
 
-            let mapped = feedData.map((item: any) => ({
-                type: (item.feed_type === 'product' ? 'product' : 'content') as 'product' | 'content',
-                item,
-            }));
+            let mapped = feedData
+                // Products always pass; content must be a picture or video (drop audio).
+                .filter((item: any) => item.feed_type === 'product' || isDisplayableContent(item))
+                .map((item: any) => ({
+                    type: (item.feed_type === 'product' ? 'product' : 'content') as 'product' | 'content',
+                    item,
+                }));
 
             if (initialId && initialType) {
                 const targetIndex = mapped.findIndex((f: any) => {
@@ -328,12 +347,16 @@ function ProductFeedView({ product, isActive }: { product: any, isActive: boolea
             >
                 {images.map((img: any, idx: number) => (
                     <SwiperSlide key={idx} className="w-full h-full flex items-center justify-center">
-                        <img 
-                            src={img} 
-                            alt={`${product.product_name} - ${idx + 1}`} 
-                            className="w-full h-full object-cover sm:object-contain transition-opacity duration-500 ease-in-out"
-                            style={{ opacity: isActive ? 1 : 0 }}
-                        />
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={img}
+                                alt={`${product.product_name} - ${idx + 1}`}
+                                fill
+                                sizes="100vw"
+                                className="object-cover sm:object-contain transition-opacity duration-500 ease-in-out"
+                                style={{ opacity: isActive ? 1 : 0 }}
+                            />
+                        </div>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -353,6 +376,9 @@ function ProductFeedView({ product, isActive }: { product: any, isActive: boolea
 function ContentFeedView({ content, isActive }: { content: any, isActive: boolean }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    // Picture content renders as an image; only true videos use the <video> element.
+    const isPicture = content.content_type === 'picture' || (content.pictures && !content.video);
 
     useEffect(() => {
         if (isActive && videoRef.current) {
@@ -378,11 +404,26 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
         }
     };
 
+    if (isPicture) {
+        return (
+            <div className="w-full h-full relative flex items-center justify-center bg-zinc-900 overflow-hidden">
+                <Image
+                    src={content.pictures}
+                    alt={content.caption || 'content'}
+                    fill
+                    sizes="100vw"
+                    priority
+                    className="object-cover sm:object-contain"
+                />
+            </div>
+        );
+    }
+
     return (
         <div className="w-full h-full relative" onClick={togglePlay}>
-            <video 
+            <video
                 ref={videoRef}
-                src={content.video} 
+                src={content.video}
                 className="w-full h-full object-cover"
                 loop
                 playsInline

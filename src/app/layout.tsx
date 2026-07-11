@@ -1,13 +1,12 @@
 import { Providers } from './providers';
 import { ToastProvider } from '@/context/ToastContext';
 import PageLayout from '@/components/PageLayout';
-import { Inter, Poppins } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const poppins = Poppins({ weight: ['400', '500', '600', '700'], subsets: ['latin'], variable: '--font-poppins' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 
 export const metadata = {
   title: "Kauchy - Student Marketplace",
@@ -20,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="icon" href="/logo.png" type="image/png" />
       </head>
-      <body className={`${inter.variable} ${poppins.variable} font-sans`}>
+      <body className={`${inter.variable} font-sans`}>
         <ToastProvider>
           <Providers>
             <PageLayout>

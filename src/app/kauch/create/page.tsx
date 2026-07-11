@@ -5,7 +5,10 @@ import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { Image as ImageIcon, Video, Plus, ArrowLeft, X } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
-import VoiceRecorder from '@/components/VoiceRecorder';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+
+const VoiceRecorder = dynamic(() => import('@/components/VoiceRecorder'), { ssr: false });
 
 interface Kauch {
   id: number;
@@ -360,7 +363,7 @@ export default function CreateKauchContent() {
                               {isVid ? (
                                 <video src={url} className="w-full h-full object-cover" muted />
                               ) : (
-                                <img src={url} alt={file.name} className="w-full h-full object-cover" />
+                                <Image src={url} alt={file.name} fill sizes="(max-width: 768px) 50vw, 240px" className="object-cover" />
                               )}
                               {/* Order badge (images only — videos are always solo) */}
                               {!isVid && (
@@ -401,8 +404,8 @@ export default function CreateKauchContent() {
                       onClick={() => toggleProductSelection(product.id)}
                       className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedProducts.includes(product.id) ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-gray-300 dark:hover:border-zinc-700'}`}
                     >
-                      <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-zinc-800 overflow-hidden shrink-0">
-                        <img src={product.image_url?.[0] || '/placeholder.svg'} alt="" className="w-full h-full object-cover" />
+                      <div className="relative w-12 h-12 rounded-lg bg-gray-100 dark:bg-zinc-800 overflow-hidden shrink-0">
+                        <Image src={product.image_url?.[0] || '/placeholder.svg'} alt="" fill sizes="48px" className="object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{product.product_name}</p>

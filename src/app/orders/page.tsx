@@ -1,10 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
-import QRScannerOverlay from '@/components/QRScannerOverlay';
+import dynamic from 'next/dynamic';
 import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+
+const QRScannerOverlay = dynamic(() => import('@/components/QRScannerOverlay'), { ssr: false });
 
 function OrdersPageContent() {
     const [orders, setOrders] = useState<any[]>([]);
@@ -379,11 +382,13 @@ function OrdersPageContent() {
                                     {activeTab === 'qrcode' ? (
                                         <div className="flex flex-col items-center animate-fadeIn w-full h-full">
                                             {/* QR must stay on a white background to remain scannable in dark mode */}
-                                            <div className="flex-1 w-full bg-white rounded-xl p-3 flex items-center justify-center">
-                                                <img
+                                            <div className="relative flex-1 w-full bg-white rounded-xl p-3 flex items-center justify-center">
+                                                <Image
                                                     src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(JSON.stringify({ id: selectedOrder.id, status: selectedOrder.status }))}`}
                                                     alt="QR Code"
-                                                    className="w-full h-full object-contain"
+                                                    fill
+                                                    sizes="250px"
+                                                    className="object-contain"
                                                 />
                                             </div>
                                             <p className="text-xs text-[#4b4b4b] dark:text-gray-400 mt-3 text-center">Scan this code to verify</p>

@@ -6,7 +6,10 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Image as ImageIcon, X, Reply, Check, CheckCheck } from 'lucide-react';
 import LoadingModal from '@/components/LoadingModal';
-import VoiceRecorder from '@/components/VoiceRecorder';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+
+const VoiceRecorder = dynamic(() => import('@/components/VoiceRecorder'), { ssr: false });
 
 interface ReplyDetails {
     id: number;
@@ -105,11 +108,11 @@ const ProductLinkPreview = ({ url }: { url: string }) => {
 
     if (loading) {
         return (
-            <div className="mt-2 bg-white dark:bg-zinc-900/80 rounded-xl border border-gray-100 dark:border-zinc-800 max-w-[260px] overflow-hidden animate-pulse">
-                <div className="h-[100px] bg-gray-200 dark:bg-zinc-700" />
+            <div className="mt-2 bg-white/80 dark:bg-white/[0.06] backdrop-blur-sm rounded-xl border border-black/5 dark:border-white/[0.08] max-w-[260px] overflow-hidden animate-pulse">
+                <div className="h-[100px] bg-black/[0.04] dark:bg-white/[0.04]" />
                 <div className="p-2.5 space-y-2">
-                    <div className="h-3 bg-gray-200 dark:bg-zinc-700 rounded w-3/4" />
-                    <div className="h-2.5 bg-gray-200 dark:bg-zinc-700 rounded w-1/2" />
+                    <div className="h-3 bg-black/[0.06] dark:bg-white/[0.06] rounded w-3/4" />
+                    <div className="h-2.5 bg-black/[0.04] dark:bg-white/[0.04] rounded w-1/2" />
                 </div>
             </div>
         );
@@ -120,15 +123,15 @@ const ProductLinkPreview = ({ url }: { url: string }) => {
     }
 
     return (
-        <div className="mt-2 text-black dark:text-white bg-white dark:bg-zinc-900/95 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 cursor-pointer max-w-[260px] overflow-hidden transition-all hover:shadow-md" onClick={() => window.open(url, '_blank')}>
-            <div className="h-[120px] bg-gray-50 dark:bg-zinc-800 overflow-hidden relative">
-               <img src={(product.image_url && product.image_url[0]) || '/placeholder.svg'} className="w-full h-full object-cover" alt="Product" />
+        <div className="mt-2 text-gray-900 dark:text-gray-100 bg-white/80 dark:bg-white/[0.06] backdrop-blur-sm rounded-xl border border-black/[0.04] dark:border-white/[0.04] cursor-pointer max-w-[260px] overflow-hidden transition-all hover:shadow-md" onClick={() => window.open(url, '_blank')}>
+            <div className="h-[120px] bg-black/[0.02] dark:bg-white/[0.03] overflow-hidden relative">
+               <Image src={(product.image_url && product.image_url[0]) || '/placeholder.svg'} fill sizes="260px" className="object-cover" alt="Product" />
                <div className="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">
                    ₦{product.price}
                </div>
             </div>
             <div className="p-2.5 flex flex-col">
-               <span className="font-semibold text-sm truncate leading-tight text-gray-900 dark:text-white">{product.product_name}</span>
+               <span className="font-semibold text-sm truncate leading-tight text-gray-900 dark:text-gray-100">{product.product_name}</span>
                <span className="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-2 mt-1 leading-snug">{product.description || 'No description available'}</span>
             </div>
         </div>
@@ -151,7 +154,7 @@ const MessageContent = ({ text, file, onImageClick }: { text?: string | null; fi
                         <audio src={file} controls className="w-full h-10" />
                     </div>
                 ) : (
-                <div className="w-full max-w-[240px] sm:max-w-[200px] overflow-hidden rounded-lg mt-1 shadow-md">
+                <div className="w-full max-w-[240px] sm:max-w-[200px] overflow-hidden rounded-lg mt-1">
                     {isVideo ? (
                         <video src={file} controls className="w-full h-auto rounded-lg" />
                     ) : isImage ? (
@@ -488,7 +491,7 @@ export default function ChatPage() {
     const activeConv = conversations.find(c => c.id === activeConversationId);
 
     return (
-        <div className="flex h-[calc(100vh-70px)] overflow-hidden relative md:grid md:grid-cols-[300px_1fr] bg-white dark:bg-zinc-900" ref={chatContainerRef}>
+        <div className="flex h-full overflow-hidden relative md:grid md:grid-cols-[300px_1fr] chat-bg" ref={chatContainerRef}>
             {loading && <LoadingModal />}
             
             {/* Mobile Overlay */}
@@ -498,7 +501,7 @@ export default function ChatPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 top-[70px] bg-black/40 z-40 md:hidden"
+                        className="fixed inset-0 bg-black/40 z-40 md:hidden"
                         onClick={() => setIsSidebarOpen(false)}
                     />
                 )}
@@ -506,15 +509,15 @@ export default function ChatPage() {
 
             {/* Sidebar */}
             <div 
-                className={`fixed inset-y-0 left-0 top-[70px] bottom-0 w-[85vw] max-w-[300px] bg-white dark:bg-zinc-900 border-r border-[#e5e7eb] dark:border-zinc-800 z-50 transition-transform duration-300 md:relative md:w-full md:inset-auto md:transform-none md:z-0 md:flex md:flex-col md:h-full ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+                className={`fixed inset-y-0 left-0 top-0 bottom-0 w-[85vw] max-w-[300px] bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl border-r border-black/5 dark:border-white/10 z-50 transition-transform duration-300 md:relative md:w-full md:inset-auto md:transform-none md:z-0 md:flex md:flex-col md:h-full ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
                 ref={sidebarRef}
             >
-                <div className="p-4 border-b border-[#e5e7eb] dark:border-zinc-800 bg-white dark:bg-zinc-900 shrink-0 sticky top-0 z-50 md:static">
+                <div className="p-4 border-b border-black/5 dark:border-white/10 bg-white/40 dark:bg-white/[0.02] backdrop-blur-xl shrink-0 sticky top-0 z-50 md:static">
                     <h2 className="text-lg font-semibold text-[#1d1d1d] dark:text-white">Messages</h2>
                 </div>
                 <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar" id="conversationsList">
                     {conversations.length === 0 && !loading && (
-                        <div className="p-5 text-center text-[#4b4b4b] dark:text-gray-400 text-sm">
+                        <div className="p-5 text-center text-gray-500 dark:text-gray-400/80 text-sm">
                             No conversations yet. Discover products to start chatting!
                         </div>
                     )}
@@ -529,13 +532,13 @@ export default function ChatPage() {
                         return (
                             <div
                                 key={conv.id}
-                                className={`relative flex items-center gap-3 p-3 cursor-pointer border-b border-[#e5e7eb] dark:border-zinc-800 transition-colors duration-200 hover:bg-[#f4f6fa] dark:hover:bg-zinc-800 ${activeConversationId === conv.id ? 'bg-[#f4f6fa] dark:bg-zinc-800 border-l-[3px] border-l-[#1c6ef2]' : ''}`}
+                                className={`relative flex items-center gap-3 p-3 cursor-pointer border-b border-black/5 dark:border-white/[0.06] transition-colors duration-200 hover:bg-black/[0.03] dark:hover:bg-white/[0.04] ${activeConversationId === conv.id ? 'bg-indigo-500/10 dark:bg-indigo-400/10 border-l-[3px] border-l-indigo-500 dark:border-l-indigo-400' : ''}`}
                                 onClick={() => selectConversation(conv)}
                             >
                                 <div className="relative">
-                                    <img src={conv.other_user.profile_picture || '/placeholder.svg'} alt={conv.other_user.username} className="w-12 h-12 rounded-full object-cover shrink-0" />
+                                    <Image src={conv.other_user.profile_picture || '/placeholder.svg'} alt={conv.other_user.username} width={48} height={48} className="w-12 h-12 rounded-full object-cover shrink-0" />
                                     {conv.other_user.status && (
-                                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm" />
+                                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border border-white rounded-full shadow-sm" />
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -543,7 +546,7 @@ export default function ChatPage() {
                                         <div className="text-sm font-semibold text-[#1d1d1d] dark:text-white truncate">{conv.other_user.username}</div>
                                         {(conv.unread_count || 0) > 0 && <span className="bg-[#ff4d4d] text-white rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wider ml-2 inline-block">{conv.unread_count}</span>}
                                     </div>
-                                    <div className="flex items-center gap-2 text-xs text-[#4b4b4b] dark:text-gray-400">
+                                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                                         <span className="flex-1 min-w-0 truncate">
                                             {!conv.last_message ? "No messages yet" : (
                                                 <>
@@ -552,7 +555,7 @@ export default function ChatPage() {
                                                 </>
                                             )}
                                         </span>
-                                        <span className={`shrink-0 whitespace-nowrap opacity-95 ${conv.last_message?.is_read ? 'text-[#1c6ef2] font-semibold' : ''}`}>{readStatus}</span>
+                                        <span className={`shrink-0 whitespace-nowrap opacity-95 ${conv.last_message?.is_read ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : ''}`}>{readStatus}</span>
                                     </div>
                                 </div>
                             </div>
@@ -562,11 +565,11 @@ export default function ChatPage() {
             </div>
 
             {/* Main Chat */}
-            <div className="flex flex-col bg-white dark:bg-zinc-900 h-full overflow-hidden relative w-full">
+            <div className="flex flex-col bg-white/40 dark:bg-white/[0.02] backdrop-blur-xl h-full overflow-hidden relative w-full">
                 {!activeConversationId ? (
-                    <div className="flex flex-col items-center justify-center h-full text-[#4b4b4b] dark:text-gray-400" id="chatEmpty">
-                        <div className="flex items-center p-3 bg-[#ffb800] border-b border-[#e5e7eb] dark:border-zinc-800 min-h-[56px] absolute top-0 left-0 w-full z-10 md:hidden">
-                            <button className="flex items-center justify-center p-2 mr-2 text-xl cursor-pointer text-[#1d1d1d] dark:text-white hover:text-[#1c6ef2] transition-colors" id="sidebarToggleBtn" onClick={(e) => { e.stopPropagation(); setIsSidebarOpen(!isSidebarOpen); }}>
+                    <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400/80" id="chatEmpty">
+                        <div className="flex items-center p-3 bg-white/30 dark:bg-white/[0.03] backdrop-blur-xl border-b border-black/5 dark:border-white/10 min-h-[56px] absolute top-0 left-0 w-full z-10 md:hidden">
+                            <button className="flex items-center justify-center p-2 mr-2 text-xl cursor-pointer text-[#1d1d1d] dark:text-white hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors" id="sidebarToggleBtn" onClick={(e) => { e.stopPropagation(); setIsSidebarOpen(!isSidebarOpen); }}>
                                 ☰
                             </button>
                         </div>
@@ -576,21 +579,21 @@ export default function ChatPage() {
                 ) : (
                     <div className="flex flex-col h-full overflow-hidden" id="chatView">
                         {/* Header */}
-                        <div className="flex items-center justify-between p-4 border-b border-[#e5e7eb] dark:border-zinc-800 bg-[#ffb800] shrink-0 min-h-[56px] md:justify-between sm:p-3">
+                        <div className="flex items-center justify-between p-4 border-b border-black/5 dark:border-white/10 bg-white/40 dark:bg-white/[0.04] backdrop-blur-xl shrink-0 min-h-[56px] md:justify-between sm:p-3">
                             <div className="flex items-center flex-1 min-w-0">
-                                <button className="flex md:hidden items-center justify-center p-2 mr-2 text-xl cursor-pointer text-[#1d1d1d] dark:text-white hover:text-[#1c6ef2] transition-colors shrink-0" id="sidebarToggleBtnDetail" onClick={(e) => { e.stopPropagation(); setIsSidebarOpen(!isSidebarOpen); }}>
+                                <button className="flex md:hidden items-center justify-center p-2 mr-2 text-xl cursor-pointer text-[#1d1d1d] dark:text-white hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors shrink-0" id="sidebarToggleBtnDetail" onClick={(e) => { e.stopPropagation(); setIsSidebarOpen(!isSidebarOpen); }}>
                                     ☰
                                 </button>
                                 <div className="flex items-center gap-3 cursor-pointer flex-1 min-w-0 hover:opacity-90 transition-opacity" onClick={() => router.push(`/vendor-profile?vendorId=${activeConv?.other_user.id}`)}>
                                     <div className="relative">
-                                        <img src={activeConv?.other_user.profile_picture || '/placeholder.svg'} alt="User" className="w-10 h-10 rounded-full object-cover shrink-0 sm:w-9 sm:h-9" />
+                                        <Image src={activeConv?.other_user.profile_picture || '/placeholder.svg'} alt="User" width={40} height={40} className="w-10 h-10 rounded-full object-cover shrink-0 sm:w-9 sm:h-9" />
                                         {activeConv?.other_user.status && (
-                                            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border border-[#ffb800] rounded-full" />
+                                            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border border-white dark:border-zinc-900 rounded-full" />
                                         )}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className="text-sm font-bold text-[#1c6ef2] truncate">{activeConv?.other_user.username}</div>
-                                        <div className={`text-xs truncate ${headerStatus === 'Online' ? 'text-[#1c6ef2] font-semibold' : 'text-white'}`}>{headerStatus}</div>
+                                        <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400 truncate">{activeConv?.other_user.username}</div>
+                                        <div className={`text-xs truncate ${headerStatus === 'Online' ? 'text-emerald-500 font-semibold' : 'text-gray-500 dark:text-gray-400'}`}>{headerStatus}</div>
                                     </div>
                                 </div>
                             </div>
@@ -633,7 +636,7 @@ export default function ChatPage() {
                                             {isSent && (
                                                 <button 
                                                     onClick={() => setReplyingTo(msg)}
-                                                    className="opacity-0 group-hover:opacity-100 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 dark:text-gray-400 transition-all focus:opacity-100 outline-none"
+                                                    className="opacity-0 group-hover:opacity-100 p-2 rounded-full hover:bg-black/[0.04] dark:hover:bg-white/[0.08] text-gray-500 dark:text-gray-400 transition-all focus:opacity-100 outline-none"
                                                     title="Reply"
                                                 >
                                                     <Reply size={16} />
@@ -650,16 +653,16 @@ export default function ChatPage() {
                                                         setReplyingTo(msg);
                                                     }
                                                 }}
-                                                className={`p-3 px-3.5 rounded-xl text-sm leading-relaxed relative overflow-hidden shadow-sm ${
-                                                    isSent 
-                                                        ? "bg-[#1c6ef2] text-white" 
-                                                        : "bg-[#ffb800] text-gray-900 dark:text-white"
+                                                className={`p-3 px-3.5 rounded-xl text-sm leading-relaxed relative overflow-hidden ${
+                                                    isSent
+                                                        ? "bg-indigo-500/90 backdrop-blur-sm text-white"
+                                                        : "bg-white/80 dark:bg-white/[0.07] backdrop-blur-sm text-gray-900 dark:text-gray-100"
                                                 }`}
                                             >
                                                 {msg.reply_to_details && (
                                                     <div 
                                                         className={`mb-2 p-2 rounded-lg text-xs border-l-4 cursor-pointer hover:brightness-95 transition-all ${
-                                                            isSent ? "bg-black/10 border-white/50 text-white" : "bg-white dark:bg-zinc-900/30 border-white text-gray-900 dark:text-white"
+                                                            isSent ? "bg-black/10 border-white/50 text-white" : "bg-black/[0.03] dark:bg-white/[0.06] border-black/10 dark:border-white/20 text-gray-900 dark:text-gray-100"
                                                         }`}
                                                     >
                                                         <div className="font-bold mb-0.5 text-[10px] uppercase tracking-wider text-inherit opacity-80">
@@ -678,7 +681,7 @@ export default function ChatPage() {
                                             {!isSent && (
                                                 <button 
                                                     onClick={() => setReplyingTo(msg)}
-                                                    className="opacity-0 group-hover:opacity-100 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 dark:text-gray-400 transition-all focus:opacity-100 outline-none"
+                                                    className="opacity-0 group-hover:opacity-100 p-2 rounded-full hover:bg-black/[0.04] dark:hover:bg-white/[0.08] text-gray-500 dark:text-gray-400 transition-all focus:opacity-100 outline-none"
                                                     title="Reply"
                                                 >
                                                     <Reply size={16} className="-scale-x-100" />
@@ -688,7 +691,7 @@ export default function ChatPage() {
                                         </div>
 
                                         {showTimestamp && (
-                                            <div className="flex items-center gap-1 text-[11px] text-[#4b4b4b] dark:text-gray-400 mt-1 px-1 sm:text-[10px]">
+                                            <div className="flex items-center gap-1 text-[11px] text-gray-400 dark:text-gray-500 mt-1 px-1 sm:text-[10px]">
                                                 {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                                                 {statusText}
                                             </div>
@@ -700,23 +703,23 @@ export default function ChatPage() {
                         </div>
 
                         {/* Input Area */}
-                        <div className="flex flex-col bg-white dark:bg-zinc-900 border-t border-[#e5e7eb] dark:border-zinc-800 relative z-20">
-                            
+                        <div className="flex flex-col bg-white/60 dark:bg-white/[0.03] backdrop-blur-xl border-t border-black/5 dark:border-white/10 relative z-20">
+
                             {/* Replying To Indicator */}
                             <AnimatePresence>
                                 {replyingTo && (
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ height: 0, opacity: 0 }}
                                         animate={{ height: 'auto', opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
-                                        className="bg-[#f4f6fa] dark:bg-zinc-800 border-b border-[#e5e7eb] dark:border-zinc-800 px-4 py-2 flex items-start justify-between"
+                                        className="bg-black/[0.02] dark:bg-white/[0.04] backdrop-blur-xl border-b border-black/5 dark:border-white/10 px-4 py-2 flex items-start justify-between"
                                     >
                                         <div className="flex-1 min-w-0 pr-4">
-                                            <div className="text-xs font-bold text-[#1c6ef2] mb-0.5 flex items-center gap-1.5">
+                                            <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-0.5 flex items-center gap-1.5">
                                                 <Reply size={12} className="-scale-x-100" />
                                                 Replying to {replyingTo.sender === user.user.id ? 'yourself' : (activeConv?.other_user.username || 'User')}
                                             </div>
-                                            <div className="text-[13px] text-[#4b4b4b] dark:text-gray-400 line-clamp-1 italic">
+                                            <div className="text-[13px] text-gray-500 dark:text-gray-400 line-clamp-1 italic">
                                                 {replyingTo.file ? "📷 Attachment" : replyingTo.text}
                                             </div>
                                         </div>
@@ -732,8 +735,8 @@ export default function ChatPage() {
 
                             <div className="flex gap-2 p-4 sm:p-2.5 sm:gap-1.5 items-end">
                                 <input type="file" ref={fileInputRef} hidden onChange={handleFileUpload} accept="video/*,image/*" />
-                                <button 
-                                    className={`bg-[#f4f6fa] dark:bg-zinc-800 text-[#4b4b4b] dark:text-gray-400 w-[44px] h-[44px] rounded-xl flex items-center justify-center text-xl transition-colors duration-200 border-none sm:w-10 sm:h-10 shrink-0 ${isUploading ? 'opacity-50 cursor-not-allowed animate-pulse' : 'hover:bg-[#e5e7eb] dark:hover:bg-zinc-700 cursor-pointer'}`}
+                                <button
+                                    className={`bg-black/[0.03] dark:bg-white/[0.06] text-gray-500 dark:text-gray-400 w-[44px] h-[44px] rounded-xl flex items-center justify-center text-xl transition-colors duration-200 border-none sm:w-10 sm:h-10 shrink-0 ${isUploading ? 'opacity-50 cursor-not-allowed animate-pulse' : 'hover:bg-black/[0.06] dark:hover:bg-white/[0.10] cursor-pointer'}`}
                                     onClick={() => !isUploading && fileInputRef.current?.click()}
                                     title="Send Attachment"
                                     disabled={isUploading}
@@ -743,7 +746,7 @@ export default function ChatPage() {
                                 <VoiceRecorder
                                     onRecorded={uploadFile}
                                     disabled={isUploading}
-                                    className="bg-[#f4f6fa] dark:bg-zinc-800 text-[#4b4b4b] dark:text-gray-400 w-[44px] h-[44px] sm:w-10 sm:h-10 shrink-0 hover:bg-[#e5e7eb] dark:hover:bg-zinc-700"
+                                    className="bg-black/[0.03] dark:bg-white/[0.06] text-gray-500 dark:text-gray-400 w-[44px] h-[44px] sm:w-10 sm:h-10 shrink-0 hover:bg-black/[0.06] dark:hover:bg-white/[0.10]"
                                 />
                                 <textarea
                                     ref={textareaRef}
@@ -761,14 +764,14 @@ export default function ChatPage() {
                                     }}
                                     rows={1}
                                     placeholder="Type a message..."
-                                    className="flex-1 bg-white dark:bg-zinc-900 border border-[#e5e7eb] dark:border-zinc-800 rounded-xl py-[10px] px-3.5 text-sm text-[#1d1d1d] dark:text-white placeholder-gray-500 focus:outline-none focus:border-[#1c6ef2] sm:text-[13px] sm:py-2 resize-none overflow-y-auto max-h-[120px] transition-all custom-scrollbar"
+                                    className="flex-1 bg-white/70 dark:bg-white/[0.05] backdrop-blur-sm border border-black/10 dark:border-white/[0.08] rounded-xl py-[10px] px-3.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-indigo-500/60 dark:focus:border-indigo-400/60 focus:ring-1 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 sm:text-[13px] sm:py-2 resize-none overflow-y-auto max-h-[120px] transition-all custom-scrollbar"
                                     style={{ minHeight: '44px' }}
                                 />
-                                <button 
+                                <button
                                     className={`w-[44px] h-[44px] rounded-xl flex items-center justify-center text-lg transition-all duration-300 border-none sm:w-10 sm:h-10 sm:text-base shrink-0 shadow-sm ${
-                                        messageText.trim() || replyingTo 
-                                            ? 'bg-[#1c6ef2]/90 backdrop-blur-md text-white hover:scale-105 cursor-pointer hover:shadow-blue-500/30 hover:shadow-lg' 
-                                            : 'bg-white dark:bg-zinc-900/50 backdrop-blur-sm text-gray-400 dark:text-gray-500 cursor-not-allowed border border-white/40'
+                                        messageText.trim() || replyingTo
+                                            ? 'bg-indigo-500/90 dark:bg-indigo-500/80 backdrop-blur-md text-white hover:scale-105 cursor-pointer hover:shadow-indigo-500/25 hover:shadow-lg'
+                                            : 'bg-white/60 dark:bg-white/[0.06] backdrop-blur-sm text-gray-400 dark:text-gray-500 cursor-not-allowed border border-black/10 dark:border-white/[0.08]'
                                     }`} 
                                     onClick={() => sendMessage()}
                                     disabled={!messageText.trim() && replyingTo === null}

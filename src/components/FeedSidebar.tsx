@@ -5,6 +5,7 @@ import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import { useAuthGate } from '../context/AuthGateContext';
 import { Heart, MessageCircle, Send, X, Share2, ShoppingCart, Info, Store, Zap } from 'lucide-react';
+import Image from 'next/image';
 
 interface FeedSidebarProps {
     isOpen: boolean;
@@ -442,9 +443,9 @@ export default function FeedSidebar({ isOpen, onClose, type, item, addToCart, co
     // One kauch comment row (used for both top-level comments and replies).
     const renderKauchComment = (r: any, isReply: boolean) => (
         <div key={r.id} className="flex gap-2.5">
-            <div className={`${isReply ? 'w-7 h-7' : 'w-9 h-9 sm:w-8 sm:h-8'} rounded-full overflow-hidden shrink-0 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold`}>
+            <div className={`${isReply ? 'w-7 h-7' : 'w-9 h-9 sm:w-8 sm:h-8'} relative rounded-full overflow-hidden shrink-0 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold`}>
                 {r.avatar_url
-                    ? <img src={r.avatar_url} alt="" className="w-full h-full object-cover" />
+                    ? <Image src={r.avatar_url} alt="" fill sizes="48px" className="object-cover" />
                     : (r.user_name || 'U').charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
@@ -542,7 +543,7 @@ export default function FeedSidebar({ isOpen, onClose, type, item, addToCart, co
                 <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-4 rounded-xl shadow-sm">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <img src={item.pfp || item.vendor_pfp || '/placeholder.svg'} alt="Vendor" className="w-11 h-11 sm:w-10 sm:h-10 rounded-full object-cover bg-gray-100 dark:bg-zinc-800" />
+                            <Image src={item.pfp || item.vendor_pfp || '/placeholder.svg'} alt="Vendor" width={44} height={44} className="w-11 h-11 sm:w-10 sm:h-10 rounded-full object-cover bg-gray-100 dark:bg-zinc-800" />
                             <div>
                                 <div className="text-base sm:text-sm font-bold text-gray-900 dark:text-white">{item.vendor_username || 'Unknown Vendor'}</div>
                                 {type === 'product' && (

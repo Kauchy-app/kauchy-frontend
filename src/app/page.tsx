@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { useAuthGate } from '@/context/AuthGateContext';
 import FeedSidebar from '@/components/FeedSidebar';
+import Image from 'next/image';
 
 // Swiper integration
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -47,8 +48,8 @@ function FeedContent() {
     const swiperRef = useRef<SwiperType | null>(null);
     const viewedItemsRef = useRef<Set<string>>(new Set());
 
-    // Bookmarks live client-side only (no backend), persisted to localStorage.
-    const [bookmarks, setBookmarks] = useState<number[]>([]);
+    // Bookmarks are server-side — toggled via the Kauch API so they sync across devices.
+    // The per-post fields `is_bookmarked_by_user` and `bookmarks_count` come from the feed response.
     // Which post id currently shows the double-tap heart burst.
     const [burstId, setBurstId] = useState<number | null>(null);
 
@@ -59,22 +60,36 @@ function FeedContent() {
     const pressStart = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
     const lastTap = useRef<{ t: number; id: number | null }>({ t: 0, id: null });
 
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem('kauch_bookmarks');
-            if (stored) setBookmarks(JSON.parse(stored));
-        } catch { /* ignore */ }
-    }, []);
+    const toggleBookmark = useCallback(async (feedObj: { type: 'kauch'; item: any }) => {
+        const postId = feedObj.item.id;
+        if (!postId) return;
+        if (!requireAuth('save posts')) return;
 
-    const toggleBookmark = useCallback((item: any) => {
-        // Side effects (toast, storage) must stay OUT of the state updater — React
-        // calls updaters twice in dev StrictMode, which double-fired the toast.
-        const exists = bookmarks.includes(item.id);
-        const next = exists ? bookmarks.filter(id => id !== item.id) : [...bookmarks, item.id];
-        setBookmarks(next);
-        try { localStorage.setItem('kauch_bookmarks', JSON.stringify(next)); } catch { /* ignore */ }
-        showToast(exists ? 'Removed from bookmarks' : 'Saved to bookmarks', 'success');
-    }, [bookmarks, showToast]);
+        const wasBookmarked = feedObj.item.is_bookmarked_by_user;
+        // Optimistic update
+        setFeedItems(prev => prev.map(f =>
+            f.item.id === postId
+                ? { ...f, item: { ...f.item, is_bookmarked_by_user: !wasBookmarked, bookmarks_count: Math.max(0, (f.item.bookmarks_count || 0) + (wasBookmarked ? -1 : 1)) } }
+                : f
+        ));
+
+        try {
+            const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+            if (user?.access) headers['Authorization'] = `Bearer ${user.access}`;
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/kauch/posts/${postId}/bookmark/`, { method: 'POST', headers });
+            if (!res.ok) throw new Error('Failed');
+            const data = await res.json();
+            showToast(data.bookmarked ? 'Saved to bookmarks' : 'Removed from bookmarks', 'success');
+        } catch {
+            // Revert on failure
+            setFeedItems(prev => prev.map(f =>
+                f.item.id === postId
+                    ? { ...f, item: { ...f.item, is_bookmarked_by_user: wasBookmarked, bookmarks_count: Math.max(0, (f.item.bookmarks_count || 0) + (wasBookmarked ? 1 : -1)) } }
+                    : f
+            ));
+            showToast('Failed to update bookmark', 'error');
+        }
+    }, [user, requireAuth, showToast]);
 
     const prevUidRef = useRef<any>(undefined);
     useEffect(() => {
@@ -127,8 +142,10 @@ function FeedContent() {
                     created_at: p.created_at,
                     likes_count: p.likes_count,
                     comments_count: p.comments_count,
-                    shares_count: 0,
+                    shares_count: p.shares_count || 0,
+                    bookmarks_count: p.bookmarks_count || 0,
                     is_liked_by_user: p.is_liked_by_user,
+                    is_bookmarked_by_user: p.is_bookmarked_by_user || false,
                     products: p.tagged_products || [],
                 },
             }));
@@ -292,7 +309,7 @@ function FeedContent() {
         if (pressTimer.current) clearTimeout(pressTimer.current);
         pressTimer.current = setTimeout(() => {
             longPressFired.current = true;
-            toggleBookmark(item);
+            toggleBookmark({ type: 'kauch', item });
         }, 500);
     };
 
@@ -434,9 +451,9 @@ function FeedContent() {
                                         className="relative mb-2 cursor-pointer group hover:scale-105 transition-transform"
                                         onClick={(e) => { e.stopPropagation(); if (feedObj.item.kauch_id) router.push(`/kauch/${feedObj.item.kauch_id}`); }}
                                     >
-                                        <div className="w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-zinc-800 shadow-lg">
+                                        <div className="relative w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-zinc-800 shadow-lg">
                                             {feedObj.item.vendor_avatar ? (
-                                                <img src={feedObj.item.vendor_avatar} alt="Vendor" className="w-full h-full object-cover" />
+                                                <Image src={feedObj.item.vendor_avatar} alt="Vendor" fill sizes="48px" className="object-cover" />
                                             ) : (
                                                 <UserCircle className="w-full h-full text-gray-400" />
                                             )}
@@ -471,11 +488,11 @@ function FeedContent() {
                                     </button>
 
                                     {/* Bookmark Button (also triggered by long-press on the media) */}
-                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-lg group" onClick={(e) => { e.stopPropagation(); toggleBookmark(feedObj.item); }}>
-                                        <div className={`p-2 rounded-full transition-all group-hover:bg-white/10 ${bookmarks.includes(feedObj.item.id) ? 'text-amber-400' : 'text-white'}`}>
-                                            <Bookmark size={30} fill={bookmarks.includes(feedObj.item.id) ? 'currentColor' : 'none'} />
+                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-lg group" onClick={(e) => { e.stopPropagation(); toggleBookmark(feedObj); }}>
+                                        <div className={`p-2 rounded-full transition-all group-hover:bg-white/10 ${feedObj.item.is_bookmarked_by_user ? 'text-amber-400' : 'text-white'}`}>
+                                            <Bookmark size={30} fill={feedObj.item.is_bookmarked_by_user ? 'currentColor' : 'none'} />
                                         </div>
-                                        <span className="text-xs font-semibold">Save</span>
+                                        <span className="text-xs font-semibold">{feedObj.item.bookmarks_count || 0}</span>
                                     </button>
                                 </div>
 
@@ -506,9 +523,11 @@ function FeedContent() {
                                                         onClick={(e) => { e.stopPropagation(); openProduct(product, feedObj.item.products); }}
                                                         className="shrink-0 w-[170px] flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-xl p-1.5 shadow-lg hover:bg-white active:scale-[0.98] transition-all text-left"
                                                     >
-                                                        <img
+                                                        <Image
                                                             src={product.image_url?.[0] || '/placeholder.svg'}
                                                             alt={product.product_name}
+                                                            width={48}
+                                                            height={48}
                                                             className="w-12 h-12 rounded-lg object-cover shrink-0 bg-gray-100"
                                                         />
                                                         <div className="min-w-0 flex-1 pr-1">
@@ -579,9 +598,11 @@ function FeedContent() {
                                 onClick={() => { setProductSheetOpen(false); openProduct(product, activeItem.item.products); }}
                                 className="w-full flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-white active:scale-[0.99] transition-all text-left"
                             >
-                                <img
+                                <Image
                                     src={product.image_url?.[0] || '/placeholder.svg'}
                                     alt={product.product_name}
+                                    width={64}
+                                    height={64}
                                     className="w-16 h-16 rounded-lg object-cover shrink-0 bg-gray-100"
                                 />
                                 <div className="min-w-0 flex-1">
@@ -616,9 +637,9 @@ function FeedContent() {
                         <button onClick={() => { handleShare(ctxMenu.item); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">
                             <Share2 size={18} /> Share
                         </button>
-                        <button onClick={() => { toggleBookmark(ctxMenu.item); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">
-                            <Bookmark size={18} className={bookmarks.includes(ctxMenu.item.id) ? 'text-amber-400' : ''} fill={bookmarks.includes(ctxMenu.item.id) ? 'currentColor' : 'none'} />
-                            {bookmarks.includes(ctxMenu.item.id) ? 'Saved' : 'Save'}
+                        <button onClick={() => { toggleBookmark({ type: 'kauch', item: ctxMenu.item }); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">
+                            <Bookmark size={18} className={ctxMenu.item.is_bookmarked_by_user ? 'text-amber-400' : ''} fill={ctxMenu.item.is_bookmarked_by_user ? 'currentColor' : 'none'} />
+                            {ctxMenu.item.is_bookmarked_by_user ? 'Saved' : 'Save'}
                         </button>
                         {Array.isArray(ctxMenu.item.products) && ctxMenu.item.products.length > 0 && (
                             <button onClick={() => { setProductSheetOpen(true); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">
@@ -716,10 +737,13 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
         if (images.length === 1) {
             return (
                 <div className="w-full h-full relative md:w-auto md:h-auto">
-                    <img
+                    <Image
                         src={images[0]}
                         alt={content.caption || 'Post'}
-                        className="w-full h-full object-contain md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw] md:rounded-2xl md:shadow-2xl"
+                        fill
+                        sizes="100vw"
+                        priority
+                        className="object-contain md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw] md:rounded-2xl md:shadow-2xl"
                     />
                 </div>
             );
@@ -776,7 +800,9 @@ function ImageCarousel({ images, caption }: { images: string[]; caption?: string
             >
                 {images.map((src, i) => (
                     <SwiperSlide key={`${src}-${i}`}>
-                        <img src={src} alt={caption || `Image ${i + 1}`} className="w-full h-full object-contain" />
+                        <div className="relative w-full h-full">
+                            <Image src={src} alt={caption || `Image ${i + 1}`} fill sizes="100vw" className="object-contain" />
+                        </div>
                     </SwiperSlide>
                 ))}
             </Swiper>

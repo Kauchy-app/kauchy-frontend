@@ -109,7 +109,9 @@ export default function KauchProfile() {
         if (kRes.ok) setKauch(await kRes.json());
         if (pRes.ok) {
           const data = await pRes.json();
-          setPosts(Array.isArray(data) ? data : []);
+          // Voice-note posts look out of place in the visual feed — keep the feed
+          // to images/videos only and drop audio posts.
+          setPosts(Array.isArray(data) ? data.filter((p: Post) => p.media_type !== 'audio') : []);
         }
       } catch (e) {
         console.error('Failed to load kauch', e);

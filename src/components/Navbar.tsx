@@ -244,10 +244,12 @@ export default function Navbar() {
 
                         {/* Right Section: Icons */}
                         <div className="flex items-center gap-3">
-                            {/* Search — opens the dedicated search page */}
-                            <Link href="/search" className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${navIconClass}`} title="Search">
-                                <Search size={22} />
-                            </Link>
+                            {/* Search — opens the dedicated search page (marketplace only) */}
+                            {pathname === '/marketplace' && (
+                                <Link href="/search" className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${navIconClass}`} title="Search">
+                                    <Search size={22} />
+                                </Link>
+                            )}
 
                             {user ? (
                                 <>

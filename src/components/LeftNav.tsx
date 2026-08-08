@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { Home, Store, MessageSquare, PlusSquare, ShoppingCart, Wallet, User, LogIn, UserPlus, Search } from 'lucide-react';
 import NotificationBell from './NotificationBell';
+import { formatNaira } from '@/utils/formatCurrency';
 
 /**
  * Desktop-only left sidebar for the immersive home feed.
@@ -70,15 +71,20 @@ export default function LeftNav() {
     const itemBase = 'relative flex items-center gap-4 rounded-xl h-12 px-3 transition-colors';
 
     return (
-        <aside className="group hidden md:flex fixed top-0 left-0 h-screen w-[72px] hover:w-[240px] bg-black border-r border-gray-800 z-[100] flex-col py-4 transition-[width] duration-300 ease-in-out overflow-hidden">
+        <aside className="group hidden md:flex fixed top-0 left-0 h-screen w-[72px] hover:w-[240px] bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 z-[100] flex-col py-4 transition-[width] duration-300 ease-in-out overflow-hidden">
             {/* Logo: icon when collapsed, full wordmark when expanded */}
             <Link href="/" className="flex items-center h-[48px] px-4 mb-6 shrink-0" title="Home">
                 <img src="/logo.png" alt="Kauchy" className="h-9 w-9 object-contain group-hover:hidden" />
                 <div className="hidden group-hover:flex w-[144px] h-[48px] overflow-hidden items-center">
                     <img
+                        src="/logo.png"
+                        alt="Kauchy"
+                        className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none dark:hidden"
+                    />
+                    <img
                         src="/inverted_logo.png"
                         alt="Kauchy"
-                        className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none"
+                        className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none hidden dark:block"
                     />
                 </div>
             </Link>
@@ -94,12 +100,12 @@ export default function LeftNav() {
                                 key={item.href}
                                 href={item.href}
                                 title={item.label}
-                                className={`${itemBase} ${active ? 'bg-white/10 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                                className={`${itemBase} ${active ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'}`}
                             >
                                 <span className="relative shrink-0">
                                     <Icon size={24} />
                                     {item.badge > 0 && (
-                                        <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full border border-black">
+                                        <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full border border-white dark:border-black">
                                             {item.badge}
                                         </span>
                                     )}
@@ -114,8 +120,8 @@ export default function LeftNav() {
 
                 {/* Kauchs the user follows */}
                 {following.length > 0 && (
-                    <div className="mt-3 pt-3 px-3 border-t border-gray-800">
-                        <p className="px-3 mb-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <div className="mt-3 pt-3 px-3 border-t border-gray-200 dark:border-gray-800">
+                        <p className="px-3 mb-1 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                             Following
                         </p>
                         {following.map(k => (
@@ -123,12 +129,12 @@ export default function LeftNav() {
                                 key={k.id}
                                 href={`/kauch/${k.id}`}
                                 title={k.name}
-                                className={`${itemBase} text-gray-300 hover:bg-white/5 hover:text-white`}
+                                className={`${itemBase} text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white`}
                             >
-                                <span className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 shrink-0 flex items-center justify-center">
+                                <span className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
                                     {k.avatar_url
                                         ? <Image src={k.avatar_url} alt={k.name} width={32} height={32} className="w-full h-full object-cover" />
-                                        : <span className="text-xs font-bold text-gray-200">{k.name.charAt(0).toUpperCase()}</span>}
+                                        : <span className="text-xs font-bold text-gray-500 dark:text-gray-200">{k.name.charAt(0).toUpperCase()}</span>}
                                 </span>
                                 <span className="whitespace-nowrap text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                     {k.name}
@@ -146,10 +152,10 @@ export default function LeftNav() {
 
             {/* Wallet — only meaningful when signed in */}
             {user && (
-                <Link href="/wallet" title="Wallet" className={`${itemBase} mx-3 text-amber-400 hover:bg-white/5`}>
+                <Link href="/wallet" title="Wallet" className={`${itemBase} mx-3 text-amber-500 dark:text-amber-400 hover:bg-gray-100 dark:hover:bg-white/5`}>
                     <Wallet size={24} className="shrink-0" />
                     <span className="whitespace-nowrap text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        ₦{walletBalance}
+                        {formatNaira(walletBalance)}
                     </span>
                 </Link>
             )}
@@ -159,14 +165,14 @@ export default function LeftNav() {
                 <Link
                     href="/account"
                     title="Profile"
-                    className={`${itemBase} mx-3 mt-1 ${pathname === '/account' ? 'bg-white/10' : 'hover:bg-white/5'}`}
+                    className={`${itemBase} mx-3 mt-1 ${pathname === '/account' ? 'bg-gray-100 dark:bg-white/10' : 'hover:bg-gray-100 dark:hover:bg-white/5'}`}
                 >
-                    <span className="w-8 h-8 rounded-full overflow-hidden bg-zinc-700 shrink-0 flex items-center justify-center">
+                    <span className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
                         {profileAvatar
                             ? <Image src={profileAvatar} alt="Profile" width={32} height={32} className="w-full h-full object-cover" />
-                            : <User size={18} className="text-gray-300" />}
+                            : <User size={18} className="text-gray-500 dark:text-gray-300" />}
                     </span>
-                    <span className="whitespace-nowrap text-sm font-medium text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="whitespace-nowrap text-sm font-medium text-gray-700 dark:text-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         Profile
                     </span>
                 </Link>
@@ -176,7 +182,7 @@ export default function LeftNav() {
                     <Link
                         href="/login"
                         title="Login"
-                        className={`${itemBase} text-gray-200 hover:bg-white/5 group-hover:border group-hover:border-gray-700 group-hover:justify-center`}
+                        className={`${itemBase} text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5 group-hover:border group-hover:border-gray-300 dark:group-hover:border-gray-700 group-hover:justify-center`}
                     >
                         <LogIn size={24} className="shrink-0 group-hover:hidden" />
                         <span className="whitespace-nowrap text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">

@@ -6,6 +6,7 @@ import { AuthWall } from '@/context/AuthGateContext';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { formatNaira, formatNairaFixed } from '@/utils/formatCurrency';
 import { Menu } from 'lucide-react';
 
 const QRScannerOverlay = dynamic(() => import('@/components/QRScannerOverlay'), { ssr: false });
@@ -350,7 +351,7 @@ function OrdersPageContent() {
                                 </div>
                                 <div className="flex justify-between mb-3 text-sm">
                                     <span className="font-medium text-[#4b4b4b] dark:text-gray-400">Total Amount</span>
-                                    <span className="font-semibold text-[#1d1d1d] dark:text-white">₦{selectedOrder.amount}</span>
+                                    <span className="font-semibold text-[#1d1d1d] dark:text-white">{formatNairaFixed(selectedOrder.amount)}</span>
                                 </div>
                             </div>
 
@@ -370,7 +371,7 @@ function OrdersPageContent() {
                                                         {item.product_name}
                                                     </Link>
                                                 </div>
-                                                <span className="font-semibold text-[#1d1d1d] dark:text-white">₦{item.price}</span>
+                                                <span className="font-semibold text-[#1d1d1d] dark:text-white">{formatNaira(item.price)}</span>
                                             </div>
                                         ))}
                                     </div>

@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GoogleAuthButton from '@/components/GoogleAuthButton';
+import UniversitySearch from '@/components/UniversitySearch';
 
 
 export default function SignupPage() {
@@ -16,19 +17,10 @@ export default function SignupPage() {
         password: '',
         confirmPassword: ''
     });
-    const [universities, setUniversities] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-    useEffect(() => {
-        // Fetch universities
-        fetch('https://university-domains-list-api-tn4l.onrender.com/search?country=Nigeria')
-            .then(res => res.json())
-            .then(data => setUniversities(data))
-            .catch(err => console.error("Failed to load universities", err));
-    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,7 +75,7 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="dark min-h-screen w-full flex items-center justify-center p-5 bg-gradient-to-br from-zinc-950 to-black font-sans">
+        <div className="min-h-screen w-full flex items-center justify-center p-5 bg-gradient-to-br from-gray-50 to-gray-200 dark:from-zinc-950 dark:to-black font-sans">
             <div className="w-full max-w-[420px] px-4 md:px-0">
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 sm:p-8 shadow-sm overflow-visible md:p-10 relative">
                     <Link href="/" className="flex items-center justify-center w-full mb-6 no-underline">
@@ -132,18 +124,11 @@ export default function SignupPage() {
                         </div>
                         <div className="mb-4.5">
                             <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">University</label>
-                            <select
-                                name="university"
+                            <UniversitySearch
                                 value={formData.university}
-                                onChange={handleChange}
+                                onChange={(val) => setFormData({ ...formData, university: val })}
                                 required
-                                className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-800 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-gray-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
-                            >
-                                <option value="">Select University</option>
-                                {universities.map((uni, idx) => (
-                                    <option key={idx} value={uni.name}>{uni.name}</option>
-                                ))}
-                            </select>
+                            />
                         </div>
                         <div className="mb-4.5">
                             <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">Role</label>

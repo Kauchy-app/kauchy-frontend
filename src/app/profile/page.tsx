@@ -5,7 +5,8 @@ import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useToast } from '@/context/ToastContext';
 import LoadingModal from '@/components/LoadingModal';
-import { UserProfile, University } from '@/types';
+import { UserProfile } from '@/types';
+import UniversitySearch from '@/components/UniversitySearch';
 import { useTheme } from 'next-themes';
 import { Moon, Sun, Camera, Pencil, Mail, Phone, GraduationCap, User as UserIcon } from 'lucide-react';
 
@@ -17,7 +18,7 @@ export default function ProfilePage() {
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState<{ bio: string; institute: string }>({ bio: '', institute: '' });
-    const [universities, setUniversities] = useState<University[]>([]);
+
 
     const { theme, setTheme, systemTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
@@ -28,7 +29,6 @@ export default function ProfilePage() {
     useEffect(() => {
         if (user) {
             fetchProfile();
-            fetchUniversities();
         } else {
             const timer = setTimeout(() => setLoading(false), 500);
             return () => clearTimeout(timer);
@@ -53,23 +53,7 @@ export default function ProfilePage() {
         }
     };
 
-    const fetchUniversities = async () => {
-        try {
-            const res = await fetch('https://university-domains-list-api-tn4l.onrender.com/search?country=Nigeria');
-            if (res.ok) {
-                const data: University[] = await res.json();
-                if (data.length === 0) {
-                    showToast('No universities available', 'error');
-                } else {
-                    setUniversities(data);
-                }
-            } else {
-                showToast("Failed to load universities", "error");
-            }
-        } catch (e) {
-            showToast("Failed to load universities", "error");
-        }
-    };
+
 
     const startEdit = () => {
         if (!profile) return;
@@ -259,14 +243,10 @@ export default function ProfilePage() {
                             <GraduationCap size={14} className="text-gray-400" /> University
                         </label>
                         {isEditing ? (
-                            <select
-                                className={inputBase}
+                            <UniversitySearch
                                 value={editForm.institute}
-                                onChange={e => setEditForm({ ...editForm, institute: e.target.value })}
-                            >
-                                <option value="">Select University</option>
-                                {universities.map((u, i) => <option key={i} value={u.name}>{u.name}</option>)}
-                            </select>
+                                onChange={(val) => setEditForm({ ...editForm, institute: val })}
+                            />
                         ) : (
                             <input type="text" className={inputDisabled} value={profile?.institute || ''} placeholder="Not set" disabled />
                         )}

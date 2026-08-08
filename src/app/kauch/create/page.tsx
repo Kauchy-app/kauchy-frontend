@@ -7,6 +7,7 @@ import { Image as ImageIcon, Video, Plus, ArrowLeft, X } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { formatNaira } from '@/utils/formatCurrency';
 
 const VoiceRecorder = dynamic(() => import('@/components/VoiceRecorder'), { ssr: false });
 
@@ -409,7 +410,7 @@ export default function CreateKauchContent() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{product.product_name}</p>
-                        <p className="text-xs font-bold text-blue-600 mt-0.5">₦{product.price}</p>
+                        <p className="text-xs font-bold text-blue-600 mt-0.5">{formatNaira(product.price)}</p>
                       </div>
                       <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${selectedProducts.includes(product.id) ? 'border-blue-500 bg-blue-500 text-white' : 'border-gray-300 dark:border-zinc-600'}`}>
                         {selectedProducts.includes(product.id) && <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}

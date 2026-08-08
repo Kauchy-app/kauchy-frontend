@@ -4,7 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from 'next-themes';
 import { ShoppingCart, User, X, Bell, Home, Store, Wallet, MessageSquare, PlusSquare, Search } from 'lucide-react';
+import { formatNaira } from '@/utils/formatCurrency';
 
 type Notification = {
     id: number;
@@ -20,6 +22,9 @@ export default function Navbar() {
     const { user, loading, logout } = useAuth();
     const pathname = usePathname();
     const router = useRouter();
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
@@ -189,11 +194,10 @@ export default function Navbar() {
     const showSearchBar = pathname === '/' || pathname === '/vendor-profile' || pathname === '/marketplace';
     const isFullWidthPage = pathname === '/chat' || pathname === '/orders' || pathname === '/cart' || pathname === '/';
 
-    // Paint the top & bottom nav black (and lighten their foreground colors)
-    // on the immersive home feed and the kauch content-creation flow.
-    const isDarkNav = pathname === '/' || pathname === '/account'
-        || pathname === '/marketplace' || pathname === '/vendor-profile' || pathname === '/chat' || pathname === '/profile'
-        || pathname === '/wallet' || pathname === '/cart' || pathname === '/inventory' || pathname === '/orders' || pathname === '/analytics' || pathname.startsWith('/kauch');
+    // Immersive pages are always dark (fullscreen TikTok-style feed).
+    // Everything else follows the user's chosen theme.
+    const isImmersiveDark = pathname === '/' || pathname.startsWith('/feed');
+    const isDarkNav = isImmersiveDark || (mounted && resolvedTheme === 'dark');
     // The left sidebar rail is the sole navigation on desktop across all pages, so the
     // top header and bottom bar are both hidden on desktop. On mobile the rail is hidden
     // (it's `hidden md:flex`) and these two bars are the navigation instead.
@@ -266,7 +270,7 @@ export default function Navbar() {
                                     <div className="block">
                                         <Link href="/wallet" className="flex items-center gap-1.5 md:gap-2 px-2.5 py-1.5 md:px-4 md:py-2 bg-amber-400 text-white rounded-lg text-sm md:text-base font-medium hover:bg-amber-500 transition-colors decoration-0" title="Wallet">
                                             <Wallet size={18} className="shrink-0 md:w-5 md:h-5" />
-                                            <span className="whitespace-nowrap">₦{walletBalance}</span>
+                                            <span className="whitespace-nowrap">{formatNaira(walletBalance)}</span>
                                         </Link>
                                     </div>
 
@@ -274,7 +278,7 @@ export default function Navbar() {
                                     <div className="relative">
                                         <Link href="/cart" className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors relative ${navIconClass}`} title="Cart">
                                             <ShoppingCart size={22} />
-                                            {cartCount > 0 && <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 border-white">{cartCount}</span>}
+                                            {cartCount > 0 && <span className={`absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 ${isDarkNav ? 'border-black' : 'border-white dark:border-black'}`}>{cartCount}</span>}
                                         </Link>
                                     </div>
 
@@ -282,7 +286,7 @@ export default function Navbar() {
                                     <div className="relative" ref={notificationRef}>
                                         <button className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors relative ${navIconClass}`} onClick={() => { setIsNotificationsOpen(!isNotificationsOpen); setIsProfileOpen(false); }} title="Notifications">
                                             <Bell size={22} />
-                                            {unreadCount > 0 && <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full border-2 border-white">{unreadCount}</span>}
+                                            {unreadCount > 0 && <span className={`absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full border-2 ${isDarkNav ? 'border-black' : 'border-white dark:border-black'}`}>{unreadCount}</span>}
                                         </button>
                                         {isNotificationsOpen && (
                                             <div className={`${isDarkNav ? 'dark' : ''} fixed inset-x-0 top-[70px] sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-80 bg-white dark:bg-zinc-900 sm:rounded-xl shadow-xl border-b sm:border border-gray-100 dark:border-zinc-800 overflow-hidden z-[200] animate-fadeIn`}>
@@ -366,21 +370,21 @@ export default function Navbar() {
                                             <User size={20} />
                                         </button>
                                         {isProfileOpen && (
-                                            <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-fadeIn py-1">
+                                            <div className="absolute right-0 mt-3 w-48 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-100 dark:border-zinc-800 overflow-hidden z-50 animate-fadeIn py-1">
                                                 {pathname !== '/profile' && (
-                                                    <Link href="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600">View Profile</Link>
+                                                    <Link href="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-blue-600">View Profile</Link>
                                                 )}
                                                 {isVendor && pathname !== '/inventory' && (
-                                                    <Link href="/inventory" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600">My Inventory</Link>
+                                                    <Link href="/inventory" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-blue-600">My Inventory</Link>
                                                 )}
                                                 {pathname !== '/orders' && (
-                                                    <Link href="/orders" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600">Orders</Link>
+                                                    <Link href="/orders" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-blue-600">Orders</Link>
                                                 )}
                                                 {pathname !== '/chat' && (
-                                                    <Link href="/chat" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600">Messages</Link>
+                                                    <Link href="/chat" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-blue-600">Messages</Link>
                                                 )}
-                                                <div className="h-px bg-gray-100 my-1"></div>
-                                                <button onClick={() => { setIsProfileOpen(false); logout(); }} className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">Logout</button>
+                                                <div className="h-px bg-gray-100 dark:bg-zinc-800 my-1"></div>
+                                                <button onClick={() => { setIsProfileOpen(false); logout(); }} className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10">Logout</button>
                                             </div>
                                         )}
                                     </div>

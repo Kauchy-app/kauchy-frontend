@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
+import { formatNairaFixed } from '@/utils/formatCurrency';
 
 interface Transaction {
     userId: number;
@@ -169,10 +170,10 @@ export default function WalletPage() {
             // response.ok means verification succeeded
             setPaymentState('success');
             setPaymentDetails({
-                amount: `₦${amount.toFixed(2)}`,
+                amount: formatNairaFixed(amount),
                 reference: reference
             });
-            showToast(`Payment of ₦${amount.toFixed(2)} successful!`, 'success');
+            showToast(`Payment of ${formatNairaFixed(amount)} successful!`, 'success');
 
             // Reload wallet data after a short delay
             setTimeout(() => {
@@ -291,7 +292,7 @@ export default function WalletPage() {
         localStorage.setItem("transactions", JSON.stringify(allTrans));
 
         setBalance(prev => prev - amount);
-        showToast(`Successfully withdrew ₦${amount.toFixed(2)}`, 'success');
+        showToast(`Successfully withdrew ${formatNairaFixed(amount)}`, 'success');
 
         setIsWithdrawOpen(false);
         setDrawerOverlayOpen(false);
@@ -330,7 +331,7 @@ export default function WalletPage() {
                 {/* Balance Card */}
                 <div className="bg-gradient-to-br from-[#1c6ef2] to-[#1a5bcc] text-white rounded-xl p-6 sm:p-10 text-center shadow-lg shadow-[#1c6ef2]/30">
                     <h2 className="text-sm mb-3 opacity-90 font-medium">Total Balance</h2>
-                    <div className="text-4xl sm:text-5xl font-bold mb-3" id="balanceAmount">₦{balance.toFixed(2)}</div>
+                    <div className="text-4xl sm:text-5xl font-bold mb-3" id="balanceAmount">{formatNairaFixed(balance)}</div>
                     <div className="text-[13px] opacity-80">Available for withdrawal</div>
                 </div>
 
@@ -364,7 +365,7 @@ export default function WalletPage() {
                                         <div className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{new Date(t.date).toLocaleDateString()}</div>
                                     </div>
                                     <div className={`text-sm font-bold ${t.type === "credit" ? "text-green-500" : "text-red-500"}`}>
-                                        {t.type === "credit" ? "+" : "-"}₦{t.amount.toFixed(2)}
+                                        {t.type === "credit" ? "+" : "-"}{formatNairaFixed(t.amount)}
                                     </div>
                                 </div>
                             ))

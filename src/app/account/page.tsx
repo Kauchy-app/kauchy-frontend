@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useTheme } from 'next-themes';
 import { User, Package, Boxes, BarChart2, Wallet, Moon, Sun, LogOut, ChevronRight } from 'lucide-react';
+import { formatNairaFixed } from '@/utils/formatCurrency';
 
 export default function AccountPage() {
     const { user, logout, loading } = useAuth();
@@ -93,7 +94,7 @@ export default function AccountPage() {
                     </div>
                     <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-xl p-4 text-center">
                         <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">
-                            ₦{walletBalance.toLocaleString()}
+                            {formatNairaFixed(walletBalance)}
                         </p>
                         <p className="mt-1.5 text-xs font-medium text-gray-500 dark:text-gray-400">Balance</p>
                     </div>
@@ -110,7 +111,7 @@ export default function AccountPage() {
                         </div>
                         <div>
                             <p className="text-xs font-medium text-white/85">Wallet Balance</p>
-                            <p className="text-lg font-bold leading-tight">₦{walletBalance.toLocaleString()}</p>
+                            <p className="text-lg font-bold leading-tight">{formatNairaFixed(walletBalance)}</p>
                         </div>
                     </div>
                     <ChevronRight size={20} className="text-white/85 group-hover:translate-x-0.5 transition-transform" />

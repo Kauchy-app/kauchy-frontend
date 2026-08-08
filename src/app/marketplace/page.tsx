@@ -102,7 +102,7 @@ export default function Home(): JSX.Element {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <div className="dark contents">
+    <>
       <div className="max-w-[1600px] mx-auto px-2.5 py-5 sm:px-5 sm:py-10 min-h-[calc(100vh-140px)] dark:bg-zinc-950">
         <HeroBanner />
 
@@ -201,6 +201,6 @@ export default function Home(): JSX.Element {
 
         <Footer />
       </div>
-    </div>
+    </>
   );
 }

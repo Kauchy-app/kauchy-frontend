@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
+import { formatNaira } from '@/utils/formatCurrency';
 
 // Define Interface for Product
 interface Product {
@@ -33,7 +34,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             </div>
             <div className="p-4">
                 <div className="text-sm font-semibold text-gray-900 dark:text-white mb-1.5 leading-snug">{product.product_name}</div>
-                <div className="text-base font-bold text-amber-400 mb-1.5">₦{product.price}</div>
+                <div className="text-base font-bold text-amber-400 mb-1.5">{formatNaira(product.price)}</div>
                 <div className="text-xs text-gray-600 dark:text-gray-400 mb-2">{product.vendor_username}</div>
                 <div className="text-xs text-gray-600 dark:text-gray-400">📍 {product.institute}</div>
             </div>

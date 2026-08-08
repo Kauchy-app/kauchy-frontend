@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useAuthGate } from '../context/AuthGateContext';
 import { Heart, MessageCircle, Send, X, Share2, ShoppingCart, Info, Store, Zap } from 'lucide-react';
 import Image from 'next/image';
+import { formatNaira } from '@/utils/formatCurrency';
 
 interface FeedSidebarProps {
     isOpen: boolean;
@@ -478,7 +479,7 @@ export default function FeedSidebar({ isOpen, onClose, type, item, addToCart, co
            ${isOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'}`;
 
     return (
-        <div className="dark contents">
+        <>
         <div className={panelClass}>
             {/* Grab handle (mobile bottom-sheet only; hidden on desktop drawer) */}
             <div className="flex md:hidden justify-center pt-2.5 pb-1 shrink-0">
@@ -500,7 +501,7 @@ export default function FeedSidebar({ isOpen, onClose, type, item, addToCart, co
                     <>
                         <div>
                             <h1 className="text-2xl sm:text-2xl font-bold text-gray-900 dark:text-white leading-tight mb-2">{item.product_name}</h1>
-                            <div className="text-2xl sm:text-xl font-bold text-amber-500">₦{item.price}</div>
+                            <div className="text-2xl sm:text-xl font-bold text-amber-500">{formatNaira(item.price)}</div>
                         </div>
 
                         <div className="flex flex-col gap-2">
@@ -757,7 +758,7 @@ export default function FeedSidebar({ isOpen, onClose, type, item, addToCart, co
             </div>
             )}
         </div>
-        </div>
+        </>
     );
 }
 

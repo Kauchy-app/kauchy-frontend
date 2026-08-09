@@ -131,8 +131,8 @@ export default function UniversitySearch({
     const isDark = variant === 'dark';
 
     const inputClasses = isDark
-        ? 'w-full pl-9 pr-8 py-3 border border-zinc-700 rounded-lg text-sm text-white bg-zinc-800 placeholder-gray-500 focus:outline-none focus:border-amber-400 transition-all duration-300'
-        : 'w-full pl-9 pr-8 py-3 border border-gray-200 dark:border-zinc-800 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-gray-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10';
+        ? 'w-full pl-9 pr-8 py-3.5 border border-zinc-700 rounded-xl text-sm text-white bg-zinc-800 placeholder-gray-500 focus:outline-none focus:border-amber-400 transition-all duration-300'
+        : 'w-full pl-9 pr-8 py-3.5 bg-gray-50/50 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700/50 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:bg-white dark:focus:bg-zinc-800';
 
     const dropdownClasses = isDark
         ? 'absolute z-50 left-0 right-0 mt-1 max-h-[220px] overflow-y-auto bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl'

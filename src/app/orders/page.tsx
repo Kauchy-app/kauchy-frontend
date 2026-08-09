@@ -145,7 +145,7 @@ function OrdersPageContent() {
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-    const handleOrderClick = (order: any) => {
+    const handleOrderClick = async (order: any) => {
         setSelectedOrder(order);
         setScanResult(null);
         setValidationStatus('idle');
@@ -162,6 +162,25 @@ function OrdersPageContent() {
             setActiveTab('camera');
         } else {
             setActiveTab('qrcode');
+        }
+        
+        // Mark as read if it is unread
+        if (!order.is_read && user?.access) {
+            try {
+                // Optimistically update the local state
+                setOrders(prev => prev.map(o => o.id === order.id ? { ...o, is_read: true } : o));
+                
+                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/mark_read/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${user.access}`
+                    },
+                    body: JSON.stringify({ order_id: order.id })
+                });
+            } catch (error) {
+                console.error("Error marking order as read:", error);
+            }
         }
     };
 
@@ -280,8 +299,13 @@ function OrdersPageContent() {
                                 className={`p-4 border-b border-gray-100 dark:border-zinc-800 cursor-pointer transition-colors duration-200 hover:bg-[#f4f6fa] dark:hover:bg-zinc-800! ${selectedOrder?.id === order.id ? 'bg-[#f4f6fa] dark:bg-zinc-950 border-l-[3px] border-l-[#1c6ef2]' : ''}`}
                                 onClick={() => handleOrderClick(order)}
                             >
-                                <div className="flex justify-between mb-1.5">
-                                    <span className="font-semibold text-sm text-[#1d1d1d] dark:text-white">{order.id}</span>
+                                <div className="flex justify-between mb-1.5 items-center">
+                                    <div className="flex items-center gap-2">
+                                        {!order.is_read && (
+                                            <div className="w-2 h-2 rounded-full bg-[#1c6ef2]"></div>
+                                        )}
+                                        <span className={`font-semibold text-sm ${!order.is_read ? 'text-[#1d1d1d] dark:text-white' : 'text-gray-600 dark:text-gray-300'}`}>{order.id}</span>
+                                    </div>
                                     <span className="text-[11px] text-[#4b4b4b] dark:text-gray-400">{new Date(order.created_at).toLocaleDateString()}</span>
                                 </div>
                                 <div className="text-xs text-[#4b4b4b] dark:text-gray-400 mb-2 leading-snug">

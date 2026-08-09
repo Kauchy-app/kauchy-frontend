@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import { useNotifications } from '../context/NotificationContext';
 import { Bell, X } from 'lucide-react';
 
 type Notification = {
@@ -23,42 +24,8 @@ export default function NotificationBell({ collapsed = true }: { collapsed?: boo
     const { user } = useAuth();
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
-    const [notifications, setNotifications] = useState<Notification[]>([]);
-    const [unreadCount, setUnreadCount] = useState<number>(0);
-    const wsRef = useRef<WebSocket | null>(null);
+    const { notifications, unreadCount, markRead, markAllRead, deleteNotification, clearAll } = useNotifications();
     const containerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!user?.access) return;
-
-        const wsHost = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000';
-        const ws = new WebSocket(`${wsHost}/ws/notifications/?token=${user.access}`);
-        wsRef.current = ws;
-
-        ws.onopen = () => {
-            ws.send(JSON.stringify({ action: 'get_notification' }));
-        };
-        ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                if (data.type === 'unread_count') {
-                    setUnreadCount(data.count);
-                } else if (data.type === 'notifications') {
-                    setNotifications(data.notifications || []);
-                } else if (data.type === 'new_notification') {
-                    setNotifications(prev => [data.notification, ...prev].slice(0, 20));
-                }
-            } catch (e) {
-                console.error('Error parsing WebSocket message:', e);
-            }
-        };
-        ws.onerror = (err) => console.error('Notification WebSocket error:', err);
-
-        return () => {
-            ws.close();
-            wsRef.current = null;
-        };
-    }, [user?.access]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -71,11 +38,7 @@ export default function NotificationBell({ collapsed = true }: { collapsed?: boo
     }, []);
 
     const handleNotificationClick = (notif: Notification) => {
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            wsRef.current.send(JSON.stringify({ action: 'mark_read', notification_id: notif.id }));
-        }
-        setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
-        setUnreadCount(prev => Math.max(0, prev - 1));
+        markRead(notif.id);
         setIsOpen(false);
 
         if (notif.link) router.push(notif.link);
@@ -83,23 +46,7 @@ export default function NotificationBell({ collapsed = true }: { collapsed?: boo
         else if (notif.notification_type === 'order') router.push('/orders');
     };
 
-    const markAllRead = () => {
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            wsRef.current.send(JSON.stringify({ action: 'mark_all_read' }));
-        }
-        setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
-        setUnreadCount(0);
-    };
 
-    const clearAll = () => {
-        notifications.forEach(n => {
-            if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-                wsRef.current.send(JSON.stringify({ action: 'delete', notification_id: n.id }));
-            }
-        });
-        setNotifications([]);
-        setUnreadCount(0);
-    };
 
     if (!user) return null;
 
@@ -160,11 +107,7 @@ export default function NotificationBell({ collapsed = true }: { collapsed?: boo
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-                                                wsRef.current.send(JSON.stringify({ action: 'delete', notification_id: notif.id }));
-                                            }
-                                            setNotifications(prev => prev.filter(n => n.id !== notif.id));
-                                            if (!notif.is_read) setUnreadCount(prev => Math.max(0, prev - 1));
+                                            deleteNotification(notif.id);
                                         }}
                                         className="absolute top-2 right-2 opacity-0 group-hover/notif:opacity-100 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-400 hover:text-red-500 transition-all"
                                         title="Remove"

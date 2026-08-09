@@ -2,26 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
   return NextResponse.next()
-  
-  // Allow requests for the waitlist path
-  if (pathname === '/waitlist') {
-    return NextResponse.next()
-  }
-
-  // Allow requests for static files, API routes, public assets, etc.
-  if (
-    pathname.startsWith('/_next') || 
-    pathname.startsWith('/api') || 
-    pathname === '/favicon.ico' ||
-    pathname.match(/\.[^/]+$/) // Match any path with a file extension (e.g., .png, .css)
-  ) {
-    return NextResponse.next()
-  }
-
-  // Redirect to waitlist for all other pages
-  return NextResponse.redirect(new URL('/waitlist', request.url))
 }
 
 export const config = {

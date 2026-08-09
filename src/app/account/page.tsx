@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
+import { useUserData } from '@/context/UserDataContext';
 import { useTheme } from 'next-themes';
 import { User, Package, Boxes, BarChart2, Wallet, Moon, Sun, LogOut, ChevronRight } from 'lucide-react';
 import { formatNairaFixed } from '@/utils/formatCurrency';
@@ -15,8 +16,7 @@ export default function AccountPage() {
     useEffect(() => setMounted(true), []);
     const currentTheme = theme === 'system' ? systemTheme : theme;
 
-    const [profile, setProfile] = useState<any>(null);
-    const [walletBalance, setWalletBalance] = useState<number>(0);
+    const { walletBalance, profile } = useUserData();
     const [ordersCount, setOrdersCount] = useState<number | null>(null);
 
     const isVendor = (user?.user?.role || user?.role || '').toLowerCase() === 'vendor';
@@ -27,20 +27,6 @@ export default function AccountPage() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user.access}`,
         };
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/users/me/`, { headers })
-            .then(r => (r.ok ? r.json() : null))
-            .then(d => { if (d) setProfile(d); })
-            .catch(() => {});
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/wallet/getbalance/`, { headers })
-            .then(r => (r.ok ? r.json() : null))
-            .then(d => {
-                if (d && d.balance !== undefined) {
-                    setWalletBalance(typeof d.balance === 'string' ? parseFloat(d.balance) : d.balance);
-                }
-            })
-            .catch(() => {});
 
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/my_orders/`, { headers })
             .then(r => (r.ok ? r.json() : null))

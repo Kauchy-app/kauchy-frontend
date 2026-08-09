@@ -266,7 +266,7 @@ function OrdersPageContent() {
     if (!user) return <AuthWall reason="view your orders" loading={authLoading} />;
 
     return (
-        <div className="flex h-[calc(100vh-70px)] overflow-hidden relative lg:grid lg:grid-cols-[320px_1fr] bg-[#f4f6fa] dark:bg-zinc-950">
+        <div className="h-full flex overflow-hidden relative lg:grid lg:grid-cols-[320px_1fr] bg-[#f4f6fa] dark:bg-zinc-950">
 
             {/* Mobile Overlay */}
             {isSidebarOpen && (
@@ -360,7 +360,7 @@ function OrdersPageContent() {
                         </div>
 
                         {/* Scrollable Content */}
-                        <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center gap-6 sm:gap-8">
+                        <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 flex flex-col items-center gap-6 sm:gap-8">
 
                             {/* Order Info Card */}
                             <div className="w-full max-w-[600px] bg-[#f4f6fa] dark:bg-zinc-950 p-5 rounded-xl border border-[#e5e7eb] dark:border-zinc-800">
@@ -436,7 +436,7 @@ function OrdersPageContent() {
                                     )}
                                 </div>
 
-                                <div className="w-[300px] h-[300px] bg-[#f4f6fa] dark:bg-zinc-950 rounded-2xl border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center relative p-5">
+                                <div className="w-full max-w-[300px] aspect-square bg-[#f4f6fa] dark:bg-zinc-950 rounded-2xl border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center relative p-5">
                                     {activeTab === 'qrcode' ? (
                                         (selectedOrder.status === 'completed' || selectedOrder.status === 'expired') ? (
                                             <div className="flex flex-col items-center justify-center gap-3 w-full h-full text-center animate-fadeIn">
@@ -460,17 +460,16 @@ function OrdersPageContent() {
                                             </div>
                                         ) : (
                                             <div className="flex flex-col items-center animate-fadeIn w-full h-full">
-                                                {/* QR must stay on a white background to remain scannable in dark mode */}
-                                                <div className="relative flex-1 w-full bg-white rounded-xl p-3 flex items-center justify-center">
+                                                <div className="relative w-full max-w-[200px] aspect-square bg-white rounded-xl p-2 flex items-center justify-center">
                                                     <Image
                                                         src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(JSON.stringify({ id: selectedOrder.id, status: selectedOrder.status }))}`}
                                                         alt="QR Code"
                                                         fill
-                                                        sizes="250px"
-                                                        className="object-contain"
+                                                        sizes="200px"
+                                                        className="object-contain p-2"
                                                     />
                                                 </div>
-                                                <p className="text-xs text-[#4b4b4b] dark:text-gray-400 mt-3 text-center">Scan this code to verify</p>
+                                                <p className="text-xs text-[#4b4b4b] dark:text-gray-400 mt-4 text-center">Scan this code to verify</p>
                                             </div>
                                         )
                                     ) : (
@@ -649,7 +648,7 @@ function OrdersPageContent() {
 
 export default function OrdersPage() {
     return (
-        <Suspense fallback={<div className="flex items-center justify-center h-[calc(100vh-70px)]">Loading orders...</div>}>
+        <Suspense fallback={<div className="h-full flex items-center justify-center">Loading orders...</div>}>
             <OrdersPageContent />
         </Suspense>
     );

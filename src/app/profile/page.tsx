@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useToast } from '@/context/ToastContext';
+import { useUserData } from '@/context/UserDataContext';
 import LoadingModal from '@/components/LoadingModal';
 import { UserProfile } from '@/types';
 import UniversitySearch from '@/components/UniversitySearch';
@@ -14,6 +15,7 @@ import { Moon, Sun, Camera, Pencil, Mail, Phone, GraduationCap, User as UserIcon
 export default function ProfilePage() {
     const { user, loading: authLoading } = useAuth();
     const { showToast } = useToast();
+    const { profile: contextProfile, refreshUserData } = useUserData();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
@@ -27,31 +29,17 @@ export default function ProfilePage() {
     const currentTheme = theme === 'system' ? systemTheme : theme;
 
     useEffect(() => {
-        if (user) {
-            fetchProfile();
-        } else {
+        if (contextProfile) {
+            setProfile(contextProfile as UserProfile);
+            setLoading(false);
+        } else if (user && !contextProfile) {
+            setProfile(user.user as unknown as UserProfile);
+            setLoading(false);
+        } else if (!user) {
             const timer = setTimeout(() => setLoading(false), 500);
             return () => clearTimeout(timer);
         }
-    }, [user]);
-
-    const fetchProfile = async () => {
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/users/me/`, {
-                headers: { Authorization: `Bearer ${user.access}` }
-            });
-            if (res.ok) {
-                const data: UserProfile = await res.json();
-                setProfile(data);
-            } else {
-                setProfile(user.user as unknown as UserProfile);
-            }
-        } catch (e) {
-            setProfile(user.user as unknown as UserProfile);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [user, contextProfile]);
 
 
 
@@ -80,6 +68,7 @@ export default function ProfilePage() {
                 const updated: Partial<UserProfile> = await res.json();
                 setProfile(prev => prev ? { ...prev, ...updated } : null);
                 setIsEditing(false);
+                refreshUserData();
                 showToast("Profile updated successfully!", "success");
             } else {
                 const error = await res.json();
@@ -123,6 +112,7 @@ export default function ProfilePage() {
             if (res.ok) {
                 const updated: Partial<UserProfile> = await res.json();
                 setProfile(prev => prev && updated.profile_url ? { ...prev, profile_url: updated.profile_url } : prev);
+                refreshUserData();
                 showToast("Profile picture updated successfully!", "success");
             } else {
                 const error = await res.json();

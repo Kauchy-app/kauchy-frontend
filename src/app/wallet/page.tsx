@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
+import { useUserData } from '@/context/UserDataContext';
 import { formatNairaFixed } from '@/utils/formatCurrency';
 
 interface Transaction {
@@ -21,8 +22,12 @@ interface Toast {
 export default function WalletPage() {
     const { user, logout, loading } = useAuth();
 
-    // State
+    const { walletBalance, refreshUserData } = useUserData();
     const [balance, setBalance] = useState<number>(0);
+
+    useEffect(() => {
+        setBalance(walletBalance);
+    }, [walletBalance]);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     // Drawer States
@@ -88,29 +93,6 @@ export default function WalletPage() {
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wallet/getbalance/`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${user.access}`
-                }
-            });
-
-            if (!response.ok) {
-                if (response.status === 401) {
-                    showToast('Session expired. Redirecting to login...', 'error');
-                    setTimeout(() => logout(), 1500);
-                    return;
-                }
-                showToast('Failed to load wallet data.', 'error');
-                return;
-            }
-
-            const data = await response.json();
-            if (data && data.balance !== undefined) {
-                setBalance(typeof data.balance === 'string' ? parseFloat(data.balance) : data.balance);
-            }
-
             // Load real transactions from API
             const historyResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wallet/history/`, {
                 method: "GET",
@@ -179,6 +161,7 @@ export default function WalletPage() {
             setTimeout(() => {
                 setPaymentModalOpen(false);
                 setPaymentState('idle');
+                refreshUserData();
                 loadWalletData();
             }, 2500);
 

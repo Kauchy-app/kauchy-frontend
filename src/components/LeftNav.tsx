@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import { useUserData } from '../context/UserDataContext';
 import { Home, Store, MessageSquare, PlusSquare, ShoppingCart, Wallet, User, LogIn, UserPlus, Search } from 'lucide-react';
 import NotificationBell from './NotificationBell';
 import { formatNaira } from '@/utils/formatCurrency';
@@ -18,9 +19,7 @@ export default function LeftNav() {
     const { user } = useAuth();
     const pathname = usePathname();
 
-    const [walletBalance, setWalletBalance] = useState<number>(0);
-    const [cartCount, setCartCount] = useState<number>(0);
-    const [profileAvatar, setProfileAvatar] = useState<string>('');
+    const { walletBalance, cartCount, profileAvatar } = useUserData();
 
     // Kauchs the user follows, loaded from GET /kauch/following/.
     const [following, setFollowing] = useState<{ id: number; name: string; avatar_url?: string }[]>([]);
@@ -33,25 +32,6 @@ export default function LeftNav() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user.access}`,
         };
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/wallet/getbalance/`, { headers })
-            .then(r => (r.ok ? r.json() : null))
-            .then(d => {
-                if (d && d.balance !== undefined) {
-                    setWalletBalance(typeof d.balance === 'string' ? parseFloat(d.balance) : d.balance);
-                }
-            })
-            .catch(() => { });
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/cart-items/`, { headers })
-            .then(r => (r.ok ? r.json() : null))
-            .then(d => { if (d) setCartCount(d?.length || 0); })
-            .catch(() => { });
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/users/me/`, { headers })
-            .then(r => (r.ok ? r.json() : null))
-            .then(d => { if (d) setProfileAvatar(d?.profile_url || d?.pfp || ''); })
-            .catch(() => { });
 
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/kauch/following/`, { headers })
             .then(r => (r.ok ? r.json() : null))

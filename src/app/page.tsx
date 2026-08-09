@@ -341,18 +341,18 @@ function FeedContent() {
 
     if (loading) {
         return (
-            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-black flex items-center justify-center text-white flex-col gap-4">
-                <div className="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div>
-                <p className="font-semibold tracking-widest text-sm uppercase text-gray-400">Loading Feed</p>
+            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex items-center justify-center text-gray-900 dark:text-white flex-col gap-4">
+                <div className="w-12 h-12 border-4 border-gray-200 dark:border-gray-600 border-t-gray-900 dark:border-t-white rounded-full animate-spin"></div>
+                <p className="font-semibold tracking-widest text-sm uppercase text-gray-500 dark:text-gray-400">Loading Feed</p>
             </div>
         );
     }
 
     if (feedItems.length === 0) {
         return (
-            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-black flex flex-col items-center justify-center text-white gap-4">
+            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex flex-col items-center justify-center text-gray-900 dark:text-white gap-4">
                 <p>No content available.</p>
-                <button onClick={() => router.back()} className="px-6 py-2 bg-white text-black rounded-full font-bold">Go Back</button>
+                <button onClick={() => router.back()} className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-black rounded-full font-bold">Go Back</button>
             </div>
         );
     }
@@ -360,7 +360,7 @@ function FeedContent() {
     const activeItem = feedItems[activeItemIndex];
 
     return (
-        <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-black relative overflow-hidden">
+        <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-[#f4f6fa] dark:bg-black relative overflow-hidden">
             {/* Global Styles to hide Swiper default outlines & scrollbars */}
             <style dangerouslySetInnerHTML={{__html: `
                 .swiper-container { width: 100%; height: 100%; }
@@ -388,7 +388,7 @@ function FeedContent() {
                 modules={[Mousewheel, Keyboard, Virtual]}
                 onSwiper={(swiper) => { swiperRef.current = swiper; }}
                 onSlideChange={handleSlideChange}
-                className="w-full h-full bg-black swiper-container"
+                className="w-full h-full bg-[#f4f6fa] dark:bg-black swiper-container"
                 touchEventsTarget="container"
                 resistanceRatio={0.85}
             >
@@ -411,7 +411,7 @@ function FeedContent() {
                     return (
                         <SwiperSlide key={`kauch-${feedObj.item.id}-${index}`} virtualIndex={index}>
                             <div
-                                className={`relative flex items-center justify-center bg-zinc-950 w-full h-full ${frameClass}`}
+                                className={`relative flex items-center justify-center bg-white dark:bg-zinc-950 w-full h-full ${frameClass}`}
                                 onPointerDown={(e) => onMediaPointerDown(e, feedObj.item)}
                                 onPointerMove={onMediaPointerMove}
                                 onPointerUp={() => onMediaPointerUp(feedObj.item)}
@@ -661,9 +661,9 @@ function FeedContent() {
 export default function FeedPage() {
     return (
         <Suspense fallback={
-            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-black flex items-center justify-center text-white flex-col gap-4">
-                <div className="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div>
-                <p className="font-semibold tracking-widest text-sm uppercase text-gray-400">Loading Feed</p>
+            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex items-center justify-center text-gray-900 dark:text-white flex-col gap-4">
+                <div className="w-12 h-12 border-4 border-gray-200 dark:border-gray-600 border-t-gray-900 dark:border-t-white rounded-full animate-spin"></div>
+                <p className="font-semibold tracking-widest text-sm uppercase text-gray-500 dark:text-gray-400">Loading Feed</p>
             </div>
         }>
             <FeedContent />
@@ -728,7 +728,7 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
 
         if (images.length === 0) {
             return (
-                <div className="w-full h-full flex items-center justify-center bg-zinc-900 text-gray-500 text-sm">No media</div>
+                <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-zinc-900 text-gray-500 text-sm">No media</div>
             );
         }
 

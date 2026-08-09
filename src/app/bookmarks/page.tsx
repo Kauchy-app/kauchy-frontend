@@ -27,7 +27,7 @@ export default function BookmarksPage() {
 
     useEffect(() => {
         if (authLoading) return;
-        if (!user) { router.push('/login'); return; }
+        if (!user) { router.push('/signup'); return; }
         fetchBookmarks();
     }, [user, authLoading]);
 

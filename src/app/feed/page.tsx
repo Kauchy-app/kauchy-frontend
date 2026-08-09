@@ -292,9 +292,10 @@ function FeedContent() {
 
                 <button 
                     onClick={() => setSidebarOpen(true)}
-                    className="w-10 h-10 sm:w-12 sm:h-12 bg-black/40 backdrop-blur-md text-white rounded-full flex flex-col items-center justify-center hover:bg-black/60 transition-all pointer-events-auto border border-white/20 shadow-lg animate-pulse"
+                    className="h-10 sm:h-12 px-4 sm:px-5 bg-black/40 backdrop-blur-md text-white rounded-full flex items-center justify-center gap-2 hover:bg-black/60 transition-all pointer-events-auto border border-white/20 shadow-lg animate-pulse"
                 >
                     <Info size={22} />
+                    <span className="text-sm font-semibold tracking-wide">Info</span>
                 </button>
             </div>
 

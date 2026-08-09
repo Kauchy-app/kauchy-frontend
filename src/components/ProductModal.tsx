@@ -469,7 +469,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                             )}
                             {!user && (
                                 <p className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-800 text-center text-sm text-gray-500 dark:text-gray-400">
-                                    <a href="/login" className="text-blue-600 font-medium hover:underline">Log in</a> to write a review
+                                    <a href="/signup" className="text-blue-600 font-medium hover:underline">Log in</a> to write a review
                                 </p>
                             )}
                         </div>

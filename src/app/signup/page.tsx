@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuth } from '@/context/AuthContext';
 import GoogleAuthButton from '@/components/GoogleAuthButton';
 import UniversitySearch from '@/components/UniversitySearch';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function SignupPage() {
     const router = useRouter();
+    const { login } = useAuth();
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         username: '',
@@ -29,12 +31,35 @@ export default function SignupPage() {
         setError('');
     };
 
+    const checkEmail = async () => {
+        setError('');
+        if (!formData.email) return setError('Email is required');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return setError('Please enter a valid email');
+
+        setLoading(true);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/check-email/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: formData.email })
+            });
+            if (!response.ok) throw new Error("Could not verify email");
+            const data = await response.json();
+            
+            if (data.exists) {
+                setStep(5); // Login step
+            } else {
+                setStep(2); // Signup step
+            }
+        } catch (e: any) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const nextStep = () => {
         setError('');
-        if (step === 1) {
-            if (!formData.email) return setError('Email is required');
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return setError('Please enter a valid email');
-        }
         if (step === 2) {
             if (!formData.username) return setError('Username is required');
             if (!formData.phone) return setError('Phone number is required');
@@ -48,10 +73,38 @@ export default function SignupPage() {
 
     const prevStep = () => {
         setError('');
-        setStep(prev => prev - 1);
+        setStep(prev => (prev === 5 ? 1 : prev - 1));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleLoginSubmit = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/jwt/create/`, {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: formData.email, password: formData.password })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.detail || "Login failed");
+            }
+
+            const data = await response.json();
+            login(data);
+            const next = new URLSearchParams(window.location.search).get('next');
+            router.push(next || '/');
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSignupSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setLoading(true);
@@ -87,13 +140,11 @@ export default function SignupPage() {
                 throw new Error(msg);
             }
 
-            alert("Account created successfully! Please login.");
-            const next = new URLSearchParams(window.location.search).get('next');
-            router.push(next ? `/login?next=${encodeURIComponent(next)}` : '/login');
+            // Immediately log them in after signup
+            await handleLoginSubmit();
 
         } catch (err: any) {
             setError(err.message);
-        } finally {
             setLoading(false);
         }
     };
@@ -109,21 +160,21 @@ export default function SignupPage() {
             <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 sm:p-12 lg:p-20 relative overflow-y-auto z-10">
                 <div className="w-full max-w-[440px] animate-in fade-in slide-in-from-bottom-4 duration-700">
                     
-                    <Link href="/" className="inline-block mb-12 no-underline group">
-                        <img src="/logo.png" alt="Kauchy" className="h-12 w-auto object-contain dark:hidden transition-transform duration-500 group-hover:scale-105" />
-                        <img src="/inverted_logo.png" alt="Kauchy" className="h-12 w-auto object-contain hidden dark:block transition-transform duration-500 group-hover:scale-105" />
+                    <Link href="/" className="relative flex items-center justify-start mb-8 h-12 sm:h-14 w-full overflow-hidden no-underline group">
+                        <img src="/logo.png" alt="Kauchy" className="absolute left-[-10px] top-1/2 -translate-y-1/2 h-[180px] w-auto object-contain dark:hidden transition-transform duration-500 group-hover:scale-105" />
+                        <img src="/darkmodelogo.png" alt="Kauchy" className="absolute left-[-10px] top-1/2 -translate-y-1/2 h-[180px] w-auto object-contain hidden dark:block transition-transform duration-500 group-hover:scale-105" />
                     </Link>
 
                     <div className="mb-10">
-                        <h1 className="text-[2.5rem] leading-[1.1] font-serif tracking-tight text-gray-900 dark:text-white mb-3">
-                            {step === 1 ? "Where content meets commerce" : step === 2 ? "Who are you?" : step === 3 ? "Your details" : "Secure account"}
+                        <h1 className="text-[2.2rem] leading-[1.2] font-serif tracking-tight text-gray-900 dark:text-white mb-3">
+                            {step === 1 ? "Your business deserves more than \"DM to order.\" 👀" : step === 2 ? "Who are you?" : step === 3 ? "Your details" : step === 5 ? "Welcome Back" : "Secure account"}
                         </h1>
                         <p className="text-base text-gray-500 dark:text-gray-400 font-medium">
-                            {step === 1 ? "Scroll the feed, chat with friends, and trade securely with our in-app escrow." : step === 4 ? "Almost there, set a strong password." : "Tell us a bit more about yourself."}
+                            {step === 1 ? "Welcome to Kauchy. Scroll the feed, chat with friends, and trade securely." : step === 4 ? "Almost there, set a strong password." : step === 5 ? "Enter your password to sign in." : "Tell us a bit more about yourself."}
                         </p>
                     </div>
 
-                    <form onSubmit={step === 4 ? handleSubmit : (e) => { e.preventDefault(); nextStep(); }} className="space-y-6">
+                    <form onSubmit={step === 4 ? handleSignupSubmit : step === 5 ? handleLoginSubmit : (e) => { e.preventDefault(); if (step === 1) checkEmail(); else nextStep(); }} className="space-y-6">
                         
                         {/* Step 1: Email & Google */}
                         {step === 1 && (
@@ -135,7 +186,7 @@ export default function SignupPage() {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        placeholder="name@university.edu"
+                                        placeholder="example@email.com"
                                         className={inputClass}
                                         autoFocus
                                     />
@@ -143,9 +194,12 @@ export default function SignupPage() {
 
                                 {error && <div className="text-sm font-medium text-red-500">{error}</div>}
 
-                                <button type="button" onClick={nextStep} className="w-full flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold cursor-pointer transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg">
-                                    Continue with email
-                                    <ArrowRight size={18} />
+                                <button type="button" onClick={checkEmail} className="w-full flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold cursor-pointer transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg" disabled={loading}>
+                                    {loading ? (
+                                        <span className="w-5 h-5 border-2 border-white/30 border-t-white dark:border-gray-900/30 dark:border-t-gray-900 rounded-full animate-spin"></span>
+                                    ) : (
+                                        <>Continue with email <ArrowRight size={18} /></>
+                                    )}
                                 </button>
 
                                 <div className="flex items-center gap-4 py-2">
@@ -241,7 +295,7 @@ export default function SignupPage() {
                             </div>
                         )}
 
-                        {/* Step 4: Password & Submit */}
+                        {/* Step 4: Password & Submit (Signup) */}
                         {step === 4 && (
                             <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
                                 <div>
@@ -303,11 +357,49 @@ export default function SignupPage() {
                                 </div>
                             </div>
                         )}
-                    </form>
 
-                    <div className="text-center mt-12 text-sm text-gray-500 dark:text-gray-400">
-                        Already have an account? <Link href="/login" className="text-gray-900 dark:text-white font-semibold underline underline-offset-4 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Log in</Link>
-                    </div>
+                        {/* Step 5: Password & Submit (Login) */}
+                        {step === 5 && (
+                            <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
+                                <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700/50">
+                                    <span className="text-sm font-medium text-gray-900 dark:text-white">{formData.email}</span>
+                                    <button type="button" onClick={() => { setStep(1); setFormData({...formData, password: ''}); }} className="text-xs font-bold text-blue-600 uppercase tracking-wide hover:underline">Change</button>
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Password</label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            placeholder="Enter your password"
+                                            className={inputClass + " pr-20"}
+                                            autoFocus
+                                        />
+                                        <button
+                                            type="button"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none text-gray-500 dark:text-gray-400 text-xs font-bold tracking-wide px-2 py-1.5 rounded-md hover:text-gray-900 dark:hover:text-white"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? "HIDE" : "SHOW"}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {error && <div className="text-sm font-medium text-red-500">{error}</div>}
+
+                                <button type="submit" className="w-full flex items-center justify-center py-4 px-6 bg-blue-600 text-white rounded-xl text-base font-semibold transition-all hover:bg-blue-700 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed" disabled={loading}>
+                                    {loading ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                            Signing in...
+                                        </span>
+                                    ) : "Sign In"}
+                                </button>
+                            </div>
+                        )}
+                    </form>
                 </div>
             </div>
 

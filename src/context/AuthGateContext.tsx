@@ -72,7 +72,10 @@ export function AuthGateProvider({ children }: { children: React.ReactNode }) {
                         </button>
 
                         <div className="flex flex-col items-center text-center gap-2 mb-6 pt-2">
-                            <img src="/logo.png" alt="Kauchy" className="w-12 h-12 rounded-xl mb-2 object-contain" />
+                            <>
+                                <img src="/logo.png" alt="Kauchy" className="w-12 h-12 rounded-xl mb-2 object-contain dark:hidden" />
+                                <img src="/darkmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl mb-2 object-contain hidden dark:block" />
+                            </>
                             <h2 className="text-xl font-bold text-white">Join Kauchy</h2>
                             <p className="text-sm text-gray-400 leading-relaxed max-w-[300px]">
                                 Create a free account or log in{reason ? ` to ${reason}` : ''} and unlock the full campus marketplace.
@@ -88,7 +91,7 @@ export function AuthGateProvider({ children }: { children: React.ReactNode }) {
                                 Sign up
                             </button>
                             <button
-                                onClick={() => go('/login')}
+                                onClick={() => go('/signup')}
                                 className="w-full flex items-center justify-center gap-2 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl font-semibold text-sm transition-colors border border-zinc-700"
                             >
                                 <LogIn size={18} />
@@ -117,7 +120,7 @@ export function useAuthGate() {
  *
  * While auth is still resolving it shows a neutral loading state. Once resolved
  * with no user it opens the shared sign-up / log-in modal (instead of doing a
- * hard redirect to /login) and shows a contextual prompt behind it.
+ * hard redirect to /signup) and shows a contextual prompt behind it.
  */
 export function AuthWall({ reason, loading }: { reason?: string; loading?: boolean }) {
     const { requireAuth } = useAuthGate();
@@ -136,7 +139,10 @@ export function AuthWall({ reason, loading }: { reason?: string; loading?: boole
 
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 text-center">
-            <img src="/logo.png" alt="Kauchy" className="w-12 h-12 rounded-xl object-contain opacity-80" />
+            <>
+                <img src="/logo.png" alt="Kauchy" className="w-12 h-12 rounded-xl object-contain opacity-80 dark:hidden" />
+                <img src="/darkmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl object-contain opacity-80 hidden dark:block" />
+            </>
             <p className="text-gray-600 dark:text-gray-300 max-w-[300px]">
                 Sign in{reason ? ` to ${reason}` : ''} to continue.
             </p>

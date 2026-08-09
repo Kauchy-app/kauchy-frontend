@@ -239,7 +239,7 @@ export default function VideoModal({ video, caption, contentId, likes = 0, views
                 </form>
             ) : (
                 <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                    <a href="/login" className="text-blue-600 font-medium hover:underline">Log in</a> to comment
+                    <a href="/signup" className="text-blue-600 font-medium hover:underline">Log in</a> to comment
                 </p>
             )}
         </div>

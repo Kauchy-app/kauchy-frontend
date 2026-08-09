@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 
 export default function PageLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const isNoNavPage = pathname === '/login' || pathname === '/signup' || pathname === '/waitlist' || pathname.startsWith('/feed');
+    const isNoNavPage = pathname === '/signup' || pathname === '/signup' || pathname === '/waitlist' || pathname.startsWith('/feed');
 
     if (isNoNavPage) {
         return <>{children}</>;

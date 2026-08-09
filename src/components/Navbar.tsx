@@ -106,7 +106,7 @@ export default function Navbar() {
                         <div className="shrink-0 flex items-center">
                             <Link href="/" className="flex items-center gap-2 no-underline font-bold text-blue-600 text-lg w-[144px] h-[48px] overflow-hidden" title="Home">
                                 <img
-                                    src="/inverted_logo.png"
+                                    src="/darkmodelogo.png"
                                     alt="Upstart"
                                     className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none"
                                 />
@@ -151,9 +151,8 @@ export default function Navbar() {
 
                                     {/* Wallet */}
                                     <div className="block">
-                                        <Link href="/wallet" className="flex items-center gap-1.5 md:gap-2 px-2.5 py-1.5 md:px-4 md:py-2 bg-amber-400 text-white rounded-lg text-sm md:text-base font-medium hover:bg-amber-500 transition-colors decoration-0" title="Wallet">
-                                            <Wallet size={18} className="shrink-0 md:w-5 md:h-5" />
-                                            <span className="whitespace-nowrap">{formatNaira(walletBalance)}</span>
+                                        <Link href="/wallet" className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-amber-400 text-white rounded-lg hover:bg-amber-500 transition-colors decoration-0 shadow-sm" title="Wallet">
+                                            <Wallet size={18} className="shrink-0" />
                                         </Link>
                                     </div>
 
@@ -260,7 +259,7 @@ export default function Navbar() {
                                 </>
                             ) : (
                                 <div className="flex items-center gap-2 sm:gap-3 ml-1 sm:ml-2">
-                                    <Link href="/login" className={`text-sm font-semibold hover:text-blue-600 px-2 sm:px-3 py-2 whitespace-nowrap ${isDarkNav ? 'text-gray-200' : 'text-gray-700'}`}>Login</Link>
+                                    <Link href="/signup" className={`text-sm font-semibold hover:text-blue-600 px-2 sm:px-3 py-2 whitespace-nowrap ${isDarkNav ? 'text-gray-200' : 'text-gray-700'}`}>Login</Link>
                                     <Link href="/signup" className="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-4 sm:px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all whitespace-nowrap">Sign Up</Link>
                                 </div>
                             )}
@@ -295,7 +294,7 @@ export default function Navbar() {
                     </Link>
 
                     <Link
-                        href={user ? '/account' : '/login'}
+                        href={user ? '/account' : '/signup'}
                         className={`flex flex-col items-center justify-center w-[60px] h-full transition-colors ${pathname === '/account' ? bnActive : bnInactive}`}
                     >
                         {profileAvatar ? (

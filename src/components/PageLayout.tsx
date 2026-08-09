@@ -13,6 +13,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
     }
 
     const isChatPage = pathname === '/chat';
+    const isOrdersPage = pathname.startsWith('/orders');
     const isHomeFeed = pathname === '/';
 
     // The home feed is fixed-height and non-scrolling. On mobile it lives between
@@ -26,8 +27,10 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
     const mainClass = isHomeFeed
         ? 'w-full overflow-hidden mt-[70px] mb-[65px] h-[calc(100dvh-135px)] md:mt-0 md:mb-0 md:h-[100dvh] md:pl-[72px]'
         : isChatPage
-        ? 'mb-[65px] md:mb-0 w-full overflow-hidden h-[calc(100dvh-65px)] md:h-screen md:pl-[72px]'
-        : 'mt-[70px] mb-[65px] md:mt-0 md:mb-0 w-full min-h-[calc(100vh-135px)] md:min-h-screen md:pl-[72px]';
+        ? 'mb-[65px] md:mb-0 w-full overflow-hidden h-[calc(100dvh-65px)] md:h-[100dvh] md:pl-[72px]'
+        : isOrdersPage
+        ? 'mt-[70px] mb-[65px] md:mt-0 md:mb-0 w-full overflow-hidden h-[calc(100dvh-135px)] md:h-[100dvh] md:pl-[72px]'
+        : 'mt-[70px] mb-[65px] md:mt-0 md:mb-0 w-full min-h-[calc(100vh-135px)] md:min-h-screen md:pl-[72px] flex flex-col';
 
     return (
         <>

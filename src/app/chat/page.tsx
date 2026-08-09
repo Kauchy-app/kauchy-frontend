@@ -8,6 +8,7 @@ import { Send, Image as ImageIcon, X, Reply, Check, CheckCheck } from 'lucide-re
 import LoadingModal from '@/components/LoadingModal';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { formatNaira } from '@/utils/formatCurrency';
 
 const VoiceRecorder = dynamic(() => import('@/components/VoiceRecorder'), { ssr: false });
 
@@ -127,7 +128,7 @@ const ProductLinkPreview = ({ url }: { url: string }) => {
             <div className="h-[120px] bg-black/[0.02] dark:bg-white/[0.03] overflow-hidden relative">
                <Image src={(product.image_url && product.image_url[0]) || '/placeholder.svg'} fill sizes="260px" className="object-cover" alt="Product" />
                <div className="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">
-                   ₦{product.price}
+                   {formatNaira(product.price)}
                </div>
             </div>
             <div className="p-2.5 flex flex-col">

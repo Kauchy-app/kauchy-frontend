@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useAuthGate } from '@/context/AuthGateContext';
 import Image from 'next/image';
+import { formatNaira } from '@/utils/formatCurrency';
 
 
 function VendorProfileContent() {
@@ -108,11 +109,11 @@ function VendorProfileContent() {
         }
     };
 
-    if (loading) return <div className="dark contents"><div className="p-12 text-center text-gray-500 dark:text-gray-400">Loading...</div></div>;
-    if (!vendor) return <div className="dark contents"><div className="p-12 text-center text-red-500">Vendor not found</div></div>;
+    if (loading) return <div className="p-12 text-center text-gray-500 dark:text-gray-400">Loading...</div>;
+    if (!vendor) return <div className="p-12 text-center text-red-500">Vendor not found</div>;
 
     return (
-        <div className="dark contents">
+        <>
         <div className="min-h-screen font-sans bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-white">
             <main className="w-full max-w-[1400px] mx-auto py-5 px-2.5 sm:py-10 sm:px-5">
                 <div className="flex flex-col gap-6 sm:gap-10">
@@ -203,7 +204,7 @@ function VendorProfileContent() {
                                         </div>
                                         <div className="p-4">
                                             <div className="text-sm font-semibold text-gray-900 dark:text-white mb-1.5">{p.product_name}</div>
-                                            <div className="text-base font-bold text-amber-400">₦{p.price}</div>
+                                            <div className="text-base font-bold text-amber-400">{formatNaira(p.price)}</div>
                                         </div>
                                     </div>
                                 )) : (
@@ -247,7 +248,7 @@ function VendorProfileContent() {
                 </div>
             </main>
         </div>
-        </div>
+        </>
     );
 }
 

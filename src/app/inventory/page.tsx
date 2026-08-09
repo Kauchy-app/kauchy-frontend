@@ -6,6 +6,7 @@ import { useToast } from '@/context/ToastContext';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { formatNaira } from '@/utils/formatCurrency';
 
 const VideoModal = dynamic(() => import('@/components/VideoModal'), { ssr: false });
 
@@ -313,7 +314,7 @@ export default function InventoryPage() {
                             </div>
                             <div className="p-4">
                                 <div className="font-semibold text-[#1d1d1d] dark:text-white mb-1 truncate">{p.product_name}</div>
-                                <div className="text-[#ffb800] font-bold mb-2">₦{p.price}</div>
+                                <div className="text-[#ffb800] font-bold mb-2">{formatNaira(p.price)}</div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">Qty: {p.quantity} | Views: {p.view_count || 0}</div>
                                 <div className="flex gap-2">
                                     <button

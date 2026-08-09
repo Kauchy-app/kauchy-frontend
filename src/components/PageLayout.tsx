@@ -15,13 +15,6 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
     const isChatPage = pathname === '/chat';
     const isHomeFeed = pathname === '/';
 
-    // Pages that should always render in a dark theme. We put `dark` on <main> so all
-    // descendant `dark:` variants activate, and paint the full content area dark so no
-    // light body background shows through the gutters.
-    const darkPages = ['/marketplace', '/vendor-profile', '/chat', '/wallet', '/cart', '/inventory', '/orders', '/analytics'];
-    const isDarkPage = darkPages.includes(pathname) || pathname.startsWith('/kauch');
-    const darkMainClass = isDarkPage ? ' dark bg-zinc-950' : '';
-
     // The home feed is fixed-height and non-scrolling. On mobile it lives between
     // the top + bottom nav bars (dvh so it never slips under the fixed bottom nav);
     // on desktop those bars are replaced by the left sidebar, so it goes full-height
@@ -40,7 +33,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
         <>
             <Navbar />
             <LeftNav />
-            <main className={mainClass + darkMainClass}>
+            <main className={mainClass}>
                 {children}
             </main>
         </>

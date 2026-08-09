@@ -6,6 +6,8 @@ import { AuthWall } from '@/context/AuthGateContext';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { formatNaira, formatNairaFixed } from '@/utils/formatCurrency';
+import { Menu } from 'lucide-react';
 
 const QRScannerOverlay = dynamic(() => import('@/components/QRScannerOverlay'), { ssr: false });
 
@@ -86,6 +88,36 @@ function OrdersPageContent() {
     useEffect(() => {
         fetchOrders();
     }, [user]);
+
+    // Keep a stable reference to the latest fetchOrders so the socket below can
+    // call it without reconnecting every time selectedOrder changes.
+    const fetchOrdersRef = useRef(fetchOrders);
+    fetchOrdersRef.current = fetchOrders;
+
+    // Live updates: the backend has no dedicated order socket, but it pushes an
+    // 'order' notification to the vendor/buyer when an order is scanned/completed.
+    // Listen on that same stream and refetch so the view (e.g. the QR panel)
+    // reflects the new status without a manual reload.
+    useEffect(() => {
+        if (!user?.access) return;
+
+        const wsHost = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000';
+        const ws = new WebSocket(`${wsHost}/ws/notifications/?token=${user.access}`);
+
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === 'new_notification' && data.notification?.notification_type === 'order') {
+                    fetchOrdersRef.current();
+                }
+            } catch (e) {
+                console.error('Error parsing order update:', e);
+            }
+        };
+        ws.onerror = (err) => console.error('Order updates WebSocket error:', err);
+
+        return () => ws.close();
+    }, [user?.access]);
 
     const handleVendorResponse = async (orderId: string, action: 'accept' | 'reject') => {
         if (!user?.access) return;
@@ -272,14 +304,16 @@ function OrdersPageContent() {
 
             {/* Main Content Area */}
             <div className="flex-1 bg-[#f4f6fa] dark:bg-zinc-950 h-full overflow-hidden flex flex-col w-full relative">
-                {/* Mobile Sidebar Toggle Button (Visible when sidebar is closed) */}
+                {/* Mobile Sidebar Toggle Button (Visible when sidebar is closed).
+                    Fixed just below the 70px top nav with a contrasting fill + border so
+                    it stays visible against the near-black dark page background. */}
                 {!isSidebarOpen && (
                     <button
                         onClick={toggleSidebar}
-                        className="absolute top-4 left-4 z-30 p-2 bg-white dark:bg-zinc-900 rounded-md shadow-md lg:hidden text-[#1d1d1d] dark:text-white hover:bg-gray-50 dark:hover:bg-zinc-800 active:scale-95 transition-all"
-                        aria-label="Toggle Menu"
+                        className="fixed top-[82px] left-3 z-[60] p-2.5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 rounded-lg shadow-lg lg:hidden text-[#1d1d1d] dark:text-white hover:bg-gray-50 dark:hover:bg-zinc-700 active:scale-95 transition-all"
+                        aria-label="Open orders list"
                     >
-                        ☰
+                        <Menu size={22} />
                     </button>
                 )}
 
@@ -288,7 +322,7 @@ function OrdersPageContent() {
                         {/* Header */}
                         <div className="flex justify-between items-center p-4 sm:p-6 border-b border-[#e5e7eb] dark:border-zinc-800 bg-white dark:bg-zinc-900 shrink-0">
                             <div className="flex items-center gap-3">
-                                <button onClick={toggleSidebar} className="lg:hidden text-xl text-[#1d1d1d] dark:text-white mr-2">☰</button>
+                                <button onClick={toggleSidebar} aria-label="Open orders list" className="lg:hidden text-[#1d1d1d] dark:text-white mr-2"><Menu size={22} /></button>
                                 <h2 className="text-xl font-bold text-[#1d1d1d] dark:text-white">Order Details</h2>
                             </div>
                             <span
@@ -317,7 +351,7 @@ function OrdersPageContent() {
                                 </div>
                                 <div className="flex justify-between mb-3 text-sm">
                                     <span className="font-medium text-[#4b4b4b] dark:text-gray-400">Total Amount</span>
-                                    <span className="font-semibold text-[#1d1d1d] dark:text-white">₦{selectedOrder.amount}</span>
+                                    <span className="font-semibold text-[#1d1d1d] dark:text-white">{formatNairaFixed(selectedOrder.amount)}</span>
                                 </div>
                             </div>
 
@@ -337,7 +371,7 @@ function OrdersPageContent() {
                                                         {item.product_name}
                                                     </Link>
                                                 </div>
-                                                <span className="font-semibold text-[#1d1d1d] dark:text-white">₦{item.price}</span>
+                                                <span className="font-semibold text-[#1d1d1d] dark:text-white">{formatNaira(item.price)}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -380,19 +414,41 @@ function OrdersPageContent() {
 
                                 <div className="w-[300px] h-[300px] bg-[#f4f6fa] dark:bg-zinc-950 rounded-2xl border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center relative p-5">
                                     {activeTab === 'qrcode' ? (
-                                        <div className="flex flex-col items-center animate-fadeIn w-full h-full">
-                                            {/* QR must stay on a white background to remain scannable in dark mode */}
-                                            <div className="relative flex-1 w-full bg-white rounded-xl p-3 flex items-center justify-center">
-                                                <Image
-                                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(JSON.stringify({ id: selectedOrder.id, status: selectedOrder.status }))}`}
-                                                    alt="QR Code"
-                                                    fill
-                                                    sizes="250px"
-                                                    className="object-contain"
-                                                />
+                                        (selectedOrder.status === 'completed' || selectedOrder.status === 'expired') ? (
+                                            <div className="flex flex-col items-center justify-center gap-3 w-full h-full text-center animate-fadeIn">
+                                                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${selectedOrder.status === 'completed' ? 'bg-[#34D399]/10' : 'bg-red-100 dark:bg-red-900/20'}`}>
+                                                    {selectedOrder.status === 'completed' ? (
+                                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                            <polyline points="20 6 9 17 4 12" />
+                                                        </svg>
+                                                    ) : (
+                                                        <span className="text-3xl text-red-500">✕</span>
+                                                    )}
+                                                </div>
+                                                <p className="text-sm font-semibold text-[#1d1d1d] dark:text-white">
+                                                    {selectedOrder.status === 'completed' ? 'Order Completed' : 'Order Expired'}
+                                                </p>
+                                                <p className="text-xs text-[#4b4b4b] dark:text-gray-400 max-w-[220px]">
+                                                    {selectedOrder.status === 'completed'
+                                                        ? 'This order has been scanned and verified. Payment has been released.'
+                                                        : 'This order expired and the buyer was refunded.'}
+                                                </p>
                                             </div>
-                                            <p className="text-xs text-[#4b4b4b] dark:text-gray-400 mt-3 text-center">Scan this code to verify</p>
-                                        </div>
+                                        ) : (
+                                            <div className="flex flex-col items-center animate-fadeIn w-full h-full">
+                                                {/* QR must stay on a white background to remain scannable in dark mode */}
+                                                <div className="relative flex-1 w-full bg-white rounded-xl p-3 flex items-center justify-center">
+                                                    <Image
+                                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(JSON.stringify({ id: selectedOrder.id, status: selectedOrder.status }))}`}
+                                                        alt="QR Code"
+                                                        fill
+                                                        sizes="250px"
+                                                        className="object-contain"
+                                                    />
+                                                </div>
+                                                <p className="text-xs text-[#4b4b4b] dark:text-gray-400 mt-3 text-center">Scan this code to verify</p>
+                                            </div>
+                                        )
                                     ) : (
                                         <div className="flex flex-col items-center gap-4 text-[#4b4b4b] dark:text-gray-400 animate-fadeIn w-full h-full justify-center">
                                             {scanResult ? (
@@ -515,7 +571,6 @@ function OrdersPageContent() {
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center h-full text-[#4b4b4b] dark:text-gray-400">
-                        <button onClick={toggleSidebar} className="lg:hidden absolute top-4 left-4 p-2 bg-white dark:bg-zinc-900 rounded-md shadow-sm z-10 text-xl">☰</button>
                         <div className="text-6xl mb-4">📦</div>
                         <p className="text-lg">Select an order to view details</p>
                     </div>

@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
+import { formatNairaFixed } from '@/utils/formatCurrency';
 
 const PIE_COLORS = ['#6366f1', '#8b5cf6', '#3b82f6', '#22c55e', '#f59e0b', '#ec4899'];
 
@@ -177,7 +178,7 @@ export default function AnalyticsPage() {
 
     if (!user) return <AuthWall reason="view your analytics" loading={authLoading} />;
 
-    const money = (v: any) => `₦${(Number(v) || 0).toLocaleString()}`;
+    const money = formatNairaFixed;
 
     return (
         <div className="p-4 sm:p-8 bg-gray-50 dark:bg-zinc-950 min-h-screen">

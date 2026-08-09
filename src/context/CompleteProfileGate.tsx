@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { GraduationCap } from 'lucide-react';
 import { useAuth } from './AuthContext';
+import UniversitySearch from '@/components/UniversitySearch';
 
 /**
  * App-wide blocking modal that appears whenever the signed-in user's profile
@@ -20,7 +21,7 @@ export default function CompleteProfileGate() {
     const [phone, setPhone] = useState('');
     const [institute, setInstitute] = useState('');
     const [role, setRole] = useState('buyer');
-    const [universities, setUniversities] = useState<any[]>([]);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -29,14 +30,7 @@ export default function CompleteProfileGate() {
         if (incomplete) setUsername(profile?.username || '');
     }, [incomplete, profile?.username]);
 
-    // Load universities (same source as the signup page).
-    useEffect(() => {
-        if (!incomplete) return;
-        fetch('https://university-domains-list-api-tn4l.onrender.com/search?country=Nigeria')
-            .then((res) => res.json())
-            .then((data) => setUniversities(Array.isArray(data) ? data : []))
-            .catch(() => {});
-    }, [incomplete]);
+
 
     if (!incomplete) return null;
 
@@ -69,7 +63,7 @@ export default function CompleteProfileGate() {
     };
 
     return (
-        <div className="dark fixed inset-0 z-[300] flex items-end sm:items-center justify-center">
+        <div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center">
             <div className="absolute inset-0 bg-black/80" aria-hidden="true" />
 
             <div
@@ -114,17 +108,12 @@ export default function CompleteProfileGate() {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-white mb-1.5">University</label>
-                        <select
+                        <UniversitySearch
                             value={institute}
-                            onChange={(e) => setInstitute(e.target.value)}
+                            onChange={setInstitute}
                             required
-                            className="w-full px-3.5 py-3 border border-zinc-700 rounded-lg text-sm text-white bg-zinc-800 focus:outline-none focus:border-amber-400"
-                        >
-                            <option value="">Select University</option>
-                            {universities.map((uni, idx) => (
-                                <option key={idx} value={uni.name}>{uni.name}</option>
-                            ))}
-                        </select>
+                            variant="dark"
+                        />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-white mb-1.5">Role</label>

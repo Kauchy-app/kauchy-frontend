@@ -7,6 +7,7 @@ import { useToast } from '@/context/ToastContext';
 import { useAuthGate } from '@/context/AuthGateContext';
 import FeedSidebar from '@/components/FeedSidebar';
 import Image from 'next/image';
+import { formatNaira } from '@/utils/formatCurrency';
 
 // Swiper integration
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -532,7 +533,7 @@ function FeedContent() {
                                                         />
                                                         <div className="min-w-0 flex-1 pr-1">
                                                             <p className="text-[11px] font-semibold text-gray-900 line-clamp-1">{product.product_name}</p>
-                                                            <p className="text-sm font-bold text-blue-600">₦{product.price}</p>
+                                                            <p className="text-sm font-bold text-blue-600">{formatNaira(product.price)}</p>
                                                         </div>
                                                     </button>
                                                 ))}
@@ -607,7 +608,7 @@ function FeedContent() {
                                 />
                                 <div className="min-w-0 flex-1">
                                     <p className="text-sm font-semibold text-gray-900 line-clamp-2">{product.product_name}</p>
-                                    <p className="text-base font-bold text-blue-600 mt-0.5">₦{product.price}</p>
+                                    <p className="text-base font-bold text-blue-600 mt-0.5">{formatNaira(product.price)}</p>
                                 </div>
                             </button>
                         ))}

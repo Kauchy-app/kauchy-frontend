@@ -4,8 +4,6 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GoogleAuthButton from '@/components/GoogleAuthButton';
-import "@/app/globals.css";
-
 
 export default function LoginPage() {
     const { login } = useAuth();
@@ -45,119 +43,62 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="login-page-wrapper">
-            <div className="login-container">
-
-                <div className="login-card">
-                    <Link href="/" className="logo">
-                        <img src="/logo.png" alt="Kauchy" className="logo-image" />
+        <div className="min-h-screen w-full flex items-center justify-center p-5 bg-gradient-to-br from-gray-50 to-gray-200 dark:from-zinc-950 dark:to-black font-sans">
+            <div className="w-full max-w-[420px]">
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 sm:p-10 shadow-sm border border-gray-200 dark:border-zinc-800">
+                    <Link href="/" className="flex items-center justify-center w-full mb-6 no-underline">
+                        <img src="/logo.png" alt="Kauchy" className="h-20 w-auto object-contain" />
                     </Link>
-                    <h2>Welcome Back</h2>
-                    <p className="subtitle">Enter your credentials to access your account</p>
+                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">Welcome Back</h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Enter your credentials to access your account</p>
 
                     <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>Email</label>
+                        <div className="mb-4.5">
+                            <label className="block text-sm font-medium text-gray-900 dark:text-gray-200 mb-2">Email</label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                                 placeholder="name@company.com"
+                                className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label>Password</label>
+                        <div className="mb-4.5">
+                            <label className="block text-sm font-medium text-gray-900 dark:text-gray-200 mb-2">Password</label>
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 placeholder="••••••••"
+                                className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
                             />
                         </div>
 
-                        {error && <div className="error-message" style={{ marginBottom: '10px' }}>{error}</div>}
+                        {error && <div className="text-xs text-red-500 mb-2.5">{error}</div>}
 
-                        <button type="submit" className="btn-primary" disabled={loading}>
+                        <button type="submit" className="w-full py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-base font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none" disabled={loading}>
                             {loading ? 'Signing in...' : 'Sign In'}
                         </button>
                     </form>
 
-                    <div className="divider"><span>or</span></div>
+                    <div className="flex items-center gap-3 my-6">
+                        <span className="flex-1 h-px bg-gray-200 dark:bg-zinc-800" />
+                        <span className="text-xs text-gray-500 dark:text-gray-400">or</span>
+                        <span className="flex-1 h-px bg-gray-200 dark:bg-zinc-800" />
+                    </div>
 
-                    <GoogleAuthButton next={typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('next') : null} />
+                    <div className="flex justify-center">
+                        <GoogleAuthButton next={typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('next') : null} />
+                    </div>
 
-                    <div className="auth-toggle">
-                        Don&apos;t have an account? <Link href="/signup" className="toggle-link">Sign up</Link>
+                    <div className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
+                        Don&apos;t have an account? <Link href="/signup" className="text-blue-600 font-semibold no-underline transition-colors hover:text-amber-400">Sign up</Link>
                     </div>
                 </div>
             </div>
-            <style jsx>{`
-        .login-page-wrapper {
-            min-height: 100vh;
-            background: #09090b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .login-container {
-            width: 100%;
-            max-width: 420px;
-        }
-        .logo {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        .logo-image {
-            height: 80px;
-            width: auto;
-            object-fit: contain;
-        }
-        .login-card {
-            background: #18181b;
-            color: #fafafa;
-            padding: 40px;
-            border-radius: 12px;
-            border: 1px solid #27272a;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-        }
-        h2 { font-size: 24px; margin-bottom: 8px; font-weight: 600; color: #ffffff; }
-        .subtitle { font-size: 14px; color: #a1a1aa; margin-bottom: 24px; }
-        .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: #e4e4e7; }
-        input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #3f3f46;
-            border-radius: 8px;
-            font-size: 14px;
-            background: #27272a;
-            color: #ffffff;
-        }
-        input::placeholder { color: #71717a; }
-        .btn-primary {
-            width: 100%;
-            padding: 12px;
-            background: var(--primary, #1c6ef2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .btn-primary:disabled { opacity: 0.7; }
-        .auth-toggle { text-align: center; margin-top: 24px; font-size: 14px; color: #a1a1aa; }
-        .toggle-link { color: var(--primary, #1c6ef2); font-weight: 600; text-decoration: none; }
-        .divider { display: flex; align-items: center; text-align: center; color: #71717a; font-size: 13px; margin: 20px 0; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #3f3f46; }
-        .divider span { padding: 0 12px; }
-      `}</style>
         </div>
     );
 }

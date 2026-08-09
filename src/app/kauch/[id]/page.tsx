@@ -10,6 +10,7 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Image from 'next/image';
+import { formatNaira } from '@/utils/formatCurrency';
 
 interface Comment {
   id: number;
@@ -547,7 +548,7 @@ export default function KauchProfile() {
                         </div>
                         <div className="p-2.5">
                           <p className="text-xs font-medium text-gray-900 dark:text-white truncate" title={product.product_name}>{product.product_name}</p>
-                          <p className="text-sm font-bold text-blue-600 mt-0.5">₦{product.price}</p>
+                          <p className="text-sm font-bold text-blue-600 mt-0.5">{formatNaira(product.price)}</p>
                         </div>
                       </div>
                     ))}

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import { useAuthGate } from '../context/AuthGateContext';
+import { formatNaira } from '@/utils/formatCurrency';
 
 interface Product {
     _id?: string;
@@ -333,7 +334,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                         <h1 className="text-3xl text-gray-900 dark:text-white leading-tight font-bold">{product.product_name}</h1>
 
                         <div className="text-2xl font-bold text-amber-400">
-                            <span>₦{product.price}</span>
+                            <span>{formatNaira(product.price)}</span>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -516,7 +517,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                                         productUrl.searchParams.set("productId", prodId.toString());
                                     }
                                     let text = `Hi, I'm interested in: ${product.product_name}`;
-                                    if (product.price) text += `\nPrice: ₦${product.price}`;
+                                    if (product.price) text += `\nPrice: ${formatNaira(product.price)}`;
                                     text += `\nLink: ${productUrl.toString()}`;
                                     
                                     if (product.vendor_id) {

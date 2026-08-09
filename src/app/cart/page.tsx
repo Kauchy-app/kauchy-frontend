@@ -5,6 +5,7 @@ import { AuthWall } from '@/context/AuthGateContext';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { formatNairaFixed } from '@/utils/formatCurrency';
 
 const ProductModal = dynamic(() => import('@/components/ProductModal'), { ssr: false });
 
@@ -313,7 +314,7 @@ export default function CartPage(): JSX.Element {
                                             <div className="text-base font-semibold text-[#1d1d1d] dark:text-white mb-1">{name}</div>
                                             <div className="text-sm text-[#4b4b4b] dark:text-gray-400">{vendorName}</div>
                                         </div>
-                                        <div className="text-sm text-[#ffb800] font-bold">₦{price.toFixed(2)}</div>
+                                        <div className="text-sm text-[#ffb800] font-bold">{formatNairaFixed(price)}</div>
                                     </div>
                                     <div className="flex flex-col items-end justify-between gap-3">
                                         <div className="flex items-center gap-2 bg-[#f4f6fa] dark:bg-zinc-950 rounded-md p-1" onClick={e => e.stopPropagation()}>
@@ -351,12 +352,12 @@ export default function CartPage(): JSX.Element {
                 <h3 className="text-base font-semibold mb-4 text-[#1d1d1d] dark:text-white">Order Summary</h3>
                 <div className="flex justify-between mb-3 text-sm text-[#4b4b4b] dark:text-gray-400">
                     <span>Subtotal ({cartItems.length} {cartItems.length === 1 ? 'item' : 'items'})</span>
-                    <span className="font-semibold text-[#1d1d1d] dark:text-white">₦{subtotal.toFixed(2)}</span>
+                    <span className="font-semibold text-[#1d1d1d] dark:text-white">{formatNairaFixed(subtotal)}</span>
                 </div>
                 <div className="h-[1px] bg-gray-200 dark:bg-zinc-700 my-4"></div>
                 <div className="flex justify-between mb-6 text-lg font-bold text-[#1d1d1d] dark:text-white">
                     <span>Total</span>
-                    <span>₦{subtotal.toFixed(2)}</span>
+                    <span>{formatNairaFixed(subtotal)}</span>
                 </div>
                 <button
                     className="w-full py-3.5 bg-[#ffb800] text-white rounded-lg font-semibold hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,184,0,0.3)] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
@@ -397,7 +398,7 @@ export default function CartPage(): JSX.Element {
                                 <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
                                     <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-zinc-800">
                                         <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Total Amount</span>
-                                        <span className="text-[13px] text-gray-900 dark:text-white font-semibold">₦{checkoutResult.total_amount_naira.toFixed(2)}</span>
+                                        <span className="text-[13px] text-gray-900 dark:text-white font-semibold">{formatNairaFixed(checkoutResult.total_amount_naira)}</span>
                                     </div>
                                     <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-zinc-800">
                                         <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Orders Created</span>
@@ -442,11 +443,11 @@ export default function CartPage(): JSX.Element {
                                     <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
                                         <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-zinc-800">
                                             <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Your Balance</span>
-                                            <span className="text-[13px] text-red-500 font-semibold">₦{checkoutError.balance_naira.toFixed(2)}</span>
+                                            <span className="text-[13px] text-red-500 font-semibold">{formatNairaFixed(checkoutError.balance_naira)}</span>
                                         </div>
                                         <div className="flex justify-between items-center py-2">
                                             <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Required</span>
-                                            <span className="text-[13px] text-gray-900 dark:text-white font-semibold">₦{checkoutError.required_naira.toFixed(2)}</span>
+                                            <span className="text-[13px] text-gray-900 dark:text-white font-semibold">{formatNairaFixed(checkoutError.required_naira)}</span>
                                         </div>
                                     </div>
                                 )}

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { useUserData } from '../context/UserDataContext';
-import { Home, Store, MessageSquare, PlusSquare, ShoppingCart, Wallet, User, LogIn, UserPlus, Search } from 'lucide-react';
+import { Home, Store, MessageSquare, PlusSquare, ShoppingCart, Wallet, User, LogIn, UserPlus, Search, ListTodo } from 'lucide-react';
 import NotificationBell from './NotificationBell';
 import { formatNaira } from '@/utils/formatCurrency';
 
@@ -43,6 +43,7 @@ export default function LeftNav() {
         { href: '/', label: 'Feed', icon: Home, show: true, badge: 0 },
         { href: '/search', label: 'Search', icon: Search, show: true, badge: 0 },
         { href: '/marketplace', label: 'Marketplace', icon: Store, show: true, badge: 0 },
+        { href: '/requests', label: 'Requests', icon: ListTodo, show: true, badge: 0 },
         { href: '/chat', label: 'Messages', icon: MessageSquare, show: true, badge: 0 },
         { href: '/kauch/create', label: 'Create', icon: PlusSquare, show: isVendor, badge: 0 },
         { href: '/cart', label: 'Cart', icon: ShoppingCart, show: true, badge: cartCount },

@@ -161,6 +161,26 @@ export default function KauchProfile() {
     }
   };
 
+  const handleShare = async () => {
+    const url = window.location.href;
+    const shareData = {
+      title: `${kauch?.name} on Kauchy`,
+      text: kauch?.description || `Check out ${kauch?.name} on Kauchy!`,
+      url: url,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error('Error sharing:', err);
+      }
+    } else {
+      navigator.clipboard.writeText(url);
+      showToast('Profile link copied to clipboard!', 'success');
+    }
+  };
+
   const handleLike = async (id: number) => {
     if (!requireAuth('like posts')) return;
 
@@ -311,6 +331,14 @@ export default function KauchProfile() {
             >
               {kauch.is_following ? 'Following' : 'Follow'}
             </button>
+            
+            <button
+              onClick={handleShare}
+              className="p-2 bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors"
+              title="Share Kauch Profile"
+            >
+              <Share2 size={20} />
+            </button>
           </div>
         </div>
       </div>
@@ -422,7 +450,22 @@ export default function KauchProfile() {
                   <MessageCircle size={26} className="transition-transform group-hover:scale-110" />
                   <span className="font-medium">{post.comments_count}</span>
                 </button>
-                <button className="flex items-center gap-2 group text-gray-600 dark:text-gray-400 hover:text-gray-900 transition-colors">
+                <button
+                    onClick={() => {
+                        const url = `${window.location.origin}/kauch/post/${post.id}`;
+                        if (navigator.share) {
+                            navigator.share({
+                                title: 'Kauchy Post',
+                                text: post.description || 'Check out this post on Kauchy',
+                                url: url
+                            }).catch(console.error);
+                        } else {
+                            navigator.clipboard.writeText(url);
+                            showToast('Post link copied to clipboard!', 'success');
+                        }
+                    }} 
+                    className="flex items-center gap-2 group text-gray-600 dark:text-gray-400 hover:text-gray-900 transition-colors"
+                >
                   <Share2 size={24} className="transition-transform group-hover:scale-110" />
                 </button>
               </div>

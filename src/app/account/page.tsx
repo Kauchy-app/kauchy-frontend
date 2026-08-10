@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useUserData } from '@/context/UserDataContext';
 import { useTheme } from 'next-themes';
-import { User, Package, Boxes, BarChart2, Wallet, Moon, Sun, LogOut, ChevronRight } from 'lucide-react';
+import { User, Package, Boxes, BarChart2, Wallet, Moon, Sun, LogOut, ChevronRight, ListTodo } from 'lucide-react';
 import { formatNairaFixed } from '@/utils/formatCurrency';
 
 export default function AccountPage() {
@@ -45,6 +45,7 @@ export default function AccountPage() {
     const links = [
         { href: '/profile', label: 'Edit Profile', sub: 'Name, bio, photo & more', icon: User, show: true },
         { href: '/orders', label: 'My Orders', sub: 'Track your purchases', icon: Package, show: true },
+        { href: '/requests', label: 'Product Requests', sub: 'See what customers are looking for', icon: ListTodo, show: true },
         { href: '/inventory', label: 'My Inventory', sub: 'Manage your listings', icon: Boxes, show: isVendor },
         { href: '/analytics', label: 'Analytics', sub: 'Sales & performance', icon: BarChart2, show: isVendor },
     ].filter(l => l.show);

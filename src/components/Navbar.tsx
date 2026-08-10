@@ -7,7 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { useUserData } from '../context/UserDataContext';
 import { useNotifications } from '../context/NotificationContext';
 import { useTheme } from 'next-themes';
-import { ShoppingCart, User, X, Bell, Home, Store, Wallet, MessageSquare, PlusSquare, Search } from 'lucide-react';
+import { ShoppingCart, User, X, Bell, Home, Store, Wallet, MessageSquare, PlusSquare, Search, ListTodo } from 'lucide-react';
 import { formatNaira } from '@/utils/formatCurrency';
 
 type Notification = {

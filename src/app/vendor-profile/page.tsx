@@ -21,7 +21,7 @@ function VendorProfileContent() {
     const [loading, setLoading] = useState(true);
     
     // Digital Menu States
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     
     // Derived values for the menu: prioritize custom Menu/Collection in specs, then fallback to category

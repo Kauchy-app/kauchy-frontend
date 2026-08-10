@@ -79,6 +79,12 @@ export default function KauchProfile() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Edit Kauch State
+  const [isEditKauchOpen, setIsEditKauchOpen] = useState(false);
+  const [editKauchForm, setEditKauchForm] = useState({ name: '', description: '' });
+  const [editKauchAvatar, setEditKauchAvatar] = useState<File | null>(null);
+  const [isSavingKauch, setIsSavingKauch] = useState(false);
+
   // Comments: which post is expanded, and per-post data
   const [openComments, setOpenComments] = useState<number | null>(null);
   const [commentsMap, setCommentsMap] = useState<Record<number, Comment[]>>({});
@@ -303,13 +309,47 @@ export default function KauchProfile() {
       </div>
     );
   }
+  
+  const handleEditKauch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editKauchForm.name.trim()) return showToast("Name is required", "error");
+    setIsSavingKauch(true);
+    try {
+        const formData = new FormData();
+        formData.append("name", editKauchForm.name);
+        formData.append("description", editKauchForm.description);
+        if (editKauchAvatar) formData.append("avatar", editKauchAvatar);
+
+        const res = await fetch(`${API}/kauch/${kauchId}/`, {
+            method: 'PATCH',
+            headers: { Authorization: `Bearer ${user.access}` },
+            body: formData
+        });
+
+        if (res.ok) {
+            const updated = await res.json();
+            setKauch(prev => prev ? { ...prev, ...updated } : null);
+            setIsEditKauchOpen(false);
+            showToast("Kauch updated successfully!", "success");
+        } else {
+            const err = await res.json().catch(() => ({}));
+            showToast(err.error || "Failed to update Kauch", "error");
+        }
+    } catch (e) {
+        showToast("Error updating Kauch", "error");
+    } finally {
+        setIsSavingKauch(false);
+    }
+  };
+
+  const isOwner = user?.user?.id === kauch.owner_id;
 
   // Shared profile card — stacks on top on mobile, lives in the sidebar on desktop.
   const profileCard = (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 sm:p-10">
       <div className="flex flex-col items-center text-center gap-5">
         <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-zinc-200 dark:bg-zinc-800 ring-4 ring-zinc-100 dark:ring-zinc-800 shrink-0">
-          <Image src={kauch.avatar_url || '/placeholder.svg'} alt={kauch.name} fill sizes="48px" className="object-cover" />
+          <Image src={kauch.avatar_url || '/placeholder.svg'} alt={kauch.name} fill sizes="(max-width: 640px) 112px, 128px" className="object-cover" />
         </div>
         <div className="w-full">
           <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2">{kauch.name}</h2>
@@ -344,6 +384,19 @@ export default function KauchProfile() {
               {kauch.is_following ? 'Following' : 'Follow'}
             </button>
             
+            {isOwner && (
+              <button
+                onClick={() => {
+                  setEditKauchForm({ name: kauch.name, description: kauch.description || '' });
+                  setEditKauchAvatar(null);
+                  setIsEditKauchOpen(true);
+                }}
+                className="px-6 py-2 rounded-full font-bold text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+              >
+                Edit Kauch
+              </button>
+            )}
+            
             <button
               onClick={handleShare}
               className="p-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
@@ -354,6 +407,62 @@ export default function KauchProfile() {
           </div>
         </div>
       </div>
+
+      {/* Edit Kauch Modal */}
+      {isEditKauchOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => !isSavingKauch && setIsEditKauchOpen(false)}>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-md shadow-2xl animate-fadeIn p-6" onClick={e => e.stopPropagation()}>
+            <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">Edit Kauch Profile</h2>
+            <form onSubmit={handleEditKauch} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Kauch Name</label>
+                <input
+                  type="text"
+                  value={editKauchForm.name}
+                  onChange={e => setEditKauchForm(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Description</label>
+                <textarea
+                  value={editKauchForm.description}
+                  onChange={e => setEditKauchForm(prev => ({ ...prev, description: e.target.value }))}
+                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors min-h-[100px]"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">New Avatar</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={e => setEditKauchAvatar(e.target.files?.[0] || null)}
+                  className="w-full text-sm text-zinc-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsEditKauchOpen(false)}
+                  disabled={isSavingKauch}
+                  className="flex-1 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSavingKauch}
+                  className="flex-1 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 shadow-md transition-all disabled:opacity-50 flex justify-center items-center gap-2"
+                >
+                  {isSavingKauch ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 

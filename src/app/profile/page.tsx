@@ -55,7 +55,7 @@ export default function ProfilePage() {
     const handleSave = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/users/me/`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/user/update/`, {
                 method: 'PATCH',
                 headers: {
                     "Content-Type": "application/json",
@@ -99,12 +99,12 @@ export default function ProfilePage() {
         }
 
         const formData = new FormData();
-        formData.append('profile_picture', file);
+        formData.append('avatar', file);
 
         setLoading(true);
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/users/me/`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/user/update/`, {
                 method: 'PATCH',
                 headers: { Authorization: `Bearer ${user.access}` },
                 body: formData

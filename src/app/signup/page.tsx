@@ -267,7 +267,7 @@ export default function SignupPage() {
                                     <button type="button" onClick={prevStep} className="flex items-center justify-center py-4 px-5 bg-gray-100 dark:bg-zinc-900 text-gray-700 dark:text-gray-300 rounded-xl font-semibold transition-colors hover:bg-gray-200 dark:hover:bg-zinc-800">
                                         <ArrowLeft size={20} />
                                     </button>
-                                    <button type="button" onClick={verifyOTP} className="flex-1 flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg" disabled={loading}>
+                                    <button type="button" onClick={() => verifyOTP()} className="flex-1 flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg" disabled={loading}>
                                         {loading ? (
                                             <span className="w-5 h-5 border-2 border-white/30 border-t-white dark:border-gray-900/30 dark:border-t-gray-900 rounded-full animate-spin"></span>
                                         ) : (

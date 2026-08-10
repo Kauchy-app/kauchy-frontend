@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { LayoutGrid, Smartphone, BookOpen, Armchair, Shirt, Dumbbell } from 'lucide-react';
+import { LayoutGrid, Smartphone, BookOpen, Armchair, Shirt, Dumbbell, Utensils } from 'lucide-react';
 
 interface CategoryNavProps {
   categories: { id: string; label: string }[];
@@ -19,6 +19,7 @@ export default function CategoryNav({ categories, currentCategory, onSelectCateg
       case 'furniture': return { icon: <Armchair className="w-6 h-6" />, color: 'bg-emerald-100 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white', active: 'bg-emerald-600 text-white shadow-md' };
       case 'clothing': return { icon: <Shirt className="w-6 h-6" />, color: 'bg-pink-100 text-pink-600 group-hover:bg-pink-600 group-hover:text-white', active: 'bg-pink-600 text-white shadow-md' };
       case 'sports': return { icon: <Dumbbell className="w-6 h-6" />, color: 'bg-red-100 text-red-600 group-hover:bg-red-600 group-hover:text-white', active: 'bg-red-600 text-white shadow-md' };
+      case 'food': return { icon: <Utensils className="w-6 h-6" />, color: 'bg-amber-100 text-amber-600 group-hover:bg-amber-600 group-hover:text-white', active: 'bg-amber-600 text-white shadow-md' };
       default: return { icon: <LayoutGrid className="w-6 h-6" />, color: 'bg-zinc-100 text-zinc-600 group-hover:bg-zinc-600 group-hover:text-white', active: 'bg-zinc-600 text-white shadow-md' };
     }
   };

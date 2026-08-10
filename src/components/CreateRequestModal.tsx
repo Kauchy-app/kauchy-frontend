@@ -99,6 +99,7 @@ export default function CreateRequestModal({ isOpen, onClose, onSuccess }: Props
                                 <option value="Home">Home</option>
                                 <option value="Beauty">Beauty</option>
                                 <option value="Sports">Sports</option>
+                                <option value="Food">Food</option>
                             </select>
                         </div>
 

@@ -91,7 +91,7 @@ export default function RequestsPage() {
                     >
                         All Categories
                     </button>
-                    {['Fashion', 'Electronics', 'Home', 'Beauty', 'Sports'].map(cat => (
+                    {['Fashion', 'Electronics', 'Home', 'Beauty', 'Sports', 'Food'].map(cat => (
                         <button
                             key={cat}
                             onClick={() => setCategoryFilter(cat)}

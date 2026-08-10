@@ -26,6 +26,7 @@ export default function Home(): JSX.Element {
     { id: 'furniture', label: 'Furniture' },
     { id: 'clothing', label: 'Clothing' },
     { id: 'sports', label: 'Sports' },
+    { id: 'food', label: 'Food' },
   ];
 
   useEffect(() => {

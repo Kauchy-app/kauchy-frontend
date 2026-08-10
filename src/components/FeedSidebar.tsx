@@ -686,7 +686,7 @@ export default function FeedSidebar({ isOpen, onClose, type, item, addToCart, co
                     ) : (
                         <div className="p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800 rounded-lg text-center">
                             <p className="text-sm sm:text-xs text-gray-600 dark:text-gray-400">
-                                <a href="/login" className="text-blue-600 font-semibold hover:underline">Log in</a> to {type === 'product' ? 'review' : 'comment'}
+                                <a href="/signup" className="text-blue-600 font-semibold hover:underline">Log in</a> to {type === 'product' ? 'review' : 'comment'}
                             </p>
                         </div>
                     )}

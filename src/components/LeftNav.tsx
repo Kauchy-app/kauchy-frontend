@@ -62,7 +62,7 @@ export default function LeftNav() {
                         className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none dark:hidden"
                     />
                     <img
-                        src="/inverted_logo.png"
+                        src="/darkmodelogo.png"
                         alt="Kauchy"
                         className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none hidden dark:block"
                     />
@@ -160,7 +160,7 @@ export default function LeftNav() {
                 <div className="flex flex-col gap-2 px-3 mt-1">
                     {/* Login: icon-only when collapsed, becomes a full outlined button on hover */}
                     <Link
-                        href="/login"
+                        href="/signup"
                         title="Login"
                         className={`${itemBase} text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5 group-hover:border group-hover:border-gray-300 dark:group-hover:border-gray-700 group-hover:justify-center`}
                     >

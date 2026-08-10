@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const logout = () => {
         if (typeof window !== 'undefined') {
             localStorage.removeItem('userData');
-            window.location.href = '/login';
+            window.location.href = '/signup';
         }
         setUser(null);
     };

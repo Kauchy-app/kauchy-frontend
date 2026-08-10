@@ -3,22 +3,25 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuth } from '@/context/AuthContext';
 import GoogleAuthButton from '@/components/GoogleAuthButton';
 import UniversitySearch from '@/components/UniversitySearch';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function SignupPage() {
     const router = useRouter();
+    const { login } = useAuth();
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         username: '',
         phone: '',
         email: '',
         university: '',
-        role: 'student', // default
+        role: 'buyer', // default
         password: '',
         confirmPassword: ''
     });
+    const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -29,18 +32,73 @@ export default function SignupPage() {
         setError('');
     };
 
+    const checkEmail = async () => {
+        setError('');
+        if (!formData.email) return setError('Email is required');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return setError('Please enter a valid email');
+
+        setLoading(true);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/check-email/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: formData.email })
+            });
+            if (!response.ok) throw new Error("Could not verify email");
+            const data = await response.json();
+            
+            if (data.exists) {
+                setStep(5); // Login step
+            } else {
+                // Send OTP
+                const otpRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/send-otp/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: formData.email })
+                });
+                if (!otpRes.ok) {
+                    const otpErr = await otpRes.json().catch(() => ({}));
+                    throw new Error(otpErr.detail || "Could not send OTP email");
+                }
+                setStep(1.5); // OTP step
+            }
+        } catch (e: any) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const verifyOTP = async () => {
+        setError('');
+        if (!otp || otp.length !== 6) return setError('Please enter a valid 6-digit OTP');
+
+        setLoading(true);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-otp/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: formData.email, otp })
+            });
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.detail || "Invalid OTP");
+            }
+            setStep(2); // Proceed to username/phone step
+        } catch (e: any) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const nextStep = () => {
         setError('');
-        if (step === 1) {
-            if (!formData.email) return setError('Email is required');
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return setError('Please enter a valid email');
-        }
         if (step === 2) {
             if (!formData.username) return setError('Username is required');
             if (!formData.phone) return setError('Phone number is required');
         }
         if (step === 3) {
-            if (!formData.university) return setError('University is required');
             if (!formData.role) return setError('Role is required');
         }
         setStep(prev => prev + 1);
@@ -48,10 +106,38 @@ export default function SignupPage() {
 
     const prevStep = () => {
         setError('');
-        setStep(prev => prev - 1);
+        setStep(prev => (prev === 5 ? 1 : prev === 1.5 ? 1 : prev === 2 ? 1.5 : prev - 1));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleLoginSubmit = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/jwt/create/`, {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: formData.email, password: formData.password })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.detail || "Login failed");
+            }
+
+            const data = await response.json();
+            login(data);
+            const next = new URLSearchParams(window.location.search).get('next');
+            router.push(next || '/');
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSignupSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setLoading(true);
@@ -64,7 +150,7 @@ export default function SignupPage() {
 
         const payload = {
             username: formData.username,
-            phone: formData.phone,
+            phone: formData.phone.startsWith('+234') ? formData.phone : `+234${formData.phone.replace(/^0+/, '')}`,
             email: formData.email,
             institute: formData.university,
             role: formData.role,
@@ -87,13 +173,11 @@ export default function SignupPage() {
                 throw new Error(msg);
             }
 
-            alert("Account created successfully! Please login.");
-            const next = new URLSearchParams(window.location.search).get('next');
-            router.push(next ? `/login?next=${encodeURIComponent(next)}` : '/login');
+            // Immediately log them in after signup
+            await handleLoginSubmit();
 
         } catch (err: any) {
             setError(err.message);
-        } finally {
             setLoading(false);
         }
     };
@@ -109,21 +193,21 @@ export default function SignupPage() {
             <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 sm:p-12 lg:p-20 relative overflow-y-auto z-10">
                 <div className="w-full max-w-[440px] animate-in fade-in slide-in-from-bottom-4 duration-700">
                     
-                    <Link href="/" className="inline-block mb-12 no-underline group">
-                        <img src="/logo.png" alt="Kauchy" className="h-12 w-auto object-contain dark:hidden transition-transform duration-500 group-hover:scale-105" />
-                        <img src="/inverted_logo.png" alt="Kauchy" className="h-12 w-auto object-contain hidden dark:block transition-transform duration-500 group-hover:scale-105" />
+                    <Link href="/" className="relative flex items-center justify-start mb-8 h-12 sm:h-14 w-full overflow-hidden no-underline group">
+                        <img src="/logo.png" alt="Kauchy" className="absolute left-[-10px] top-1/2 -translate-y-1/2 h-[180px] w-auto object-contain dark:hidden transition-transform duration-500 group-hover:scale-105" />
+                        <img src="/darkmodelogo.png" alt="Kauchy" className="absolute left-[-10px] top-1/2 -translate-y-1/2 h-[180px] w-auto object-contain hidden dark:block transition-transform duration-500 group-hover:scale-105" />
                     </Link>
 
                     <div className="mb-10">
-                        <h1 className="text-[2.5rem] leading-[1.1] font-serif tracking-tight text-gray-900 dark:text-white mb-3">
-                            {step === 1 ? "Where content meets commerce" : step === 2 ? "Who are you?" : step === 3 ? "Your details" : "Secure account"}
+                        <h1 className="text-[2.2rem] leading-[1.2] font-serif tracking-tight text-gray-900 dark:text-white mb-3">
+                            {step === 1 ? "Your business deserves more than \"DM to order.\" 👀" : step === 1.5 ? "Verify your email" : step === 2 ? "Who are you?" : step === 3 ? "Your details" : step === 5 ? "Welcome Back" : "Secure account"}
                         </h1>
                         <p className="text-base text-gray-500 dark:text-gray-400 font-medium">
-                            {step === 1 ? "Scroll the feed, chat with friends, and trade securely with our in-app escrow." : step === 4 ? "Almost there, set a strong password." : "Tell us a bit more about yourself."}
+                            {step === 1 ? "Welcome to Kauchy. Scroll the feed, chat with friends, and trade securely." : step === 1.5 ? "We sent a 6-digit code to your email." : step === 4 ? "Almost there, set a strong password." : step === 5 ? "Enter your password to sign in." : "Tell us a bit more about yourself."}
                         </p>
                     </div>
 
-                    <form onSubmit={step === 4 ? handleSubmit : (e) => { e.preventDefault(); nextStep(); }} className="space-y-6">
+                    <form onSubmit={step === 4 ? handleSignupSubmit : step === 5 ? handleLoginSubmit : (e) => { e.preventDefault(); if (step === 1) checkEmail(); else if (step === 1.5) verifyOTP(); else nextStep(); }} className="space-y-6">
                         
                         {/* Step 1: Email & Google */}
                         {step === 1 && (
@@ -135,7 +219,7 @@ export default function SignupPage() {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        placeholder="name@university.edu"
+                                        placeholder="example@email.com"
                                         className={inputClass}
                                         autoFocus
                                     />
@@ -143,9 +227,12 @@ export default function SignupPage() {
 
                                 {error && <div className="text-sm font-medium text-red-500">{error}</div>}
 
-                                <button type="button" onClick={nextStep} className="w-full flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold cursor-pointer transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg">
-                                    Continue with email
-                                    <ArrowRight size={18} />
+                                <button type="button" onClick={checkEmail} className="w-full flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold cursor-pointer transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg" disabled={loading}>
+                                    {loading ? (
+                                        <span className="w-5 h-5 border-2 border-white/30 border-t-white dark:border-gray-900/30 dark:border-t-gray-900 rounded-full animate-spin"></span>
+                                    ) : (
+                                        <>Continue with email <ArrowRight size={18} /></>
+                                    )}
                                 </button>
 
                                 <div className="flex items-center gap-4 py-2">
@@ -155,6 +242,45 @@ export default function SignupPage() {
                                 </div>
 
                                 <GoogleAuthButton next={typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('next') : null} />
+                            </div>
+                        )}
+
+                        {/* Step 1.5: OTP Verification */}
+                        {step === 1.5 && (
+                            <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
+                                <div>
+                                    <label className={labelClass}>OTP Code</label>
+                                    <input
+                                        type="text"
+                                        name="otp"
+                                        value={otp}
+                                        onChange={(e) => { setOtp(e.target.value); setError(''); }}
+                                        placeholder="Enter 6-digit code"
+                                        className={inputClass + " text-center tracking-widest text-2xl font-bold"}
+                                        maxLength={6}
+                                        autoFocus
+                                    />
+                                </div>
+
+                                {error && <div className="text-sm font-medium text-red-500 text-center">{error}</div>}
+
+                                <div className="flex gap-4 pt-2">
+                                    <button type="button" onClick={prevStep} className="flex items-center justify-center py-4 px-5 bg-gray-100 dark:bg-zinc-900 text-gray-700 dark:text-gray-300 rounded-xl font-semibold transition-colors hover:bg-gray-200 dark:hover:bg-zinc-800">
+                                        <ArrowLeft size={20} />
+                                    </button>
+                                    <button type="button" onClick={verifyOTP} className="flex-1 flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg" disabled={loading}>
+                                        {loading ? (
+                                            <span className="w-5 h-5 border-2 border-white/30 border-t-white dark:border-gray-900/30 dark:border-t-gray-900 rounded-full animate-spin"></span>
+                                        ) : (
+                                            <>Verify OTP <ArrowRight size={18} /></>
+                                        )}
+                                    </button>
+                                </div>
+                                <div className="text-center mt-4">
+                                    <button type="button" onClick={checkEmail} className="text-sm text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 font-medium" disabled={loading}>
+                                        Resend Code
+                                    </button>
+                                </div>
                             </div>
                         )}
 
@@ -175,14 +301,20 @@ export default function SignupPage() {
                                 </div>
                                 <div>
                                     <label className={labelClass}>Phone Number</label>
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        placeholder="Mobile number"
-                                        className={inputClass}
-                                    />
+                                    <div className="relative flex items-center">
+                                        <div className="absolute left-0 top-0 bottom-0 flex items-center px-4 border-r border-gray-300 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/50 rounded-l-xl pointer-events-none">
+                                            <span className="mr-2 text-lg leading-none">🇳🇬</span>
+                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">+234</span>
+                                        </div>
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            placeholder="Mobile number"
+                                            className={inputClass + " pl-[110px]"}
+                                        />
+                                    </div>
                                 </div>
 
                                 {error && <div className="text-sm font-medium text-red-500">{error}</div>}
@@ -202,7 +334,7 @@ export default function SignupPage() {
                         {step === 3 && (
                             <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
                                 <div>
-                                    <label className={labelClass}>University</label>
+                                    <label className={labelClass}>University <span className="text-gray-400 dark:text-gray-500 normal-case tracking-normal ml-1">(Optional)</span></label>
                                     <UniversitySearch
                                         value={formData.university}
                                         onChange={(val) => { setFormData({ ...formData, university: val }); setError(''); }}
@@ -217,8 +349,8 @@ export default function SignupPage() {
                                             onChange={handleChange}
                                             className={`${inputClass} appearance-none`}
                                         >
-                                            <option value="student">I want to buy things (Student)</option>
-                                            <option value="vendor">I want to sell things (Vendor)</option>
+                                            <option value="buyer" className="bg-white dark:bg-zinc-900 text-gray-900 dark:text-white py-2">I want to buy things (Buyer)</option>
+                                            <option value="vendor" className="bg-white dark:bg-zinc-900 text-gray-900 dark:text-white py-2">I want to sell things (Vendor)</option>
                                         </select>
                                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                                             <svg className="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -241,7 +373,7 @@ export default function SignupPage() {
                             </div>
                         )}
 
-                        {/* Step 4: Password & Submit */}
+                        {/* Step 4: Password & Submit (Signup) */}
                         {step === 4 && (
                             <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
                                 <div>
@@ -303,11 +435,49 @@ export default function SignupPage() {
                                 </div>
                             </div>
                         )}
-                    </form>
 
-                    <div className="text-center mt-12 text-sm text-gray-500 dark:text-gray-400">
-                        Already have an account? <Link href="/login" className="text-gray-900 dark:text-white font-semibold underline underline-offset-4 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Log in</Link>
-                    </div>
+                        {/* Step 5: Password & Submit (Login) */}
+                        {step === 5 && (
+                            <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
+                                <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700/50">
+                                    <span className="text-sm font-medium text-gray-900 dark:text-white">{formData.email}</span>
+                                    <button type="button" onClick={() => { setStep(1); setFormData({...formData, password: ''}); }} className="text-xs font-bold text-blue-600 uppercase tracking-wide hover:underline">Change</button>
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Password</label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            placeholder="Enter your password"
+                                            className={inputClass + " pr-20"}
+                                            autoFocus
+                                        />
+                                        <button
+                                            type="button"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none text-gray-500 dark:text-gray-400 text-xs font-bold tracking-wide px-2 py-1.5 rounded-md hover:text-gray-900 dark:hover:text-white"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? "HIDE" : "SHOW"}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {error && <div className="text-sm font-medium text-red-500">{error}</div>}
+
+                                <button type="submit" className="w-full flex items-center justify-center py-4 px-6 bg-blue-600 text-white rounded-xl text-base font-semibold transition-all hover:bg-blue-700 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed" disabled={loading}>
+                                    {loading ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                            Signing in...
+                                        </span>
+                                    ) : "Sign In"}
+                                </button>
+                            </div>
+                        )}
+                    </form>
                 </div>
             </div>
 

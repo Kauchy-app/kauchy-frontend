@@ -17,10 +17,11 @@ export default function SignupPage() {
         phone: '',
         email: '',
         university: '',
-        role: 'student', // default
+        role: 'buyer', // default
         password: '',
         confirmPassword: ''
     });
+    const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -49,8 +50,41 @@ export default function SignupPage() {
             if (data.exists) {
                 setStep(5); // Login step
             } else {
-                setStep(2); // Signup step
+                // Send OTP
+                const otpRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/send-otp/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: formData.email })
+                });
+                if (!otpRes.ok) {
+                    const otpErr = await otpRes.json().catch(() => ({}));
+                    throw new Error(otpErr.detail || "Could not send OTP email");
+                }
+                setStep(1.5); // OTP step
             }
+        } catch (e: any) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const verifyOTP = async () => {
+        setError('');
+        if (!otp || otp.length !== 6) return setError('Please enter a valid 6-digit OTP');
+
+        setLoading(true);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-otp/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: formData.email, otp })
+            });
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.detail || "Invalid OTP");
+            }
+            setStep(2); // Proceed to username/phone step
         } catch (e: any) {
             setError(e.message);
         } finally {
@@ -65,7 +99,6 @@ export default function SignupPage() {
             if (!formData.phone) return setError('Phone number is required');
         }
         if (step === 3) {
-            if (!formData.university) return setError('University is required');
             if (!formData.role) return setError('Role is required');
         }
         setStep(prev => prev + 1);
@@ -73,7 +106,7 @@ export default function SignupPage() {
 
     const prevStep = () => {
         setError('');
-        setStep(prev => (prev === 5 ? 1 : prev - 1));
+        setStep(prev => (prev === 5 ? 1 : prev === 1.5 ? 1 : prev === 2 ? 1.5 : prev - 1));
     };
 
     const handleLoginSubmit = async (e?: React.FormEvent) => {
@@ -117,7 +150,7 @@ export default function SignupPage() {
 
         const payload = {
             username: formData.username,
-            phone: formData.phone,
+            phone: formData.phone.startsWith('+234') ? formData.phone : `+234${formData.phone.replace(/^0+/, '')}`,
             email: formData.email,
             institute: formData.university,
             role: formData.role,
@@ -167,14 +200,14 @@ export default function SignupPage() {
 
                     <div className="mb-10">
                         <h1 className="text-[2.2rem] leading-[1.2] font-serif tracking-tight text-gray-900 dark:text-white mb-3">
-                            {step === 1 ? "Your business deserves more than \"DM to order.\" 👀" : step === 2 ? "Who are you?" : step === 3 ? "Your details" : step === 5 ? "Welcome Back" : "Secure account"}
+                            {step === 1 ? "Your business deserves more than \"DM to order.\" 👀" : step === 1.5 ? "Verify your email" : step === 2 ? "Who are you?" : step === 3 ? "Your details" : step === 5 ? "Welcome Back" : "Secure account"}
                         </h1>
                         <p className="text-base text-gray-500 dark:text-gray-400 font-medium">
-                            {step === 1 ? "Welcome to Kauchy. Scroll the feed, chat with friends, and trade securely." : step === 4 ? "Almost there, set a strong password." : step === 5 ? "Enter your password to sign in." : "Tell us a bit more about yourself."}
+                            {step === 1 ? "Welcome to Kauchy. Scroll the feed, chat with friends, and trade securely." : step === 1.5 ? "We sent a 6-digit code to your email." : step === 4 ? "Almost there, set a strong password." : step === 5 ? "Enter your password to sign in." : "Tell us a bit more about yourself."}
                         </p>
                     </div>
 
-                    <form onSubmit={step === 4 ? handleSignupSubmit : step === 5 ? handleLoginSubmit : (e) => { e.preventDefault(); if (step === 1) checkEmail(); else nextStep(); }} className="space-y-6">
+                    <form onSubmit={step === 4 ? handleSignupSubmit : step === 5 ? handleLoginSubmit : (e) => { e.preventDefault(); if (step === 1) checkEmail(); else if (step === 1.5) verifyOTP(); else nextStep(); }} className="space-y-6">
                         
                         {/* Step 1: Email & Google */}
                         {step === 1 && (
@@ -212,6 +245,45 @@ export default function SignupPage() {
                             </div>
                         )}
 
+                        {/* Step 1.5: OTP Verification */}
+                        {step === 1.5 && (
+                            <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
+                                <div>
+                                    <label className={labelClass}>OTP Code</label>
+                                    <input
+                                        type="text"
+                                        name="otp"
+                                        value={otp}
+                                        onChange={(e) => { setOtp(e.target.value); setError(''); }}
+                                        placeholder="Enter 6-digit code"
+                                        className={inputClass + " text-center tracking-widest text-2xl font-bold"}
+                                        maxLength={6}
+                                        autoFocus
+                                    />
+                                </div>
+
+                                {error && <div className="text-sm font-medium text-red-500 text-center">{error}</div>}
+
+                                <div className="flex gap-4 pt-2">
+                                    <button type="button" onClick={prevStep} className="flex items-center justify-center py-4 px-5 bg-gray-100 dark:bg-zinc-900 text-gray-700 dark:text-gray-300 rounded-xl font-semibold transition-colors hover:bg-gray-200 dark:hover:bg-zinc-800">
+                                        <ArrowLeft size={20} />
+                                    </button>
+                                    <button type="button" onClick={verifyOTP} className="flex-1 flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg" disabled={loading}>
+                                        {loading ? (
+                                            <span className="w-5 h-5 border-2 border-white/30 border-t-white dark:border-gray-900/30 dark:border-t-gray-900 rounded-full animate-spin"></span>
+                                        ) : (
+                                            <>Verify OTP <ArrowRight size={18} /></>
+                                        )}
+                                    </button>
+                                </div>
+                                <div className="text-center mt-4">
+                                    <button type="button" onClick={checkEmail} className="text-sm text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 font-medium" disabled={loading}>
+                                        Resend Code
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Step 2: Username & Phone */}
                         {step === 2 && (
                             <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
@@ -229,14 +301,20 @@ export default function SignupPage() {
                                 </div>
                                 <div>
                                     <label className={labelClass}>Phone Number</label>
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        placeholder="Mobile number"
-                                        className={inputClass}
-                                    />
+                                    <div className="relative flex items-center">
+                                        <div className="absolute left-0 top-0 bottom-0 flex items-center px-4 border-r border-gray-300 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-800/50 rounded-l-xl pointer-events-none">
+                                            <span className="mr-2 text-lg leading-none">🇳🇬</span>
+                                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">+234</span>
+                                        </div>
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            placeholder="Mobile number"
+                                            className={inputClass + " pl-[110px]"}
+                                        />
+                                    </div>
                                 </div>
 
                                 {error && <div className="text-sm font-medium text-red-500">{error}</div>}
@@ -256,7 +334,7 @@ export default function SignupPage() {
                         {step === 3 && (
                             <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
                                 <div>
-                                    <label className={labelClass}>University</label>
+                                    <label className={labelClass}>University <span className="text-gray-400 dark:text-gray-500 normal-case tracking-normal ml-1">(Optional)</span></label>
                                     <UniversitySearch
                                         value={formData.university}
                                         onChange={(val) => { setFormData({ ...formData, university: val }); setError(''); }}
@@ -271,8 +349,8 @@ export default function SignupPage() {
                                             onChange={handleChange}
                                             className={`${inputClass} appearance-none`}
                                         >
-                                            <option value="student">I want to buy things (Student)</option>
-                                            <option value="vendor">I want to sell things (Vendor)</option>
+                                            <option value="buyer" className="bg-white dark:bg-zinc-900 text-gray-900 dark:text-white py-2">I want to buy things (Buyer)</option>
+                                            <option value="vendor" className="bg-white dark:bg-zinc-900 text-gray-900 dark:text-white py-2">I want to sell things (Vendor)</option>
                                         </select>
                                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                                             <svg className="h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

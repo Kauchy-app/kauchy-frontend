@@ -542,7 +542,7 @@ export default function KauchProfile() {
                       </button>
                   )}
                 </div>
-                <p className="text-zinc-800 dark:text-zinc-100 text-sm leading-relaxed mb-4">{post.description}</p>
+                <p className="text-zinc-800 dark:text-zinc-100 text-sm leading-relaxed mb-4 whitespace-pre-line">{post.description}</p>
               </div>
 
               {/* Media Container — one video, one image, or a swipeable image carousel */}

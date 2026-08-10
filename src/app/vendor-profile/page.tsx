@@ -24,9 +24,18 @@ function VendorProfileContent() {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     
-    // Derived values for the menu
-    const categories = ['All', ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))];
-    const filteredProducts = selectedCategory === 'All' ? products : products.filter(p => p.category === selectedCategory);
+    // Derived values for the menu: prioritize custom Menu/Collection in specs, then fallback to category
+    const getProductMenu = (p: any) => {
+        if (p.specs) {
+            const keys = Object.keys(p.specs);
+            const menuKey = keys.find(k => k.toLowerCase() === 'menu' || k.toLowerCase() === 'collection' || k.toLowerCase() === 'subcategory');
+            if (menuKey) return p.specs[menuKey];
+        }
+        return p.category;
+    };
+
+    const categories = ['All', ...Array.from(new Set(products.map(getProductMenu).filter(Boolean)))];
+    const filteredProducts = selectedCategory === 'All' ? products : products.filter(p => getProductMenu(p) === selectedCategory);
 
 
     useEffect(() => {

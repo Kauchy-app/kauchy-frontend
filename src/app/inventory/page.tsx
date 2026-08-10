@@ -74,7 +74,7 @@ export default function InventoryPage() {
         }
     };
 
-    const handleDeleteProduct = async (id: number) => {
+    const handleDeleteProduct = async (id: string | number) => {
         if (!confirm("Delete product?")) return;
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, {
@@ -135,6 +135,10 @@ export default function InventoryPage() {
         }
 
         const formData = new FormData(e.currentTarget);
+        if (!formData.get('quantity')) {
+            formData.set('quantity', '999'); // default to 999 (infinite) for food/services
+        }
+        
         formData.delete('image_url');
         selectedImages.forEach(file => {
             formData.append('image_url', file);
@@ -180,7 +184,7 @@ export default function InventoryPage() {
                     product_name: data.product_name,
                     description: data.description,
                     price: parseFloat(data.price),
-                    quantity: parseInt(data.quantity),
+                    quantity: data.quantity ? parseInt(data.quantity) : 999,
                     category: data.category,
                     specs: editSpecs.reduce((acc: Record<string, string>, s) => {
                         const k = s.key.trim(); const v = s.value.trim();
@@ -274,8 +278,8 @@ export default function InventoryPage() {
                                         <input name="price" type="number" required placeholder="0.00" step="0.01" min="0" className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors text-[#1d1d1d] dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500"/>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-semibold mb-1.5 text-[#1d1d1d] dark:text-white">Quantity *</label>
-                                        <input name="quantity" type="number" required placeholder="1" min="1" className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors text-[#1d1d1d] dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500"/>
+                                        <label className="block text-sm font-semibold mb-1.5 text-[#1d1d1d] dark:text-white">Quantity <span className="font-normal text-zinc-400">(optional)</span></label>
+                                        <input name="quantity" type="number" placeholder="Leave blank if infinite" min="1" className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors text-[#1d1d1d] dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500"/>
                                     </div>
                                 </div>
                                 <div className="mb-4">
@@ -389,8 +393,8 @@ export default function InventoryPage() {
                                         <input name="price" type="number" defaultValue={editingProduct.price} required step="0.01" min="0" className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors text-[#1d1d1d] dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500"/>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-semibold mb-1.5 text-[#1d1d1d] dark:text-white">Quantity</label>
-                                        <input name="quantity" type="number" defaultValue={editingProduct.quantity} required min="1" className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors text-[#1d1d1d] dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500"/>
+                                        <label className="block text-sm font-semibold mb-1.5 text-[#1d1d1d] dark:text-white">Quantity <span className="font-normal text-zinc-400">(optional)</span></label>
+                                        <input name="quantity" type="number" defaultValue={editingProduct.quantity} placeholder="Leave blank if infinite" min="1" className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors text-[#1d1d1d] dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500"/>
                                     </div>
                                 </div>
                                 <div className="mb-4">

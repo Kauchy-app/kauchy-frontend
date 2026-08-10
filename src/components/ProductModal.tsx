@@ -304,8 +304,8 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
     const isOwnProduct = user && product.vendor_id && String(user.id) === String(product.vendor_id);
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 overflow-y-auto p-5" onClick={onClose}>
-            <div className="relative w-full max-w-[900px] max-h-[90vh] overflow-y-auto bg-white dark:bg-zinc-900 rounded-xl shadow-legacy-modal animate-slideInUp" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 p-5" onClick={onClose}>
+            <div className="relative w-full max-w-[900px] max-h-[90vh] overflow-y-auto custom-scrollbar bg-white dark:bg-zinc-900 rounded-xl shadow-legacy-modal animate-slideInUp" onClick={(e) => e.stopPropagation()}>
                 <button className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white rounded-full border-none cursor-pointer transition-all duration-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 z-10" onClick={onClose}>✕</button>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-10">
@@ -403,7 +403,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                         {/* Reviews Section */}
                         <div className="mt-6 pt-6 border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg" ref={reviewsRef}>
                             <h3 className="text-lg font-semibold mb-4 text-zinc-900 dark:text-white">Customer Reviews ({totalReviews})</h3>
-                            <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto pr-1">
+                            <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
                                 {loadingReviews ? (
                                     <div className="flex flex-col gap-3 animate-pulse">
                                         {[1, 2].map(i => (

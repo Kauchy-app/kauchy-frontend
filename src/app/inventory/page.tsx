@@ -38,6 +38,15 @@ export default function InventoryPage() {
     const updateSpec = (i: number, field: 'key' | 'value', val: string) =>
         setSpecs(prev => prev.map((s, idx) => (idx === i ? { ...s, [field]: val } : s)));
     const removeSpec = (i: number) => setSpecs(prev => prev.filter((_, idx) => idx !== i));
+    
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (e.target.value === 'food') {
+            setSpecs(prev => {
+                if (prev.some(s => s.key.toLowerCase() === 'menu')) return prev;
+                return [{ key: 'Menu', value: '' }, ...prev];
+            });
+        }
+    };
 
     // Same custom-attribute rows for the edit modal, seeded from the product.
     const [editSpecs, setEditSpecs] = useState<{ key: string; value: string }[]>([]);
@@ -45,6 +54,16 @@ export default function InventoryPage() {
     const updateEditSpec = (i: number, field: 'key' | 'value', val: string) =>
         setEditSpecs(prev => prev.map((s, idx) => (idx === i ? { ...s, [field]: val } : s)));
     const removeEditSpec = (i: number) => setEditSpecs(prev => prev.filter((_, idx) => idx !== i));
+    
+    const handleEditCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (e.target.value === 'food') {
+            setEditSpecs(prev => {
+                if (prev.some(s => s.key.toLowerCase() === 'menu')) return prev;
+                return [{ key: 'Menu', value: '' }, ...prev];
+            });
+        }
+    };
+
     const openEditProduct = (p: any) => {
         setEditingProduct(p);
         const entries = p.specs && typeof p.specs === 'object' ? Object.entries(p.specs) : [];
@@ -334,7 +353,7 @@ export default function InventoryPage() {
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-sm font-semibold mb-1.5 text-[#1d1d1d] dark:text-white">Category *</label>
-                                    <select name="category" required className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors bg-white dark:bg-zinc-800 text-[#1d1d1d] dark:text-white">
+                                    <select name="category" required onChange={handleCategoryChange} className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors bg-white dark:bg-zinc-800 text-[#1d1d1d] dark:text-white">
                                         <option value="">Select Category</option>
                                         <option value="electronics">Electronics</option>
                                         <option value="books">Books</option>
@@ -451,7 +470,7 @@ export default function InventoryPage() {
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-sm font-semibold mb-1.5 text-[#1d1d1d] dark:text-white">Category</label>
-                                    <select name="category" defaultValue={editingProduct.category} required className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors bg-white dark:bg-zinc-800 text-[#1d1d1d] dark:text-white">
+                                    <select name="category" defaultValue={editingProduct.category} required onChange={handleEditCategoryChange} className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:border-[#1c6ef2] transition-colors bg-white dark:bg-zinc-800 text-[#1d1d1d] dark:text-white">
                                         <option value="electronics">Electronics</option>
                                         <option value="books">Books</option>
                                         <option value="furniture">Furniture</option>

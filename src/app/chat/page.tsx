@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { AuthWall } from '@/context/AuthGateContext';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Image as ImageIcon, X, Reply, Check, CheckCheck } from 'lucide-react';
+import { Send, Image as ImageIcon, X, Reply, Check, CheckCheck, ArrowLeft } from 'lucide-react';
 import LoadingModal from '@/components/LoadingModal';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -495,22 +495,11 @@ export default function ChatPage() {
         <div className="flex h-full overflow-hidden relative md:grid md:grid-cols-[300px_1fr] chat-bg" ref={chatContainerRef}>
             {loading && <LoadingModal />}
             
-            {/* Mobile Overlay */}
-            <AnimatePresence>
-                {isSidebarOpen && (
-                    <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/40 z-40 md:hidden"
-                        onClick={() => setIsSidebarOpen(false)}
-                    />
-                )}
-            </AnimatePresence>
+
 
             {/* Sidebar */}
             <div 
-                className={`fixed inset-y-0 left-0 top-0 bottom-0 w-[85vw] max-w-[300px] bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl border-r border-black/5 dark:border-white/10 z-50 transition-transform duration-300 md:relative md:w-full md:inset-auto md:transform-none md:z-0 md:flex md:flex-col md:h-full ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+                className={`${activeConversationId ? 'hidden md:flex' : 'flex'} flex-col w-full h-full bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl border-r border-black/5 dark:border-white/10 z-10 md:relative md:w-full md:z-0`}
                 ref={sidebarRef}
             >
                 <div className="p-4 border-b border-black/5 dark:border-white/10 bg-white/40 dark:bg-white/[0.02] backdrop-blur-xl shrink-0 sticky top-0 z-50 md:static">
@@ -566,13 +555,11 @@ export default function ChatPage() {
             </div>
 
             {/* Main Chat */}
-            <div className="flex flex-col bg-white/40 dark:bg-white/[0.02] backdrop-blur-xl h-full overflow-hidden relative w-full">
+            <div className={`${activeConversationId ? 'flex' : 'hidden md:flex'} flex-col bg-white/40 dark:bg-white/[0.02] backdrop-blur-xl h-full overflow-hidden relative w-full`}>
                 {!activeConversationId ? (
                     <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400/80" id="chatEmpty">
                         <div className="flex items-center p-3 bg-white/30 dark:bg-white/[0.03] backdrop-blur-xl border-b border-black/5 dark:border-white/10 min-h-[56px] absolute top-0 left-0 w-full z-10 md:hidden">
-                            <button className="flex items-center justify-center p-2 mr-2 text-xl cursor-pointer text-[#1d1d1d] dark:text-white hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors" id="sidebarToggleBtn" onClick={(e) => { e.stopPropagation(); setIsSidebarOpen(!isSidebarOpen); }}>
-                                ☰
-                            </button>
+                            {/* Removed sidebar toggle button */}
                         </div>
                         <div className="text-6xl mb-4">💬</div>
                         <p className="text-lg font-medium">Select a conversation to start chatting</p>
@@ -582,8 +569,8 @@ export default function ChatPage() {
                         {/* Header */}
                         <div className="flex items-center justify-between p-4 border-b border-black/5 dark:border-white/10 bg-white/40 dark:bg-white/[0.04] backdrop-blur-xl shrink-0 min-h-[56px] md:justify-between sm:p-3">
                             <div className="flex items-center flex-1 min-w-0">
-                                <button className="flex md:hidden items-center justify-center p-2 mr-2 text-xl cursor-pointer text-[#1d1d1d] dark:text-white hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors shrink-0" id="sidebarToggleBtnDetail" onClick={(e) => { e.stopPropagation(); setIsSidebarOpen(!isSidebarOpen); }}>
-                                    ☰
+                                <button className="flex md:hidden items-center justify-center p-2 mr-2 cursor-pointer text-[#1d1d1d] dark:text-white hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors shrink-0" onClick={() => setActiveConversationId(null)}>
+                                    <ArrowLeft size={20} />
                                 </button>
                                 <div className="flex items-center gap-3 cursor-pointer flex-1 min-w-0 hover:opacity-90 transition-opacity" onClick={() => router.push(`/vendor-profile?vendorId=${activeConv?.other_user.id}`)}>
                                     <div className="relative">

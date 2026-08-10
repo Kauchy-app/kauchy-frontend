@@ -19,6 +19,10 @@ export default function InventoryPage() {
     const [isAddProductOpen, setIsAddProductOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<any | null>(null);
     const [isEditProductOpen, setIsEditProductOpen] = useState(false);
+    
+    // Delete state
+    const [productToDelete, setProductToDelete] = useState<any | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // Drag & Drop Image States
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -74,20 +78,25 @@ export default function InventoryPage() {
         }
     };
 
-    const handleDeleteProduct = async (id: string | number) => {
-        if (!confirm("Delete product?")) return;
+    const executeDeleteProduct = async () => {
+        if (!productToDelete) return;
+        setIsDeleting(true);
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${productToDelete.id}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${user.access}` }
             });
             if (res.ok) {
-                setProducts(prev => prev.filter(p => p.id !== id));
+                setProducts(prev => prev.filter(p => p.id !== productToDelete.id));
                 showToast("Product deleted", "success");
             } else {
                 showToast("Failed to delete product", "error");
             }
         } catch (e) { showToast("Error deleting product", "error"); }
+        finally {
+            setIsDeleting(false);
+            setProductToDelete(null);
+        }
     };
 
     // Img Drag & Drop
@@ -236,7 +245,7 @@ export default function InventoryPage() {
                                     </button>
                                     <button
                                         className="flex-1 py-1.5 bg-[#ff4d4d] text-white text-xs rounded hover:bg-[#e63e3e] transition-colors"
-                                        onClick={() => handleDeleteProduct(p.id)}
+                                        onClick={() => setProductToDelete(p)}
                                     >
                                         Delete
                                     </button>
@@ -251,6 +260,39 @@ export default function InventoryPage() {
                             <div>No products found. Add one!</div>
                         </div>
                     )}
+                </div>
+            )}
+            
+            {/* Delete Confirmation Modal */}
+            {productToDelete && (
+                <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => !isDeleting && setProductToDelete(null)}>
+                    <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-sm flex flex-col shadow-2xl animate-fadeIn p-6 text-center" onClick={e => e.stopPropagation()}>
+                        <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                        </div>
+                        <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Delete Product</h3>
+                        <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-6">
+                            Are you sure you want to delete <span className="font-semibold text-zinc-900 dark:text-zinc-200">"{productToDelete.product_name}"</span>? This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3 w-full">
+                            <button 
+                                onClick={() => setProductToDelete(null)}
+                                disabled={isDeleting}
+                                className="flex-1 py-2.5 px-4 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl font-semibold hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                onClick={executeDeleteProduct}
+                                disabled={isDeleting}
+                                className="flex-1 py-2.5 px-4 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 shadow-md hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                            >
+                                {isDeleting ? (
+                                    <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span> Deleting...</>
+                                ) : "Delete"}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
 

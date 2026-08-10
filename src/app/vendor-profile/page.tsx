@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useAuthGate } from '@/context/AuthGateContext';
 import Image from 'next/image';
 import { formatNaira } from '@/utils/formatCurrency';
-
+import { Grid, List, QrCode } from 'lucide-react';
 
 function VendorProfileContent() {
     const searchParams = useSearchParams();
@@ -18,6 +18,15 @@ function VendorProfileContent() {
     const [vendor, setVendor] = useState<any | null>(null);
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    
+    // Digital Menu States
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [selectedCategory, setSelectedCategory] = useState<string>('All');
+    
+    // Derived values for the menu
+    const categories = ['All', ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))];
+    const filteredProducts = selectedCategory === 'All' ? products : products.filter(p => p.category === selectedCategory);
+
 
     useEffect(() => {
         if (vendorId) {
@@ -137,10 +146,12 @@ function VendorProfileContent() {
                                     Contact Vendor
                                 </button>
                                 <button
-                                    className="flex items-center justify-center p-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-lg text-zinc-600 dark:text-zinc-400 cursor-pointer transition-all hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-blue-600 hover:border-blue-600 shrink-0"
+                                    className="flex items-center justify-center p-3 sm:px-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-lg text-zinc-600 dark:text-zinc-400 cursor-pointer transition-all hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-blue-600 hover:border-blue-600 shrink-0 gap-2"
                                     onClick={handleShare}
-                                    aria-label="Share Profile"
+                                    title="Share Menu"
                                 >
+                                    <QrCode size={18} />
+                                    <span className="hidden sm:inline text-sm font-semibold">Share Menu</span>
                                 </button>
                             </div>
                         </div>
@@ -168,26 +179,91 @@ function VendorProfileContent() {
                         </div>
                     </div>
 
-                    {/* Products Grid */}
-                    <div className="flex flex-col gap-4 mt-4">
-                        <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                            {products.length > 0 ? products.map(p => (
-                                <div key={p._id || p.id} className="bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-legacy-card cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-legacy-hover animate-fadeIn" onClick={() => router.push(`/feed?type=product&id=${p._id || p.id}&vendorId=${vendorId}`)}>
-                                    <div className="relative w-full h-[180px] bg-zinc-50 dark:bg-zinc-800 overflow-hidden">
-                                        <Image src={p.image_url?.[0] || '/placeholder.svg'} fill sizes="(max-width: 768px) 50vw, 240px" className="object-cover" alt={p.product_name} />
-                                    </div>
-                                    <div className="p-4">
-                                        <div className="text-sm font-semibold text-zinc-900 dark:text-white mb-1.5">{p.product_name}</div>
-                                        <div className="text-base font-bold text-amber-400">{formatNaira(p.price)}</div>
-                                    </div>
-                                </div>
-                            )) : (
-                                <div className="col-span-full text-center py-12 bg-white dark:bg-zinc-900 rounded-xl">
-                                    <div className="text-5xl mb-3">📦</div>
-                                    <p className="text-base text-zinc-600 dark:text-zinc-400">No products available.</p>
-                                </div>
-                            )}
+                    {/* Menu Controls */}
+                    <div className="flex flex-col gap-4 mt-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Store Items</h2>
+                            {/* View Mode Toggle */}
+                            <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg self-start sm:self-auto shrink-0">
+                                <button
+                                    onClick={() => setViewMode('grid')}
+                                    className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-zinc-700 shadow text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+                                >
+                                    <Grid size={16} className="inline-block mr-1.5 -mt-0.5" />
+                                    Grid
+                                </button>
+                                <button
+                                    onClick={() => setViewMode('list')}
+                                    className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${viewMode === 'list' ? 'bg-white dark:bg-zinc-700 shadow text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+                                >
+                                    <List size={16} className="inline-block mr-1.5 -mt-0.5" />
+                                    List
+                                </button>
+                            </div>
                         </div>
+
+                        {/* Category Filters */}
+                        {categories.length > 1 && (
+                            <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-hide">
+                                {categories.map(cat => (
+                                    <button
+                                        key={cat}
+                                        onClick={() => setSelectedCategory(cat)}
+                                        className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${selectedCategory === cat ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'}`}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Products Display */}
+                    <div className="flex flex-col gap-4">
+                        {viewMode === 'grid' ? (
+                            <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+                                {filteredProducts.length > 0 ? filteredProducts.map(p => (
+                                    <div key={p._id || p.id} className="bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-legacy-card cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-legacy-hover animate-fadeIn" onClick={() => router.push(`/feed?type=product&id=${p._id || p.id}&vendorId=${vendorId}`)}>
+                                        <div className="relative w-full h-[180px] bg-zinc-50 dark:bg-zinc-800 overflow-hidden">
+                                            <Image src={p.image_url?.[0] || '/placeholder.svg'} fill sizes="(max-width: 768px) 50vw, 240px" className="object-cover" alt={p.product_name} />
+                                        </div>
+                                        <div className="p-4">
+                                            <div className="text-sm font-semibold text-zinc-900 dark:text-white mb-1.5 line-clamp-1">{p.product_name}</div>
+                                            <div className="text-base font-bold text-amber-400">{formatNaira(p.price)}</div>
+                                        </div>
+                                    </div>
+                                )) : (
+                                    <div className="col-span-full text-center py-12 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                                        <div className="text-5xl mb-3">🍽️</div>
+                                        <p className="text-base text-zinc-600 dark:text-zinc-400">No items available in this category.</p>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-3">
+                                {filteredProducts.length > 0 ? filteredProducts.map(p => (
+                                    <div key={p._id || p.id} className="flex gap-4 p-4 bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-800 cursor-pointer transition-all hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md animate-fadeIn" onClick={() => router.push(`/feed?type=product&id=${p._id || p.id}&vendorId=${vendorId}`)}>
+                                        <div className="relative w-24 h-24 sm:w-32 sm:h-32 shrink-0 bg-zinc-50 dark:bg-zinc-800 rounded-lg overflow-hidden">
+                                            <Image src={p.image_url?.[0] || '/placeholder.svg'} fill sizes="128px" className="object-cover" alt={p.product_name} />
+                                        </div>
+                                        <div className="flex flex-col flex-grow min-w-0 justify-center">
+                                            <div className="flex justify-between items-start gap-2 mb-1">
+                                                <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white line-clamp-2">{p.product_name}</h3>
+                                                <span className="text-base sm:text-lg font-bold text-amber-500 whitespace-nowrap">{formatNaira(p.price)}</span>
+                                            </div>
+                                            <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 mt-1 hidden sm:block">
+                                                {p.description || "No description provided."}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )) : (
+                                    <div className="text-center py-12 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                                        <div className="text-5xl mb-3">🍽️</div>
+                                        <p className="text-base text-zinc-600 dark:text-zinc-400">No items available in this category.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                 </div>

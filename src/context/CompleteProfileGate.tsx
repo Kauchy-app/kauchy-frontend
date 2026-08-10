@@ -73,7 +73,7 @@ export default function CompleteProfileGate() {
                 <div className="flex flex-col items-center text-center gap-2 mb-6">
                     {profile?.profile_url
                         ? <img src={profile.profile_url} alt="" className="w-14 h-14 rounded-full object-cover shadow-sm" />
-                        : <GraduationCap size={40} className="text-amber-400" />}
+                        : <GraduationCap size={40} className="text-blue-600" />}
                     <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Complete your profile</h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-[320px]">
                         Welcome{profile?.email ? `, ${profile.email}` : ''}! We just need a few more details
@@ -90,7 +90,7 @@ export default function CompleteProfileGate() {
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="Choose a username"
                             required
-                            className="w-full px-3.5 py-3 border border-zinc-300 dark:border-zinc-700 rounded-lg text-sm text-zinc-900 dark:text-white bg-zinc-50 dark:bg-zinc-800 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-colors"
+                            className="w-full px-3.5 py-3 border border-zinc-300 dark:border-zinc-700 rounded-lg text-sm text-zinc-900 dark:text-white bg-zinc-50 dark:bg-zinc-800 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
                         />
                     </div>
                     <div>
@@ -101,7 +101,7 @@ export default function CompleteProfileGate() {
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="10-15 digits"
                             required
-                            className="w-full px-3.5 py-3 border border-zinc-300 dark:border-zinc-700 rounded-lg text-sm text-zinc-900 dark:text-white bg-zinc-50 dark:bg-zinc-800 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-colors"
+                            className="w-full px-3.5 py-3 border border-zinc-300 dark:border-zinc-700 rounded-lg text-sm text-zinc-900 dark:text-white bg-zinc-50 dark:bg-zinc-800 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
                         />
                     </div>
                     <div>
@@ -119,7 +119,7 @@ export default function CompleteProfileGate() {
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
                             required
-                            className="w-full px-3.5 py-3 border border-zinc-300 dark:border-zinc-700 rounded-lg text-sm text-zinc-900 dark:text-white bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-colors"
+                            className="w-full px-3.5 py-3 border border-zinc-300 dark:border-zinc-700 rounded-lg text-sm text-zinc-900 dark:text-white bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
                         >
                             <option value="buyer">Buyer</option>
                             <option value="vendor">Vendor</option>
@@ -131,7 +131,7 @@ export default function CompleteProfileGate() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3.5 mt-2 bg-amber-400 hover:bg-amber-500 text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-md hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full py-3.5 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-md hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         {loading ? 'Saving…' : 'Finish & Continue'}
                     </button>

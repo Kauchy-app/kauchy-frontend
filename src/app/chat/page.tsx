@@ -541,7 +541,7 @@ export default function ChatPage() {
                                             {!conv.last_message ? "No messages yet" : (
                                                 <>
                                                     {isSent && <span className="mr-1">You:</span>}
-                                                    {conv.last_message.text ? conv.last_message.text : (conv.last_message.file ? "📷 Image/Video" : "")}
+                                                    {conv.last_message.text ? conv.last_message.text : (conv.last_message.file ? "📷 Media" : "")}
                                                 </>
                                             )}
                                         </span>

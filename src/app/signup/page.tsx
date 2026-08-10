@@ -196,7 +196,7 @@ export default function SignupPage() {
                 <div className="w-full max-w-[440px] animate-in fade-in slide-in-from-bottom-4 duration-700">
                     
                     <Link href="/" className="relative flex items-center justify-start mb-8 h-12 sm:h-14 w-full overflow-hidden no-underline group">
-                        <img src="/logo.png" alt="Kauchy" className="absolute left-[-10px] top-1/2 -translate-y-1/2 h-[180px] w-auto object-contain dark:hidden transition-transform duration-500 group-hover:scale-105" />
+                        <img src="/lightmodelogo.png" alt="Kauchy" className="absolute left-[-10px] top-1/2 -translate-y-1/2 h-[180px] w-auto object-contain dark:hidden transition-transform duration-500 group-hover:scale-105" />
                         <img src="/darkmodelogo.png" alt="Kauchy" className="absolute left-[-10px] top-1/2 -translate-y-1/2 h-[180px] w-auto object-contain hidden dark:block transition-transform duration-500 group-hover:scale-105" />
                     </Link>
 

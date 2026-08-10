@@ -73,7 +73,7 @@ export function AuthGateProvider({ children }: { children: React.ReactNode }) {
 
                         <div className="flex flex-col items-center text-center gap-2 mb-6 pt-2">
                             <>
-                                <img src="/logo.png" alt="Kauchy" className="w-12 h-12 rounded-xl mb-2 object-contain dark:hidden" />
+                                <img src="/lightmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl mb-2 object-contain dark:hidden" />
                                 <img src="/darkmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl mb-2 object-contain hidden dark:block" />
                             </>
                             <h2 className="text-xl font-bold text-white">Join Kauchy</h2>
@@ -140,7 +140,7 @@ export function AuthWall({ reason, loading }: { reason?: string; loading?: boole
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 px-4 text-center">
             <>
-                <img src="/logo.png" alt="Kauchy" className="w-12 h-12 rounded-xl object-contain opacity-80 dark:hidden" />
+                <img src="/lightmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl object-contain opacity-80 dark:hidden" />
                 <img src="/darkmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl object-contain opacity-80 hidden dark:block" />
             </>
             <p className="text-gray-600 dark:text-gray-300 max-w-[300px]">

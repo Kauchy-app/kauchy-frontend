@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { useAuthGate } from '@/context/AuthGateContext';
-import { Heart, MessageCircle, Share2, MoreHorizontal, ShoppingBag, ArrowLeft, Users, Send, Mic, X } from 'lucide-react';
+import { Heart, MessageCircle, Share2, MoreHorizontal, ShoppingBag, ArrowLeft, Users, Send, Mic, X, Trash2 } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -84,6 +84,10 @@ export default function KauchProfile() {
   const [editKauchForm, setEditKauchForm] = useState({ name: '', description: '' });
   const [editKauchAvatar, setEditKauchAvatar] = useState<File | null>(null);
   const [isSavingKauch, setIsSavingKauch] = useState(false);
+
+  // Delete Post State
+  const [postToDelete, setPostToDelete] = useState<number | null>(null);
+  const [isDeletingPost, setIsDeletingPost] = useState(false);
 
   // Comments: which post is expanded, and per-post data
   const [openComments, setOpenComments] = useState<number | null>(null);
@@ -344,6 +348,28 @@ export default function KauchProfile() {
 
   const isOwner = user?.user?.id === kauch.owner_id;
 
+  const handleDeletePost = async () => {
+    if (!postToDelete) return;
+    setIsDeletingPost(true);
+    try {
+        const res = await fetch(`${API}/kauch/posts/${postToDelete}/`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${user.access}` }
+        });
+        if (res.ok) {
+            setPosts(prev => prev.filter(p => p.id !== postToDelete));
+            showToast("Post deleted successfully!", "success");
+        } else {
+            showToast("Failed to delete post", "error");
+        }
+    } catch (e) {
+        showToast("Error deleting post", "error");
+    } finally {
+        setIsDeletingPost(false);
+        setPostToDelete(null);
+    }
+  };
+
   // Shared profile card — stacks on top on mobile, lives in the sidebar on desktop.
   const profileCard = (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 sm:p-10">
@@ -502,9 +528,19 @@ export default function KauchProfile() {
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">{timeAgo(post.created_at)}</span>
-                  <button className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 transition-all">
-                    <MoreHorizontal size={20} />
-                  </button>
+                  {isOwner ? (
+                      <button 
+                          onClick={() => setPostToDelete(post.id)} 
+                          className="text-red-500 hover:text-red-600 p-1 transition-all" 
+                          title="Delete post"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                  ) : (
+                      <button className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 transition-all">
+                        <MoreHorizontal size={20} />
+                      </button>
+                  )}
                 </div>
                 <p className="text-zinc-800 dark:text-zinc-100 text-sm leading-relaxed mb-4">{post.description}</p>
               </div>
@@ -733,6 +769,35 @@ export default function KauchProfile() {
 
         </div>{/* /grid */}
       </div>{/* /container */}
+      {/* Delete Post Confirmation Modal */}
+      {postToDelete !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={() => !isDeletingPost && setPostToDelete(null)}>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-sm p-6 shadow-2xl animate-fadeIn text-center" onClick={e => e.stopPropagation()}>
+            <Trash2 size={48} className="text-red-500 mx-auto mb-4 opacity-80" />
+            <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Delete Post?</h3>
+            <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-6">
+              This action cannot be undone. Are you sure you want to permanently delete this post?
+            </p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setPostToDelete(null)}
+                disabled={isDeletingPost}
+                className="flex-1 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleDeletePost}
+                disabled={isDeletingPost}
+                className="flex-1 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 shadow-md transition-all disabled:opacity-50 flex justify-center items-center gap-2"
+              >
+                {isDeletingPost ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

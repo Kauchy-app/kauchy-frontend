@@ -24,6 +24,8 @@ export default function InventoryPage() {
     const [productToDelete, setProductToDelete] = useState<any | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // Drag & Drop Image States
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -143,6 +145,7 @@ export default function InventoryPage() {
             return;
         }
 
+        setIsSubmitting(true);
         const formData = new FormData(e.currentTarget);
         if (!formData.get('quantity')) {
             formData.set('quantity', '999'); // default to 999 (infinite) for food/services
@@ -176,12 +179,16 @@ export default function InventoryPage() {
                 showToast("Failed to create product", "error");
             }
         } catch (err) { showToast("Error creating product", "error"); }
+        finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleUpdateProduct = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const fd = new FormData(e.currentTarget);
         const data: any = Object.fromEntries(fd.entries());
+        setIsSubmitting(true);
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${editingProduct.id}`, {
                 method: 'PUT',
@@ -209,6 +216,7 @@ export default function InventoryPage() {
                 showToast("Product updated", "success");
             } else { showToast("Failed to update product", "error"); }
         } catch (e) { showToast("Error updating product", "error"); }
+        finally { setIsSubmitting(false); }
     };
 
     if (!user) return <AuthWall reason="manage your inventory" loading={authLoading} />;
@@ -402,8 +410,10 @@ export default function InventoryPage() {
                                     )}
                                 </div>
                                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                                    <button type="submit" className="w-full py-2.5 bg-[#1c6ef2] hover:-translate-y-[2px] hover:shadow-[0_8px_16px_rgba(28,110,242,0.3)] text-white font-bold rounded-lg transition-all">Add Product</button>
-                                    <button type="button" onClick={closeAddProductModal} className="w-full py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold text-zinc-700 dark:text-zinc-300 rounded-lg transition-colors">Cancel</button>
+                                    <button type="submit" disabled={isSubmitting} className="w-full py-2.5 bg-[#1c6ef2] hover:-translate-y-[2px] hover:shadow-[0_8px_16px_rgba(28,110,242,0.3)] text-white font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                                        {isSubmitting ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span> Creating...</> : "Add Product"}
+                                    </button>
+                                    <button type="button" onClick={closeAddProductModal} disabled={isSubmitting} className="w-full py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold text-zinc-700 dark:text-zinc-300 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -495,9 +505,11 @@ export default function InventoryPage() {
                                     Views: <strong>{editingProduct.view_count || 0}</strong>
                                 </div>
                                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                                    <button type="submit" className="w-full py-2.5 bg-[#1c6ef2] hover:-translate-y-[2px] hover:shadow-[0_8px_16px_rgba(28,110,242,0.3)] text-white font-bold rounded-lg transition-all">Save Changes</button>
-                                    <button type="button" onClick={() => { handleDeleteProduct(editingProduct.id); setIsEditProductOpen(false); }} className="w-full py-2.5 bg-[#ff4d4d] hover:bg-[#e63e3e] text-white font-bold rounded-lg transition-colors">Delete Product</button>
-                                    <button type="button" onClick={() => setIsEditProductOpen(false)} className="w-full py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold text-zinc-700 dark:text-zinc-300 rounded-lg transition-colors">Close</button>
+                                    <button type="submit" disabled={isSubmitting} className="w-full py-2.5 bg-[#1c6ef2] hover:-translate-y-[2px] hover:shadow-[0_8px_16px_rgba(28,110,242,0.3)] text-white font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                                        {isSubmitting ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span> Saving...</> : "Save Changes"}
+                                    </button>
+                                    <button type="button" onClick={() => { setProductToDelete(editingProduct); setIsEditProductOpen(false); }} disabled={isSubmitting} className="w-full py-2.5 bg-[#ff4d4d] hover:bg-[#e63e3e] text-white font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Delete Product</button>
+                                    <button type="button" onClick={() => setIsEditProductOpen(false)} disabled={isSubmitting} className="w-full py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold text-zinc-700 dark:text-zinc-300 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Close</button>
                                 </div>
                             </form>
                         </div>

@@ -54,7 +54,7 @@ function StarRating({ rating, onRate, interactive = false, size = 'text-base' }:
                 <span
                     key={star}
                     className={`${size} transition-all duration-150 ${interactive ? 'cursor-pointer hover:scale-125' : ''} ${
-                        star <= (hovered || rating) ? 'text-amber-400' : 'text-gray-300'
+                        star <= (hovered || rating) ? 'text-amber-400' : 'text-zinc-300'
                     }`}
                     onClick={() => interactive && onRate?.(star)}
                     onMouseEnter={() => interactive && setHovered(star)}
@@ -306,12 +306,12 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
     return (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 overflow-y-auto p-5" onClick={onClose}>
             <div className="relative w-full max-w-[900px] max-h-[90vh] overflow-y-auto bg-white dark:bg-zinc-900 rounded-xl shadow-legacy-modal animate-slideInUp" onClick={(e) => e.stopPropagation()}>
-                <button className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white rounded-full border-none cursor-pointer transition-all duration-300 hover:bg-gray-200 dark:hover:bg-zinc-700 z-10" onClick={onClose}>✕</button>
+                <button className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white rounded-full border-none cursor-pointer transition-all duration-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 z-10" onClick={onClose}>✕</button>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-10">
                     {/* Image Gallery */}
                     <div className="flex flex-col gap-3">
-                        <div className="relative w-full h-[300px] bg-gray-50 dark:bg-zinc-800 rounded-xl overflow-hidden">
+                        <div className="relative w-full h-[300px] bg-zinc-50 dark:bg-zinc-800 rounded-xl overflow-hidden">
                             <Image src={mainImage} alt={product.product_name} fill sizes="(max-width: 768px) 100vw, 450px" className="object-cover" />
                         </div>
                         <div className="flex flex-wrap gap-3 p-1">
@@ -321,7 +321,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                                     src={img}
                                     width={60}
                                     height={60}
-                                    className={`w-[60px] h-[60px] rounded-md cursor-pointer object-cover border-2 transition-all duration-200 hover:opacity-80 ${i === activeImage ? 'border-amber-400' : 'border-transparent'}`}
+                                    className={`w-[60px] h-[60px] rounded-lg cursor-pointer object-cover border-2 transition-all duration-200 hover:opacity-80 ${i === activeImage ? 'border-amber-400' : 'border-transparent'}`}
                                     alt={`Thumbnail ${i}`}
                                     onClick={() => setActiveImage(i)}
                                 />
@@ -331,7 +331,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
 
                     {/* Product Info */}
                     <div className="flex flex-col gap-5">
-                        <h1 className="text-3xl text-gray-900 dark:text-white leading-tight font-bold">{product.product_name}</h1>
+                        <h1 className="text-3xl text-zinc-900 dark:text-white leading-tight font-bold">{product.product_name}</h1>
 
                         <div className="text-2xl font-bold text-amber-400">
                             <span>{formatNaira(product.price)}</span>
@@ -339,16 +339,16 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
 
                         <div className="flex items-center gap-2">
                             <StarRating rating={Math.round(product.rating || 0)} />
-                            <span className="text-sm text-gray-600 dark:text-gray-400">({totalReviews} reviews)</span>
+                            <span className="text-sm text-zinc-600 dark:text-zinc-400">({totalReviews} reviews)</span>
                         </div>
 
                         {/* Engagement */}
-                        <div className="flex flex-wrap gap-4 mt-1 bg-gray-100 dark:bg-zinc-800 p-4 rounded-lg">
+                        <div className="flex flex-wrap gap-4 mt-1 bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg">
                             <button
                                 className={`flex items-center gap-1.5 px-3 py-1.5 border rounded-lg text-sm font-medium transition-all cursor-pointer ${
                                     liked
                                         ? 'bg-red-50 dark:bg-red-900/20 border-red-300 text-red-500'
-                                        : 'border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-white hover:border-red-400 hover:text-red-500'
+                                        : 'border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-white hover:border-red-400 hover:text-red-500'
                                 } ${likeLoading ? 'opacity-50 pointer-events-none' : ''}`}
                                 title={liked ? "Unlike this product" : "Like this product"}
                                 onClick={handleLikeToggle}
@@ -358,66 +358,66 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                                 </span>
                                 <span>{likesCount}</span> Likes
                             </button>
-                            <span className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 px-3 py-1.5 rounded-lg">
+                            <span className="flex items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-400 px-3 py-1.5 rounded-lg">
                                 👁 <span>{product.view_count || 0}</span> Views
                             </span>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 p-4 bg-gray-100 dark:bg-zinc-800 rounded-lg">
+                        <div className="grid grid-cols-2 gap-4 p-4 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600 dark:text-gray-400">Available:</span>
-                                <span className="text-base font-semibold text-gray-900 dark:text-white">{product.quantity || 1}</span>
+                                <span className="text-sm text-zinc-600 dark:text-zinc-400">Available:</span>
+                                <span className="text-base font-semibold text-zinc-900 dark:text-white">{product.quantity || 1}</span>
                             </div>
                         </div>
 
                         <div className="product-description">
-                            <h3 className="text-base text-gray-900 dark:text-white mb-2 font-semibold">Description</h3>
-                            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{product.description || 'No description available.'}</p>
+                            <h3 className="text-base text-zinc-900 dark:text-white mb-2 font-semibold">Description</h3>
+                            <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{product.description || 'No description available.'}</p>
                         </div>
 
                         {product.specs && Object.keys(product.specs).length > 0 && (
                             <div>
-                                <h3 className="text-base text-gray-900 dark:text-white mb-2 font-semibold">Details</h3>
+                                <h3 className="text-base text-zinc-900 dark:text-white mb-2 font-semibold">Details</h3>
                                 <div className="grid grid-cols-2 gap-3">
                                     {Object.entries(product.specs).map(([k, v]) => (
-                                        <div key={k} className="flex flex-col p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg">
-                                            <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">{k}</span>
-                                            <span className="text-sm font-semibold text-gray-900 dark:text-white break-words">{String(v)}</span>
+                                        <div key={k} className="flex flex-col p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                                            <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">{k}</span>
+                                            <span className="text-sm font-semibold text-zinc-900 dark:text-white break-words">{String(v)}</span>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         )}
 
-                        <div className="grid grid-cols-2 gap-3 p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
+                        <div className="grid grid-cols-2 gap-3 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
                             <div className="flex flex-col">
-                                <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Location:</span>
-                                <span className="text-sm font-medium text-gray-900 dark:text-white"><b>{product.institute || 'N/A'}</b></span>
+                                <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">Location:</span>
+                                <span className="text-sm font-medium text-zinc-900 dark:text-white"><b>{product.institute || 'N/A'}</b></span>
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Category:</span>
-                                <span className="text-sm font-medium text-gray-900 dark:text-white"><b>{product.category || 'General'}</b></span>
+                                <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">Category:</span>
+                                <span className="text-sm font-medium text-zinc-900 dark:text-white"><b>{product.category || 'General'}</b></span>
                             </div>
                         </div>
 
                         {/* Reviews Section */}
-                        <div className="mt-6 pt-6 border-gray-200 dark:border-zinc-800 bg-gray-100 dark:bg-zinc-800 p-4 rounded-lg" ref={reviewsRef}>
-                            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Customer Reviews ({totalReviews})</h3>
+                        <div className="mt-6 pt-6 border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg" ref={reviewsRef}>
+                            <h3 className="text-lg font-semibold mb-4 text-zinc-900 dark:text-white">Customer Reviews ({totalReviews})</h3>
                             <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto pr-1">
                                 {loadingReviews ? (
                                     <div className="flex flex-col gap-3 animate-pulse">
                                         {[1, 2].map(i => (
                                             <div key={i} className="flex gap-3 p-3 bg-white dark:bg-zinc-900 rounded-lg">
-                                                <div className="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-700 shrink-0"></div>
+                                                <div className="w-9 h-9 rounded-full bg-zinc-200 dark:bg-zinc-700 shrink-0"></div>
                                                 <div className="flex-1 space-y-2">
-                                                    <div className="h-3 bg-gray-200 dark:bg-zinc-700 rounded w-1/3"></div>
-                                                    <div className="h-3 bg-gray-200 dark:bg-zinc-700 rounded w-2/3"></div>
+                                                    <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-1/3"></div>
+                                                    <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-2/3"></div>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                 ) : reviews.length === 0 ? (
-                                    <p className="text-center py-4 text-gray-500 dark:text-gray-400 text-sm italic">No reviews yet. Be the first to review!</p>
+                                    <p className="text-center py-4 text-zinc-500 dark:text-zinc-400 text-sm italic">No reviews yet. Be the first to review!</p>
                                 ) : (
                                     reviews.map(rev => (
                                         <div key={rev.id} className="flex gap-3 p-3 bg-white dark:bg-zinc-900 rounded-lg shadow-sm">
@@ -426,11 +426,11 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2 mb-1">
-                                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">{rev.user_name || 'User'}</span>
-                                                    <span className="text-xs text-gray-400 dark:text-gray-500">{timeAgo(rev.created_at)}</span>
+                                                    <span className="text-sm font-semibold text-zinc-900 dark:text-white">{rev.user_name || 'User'}</span>
+                                                    <span className="text-xs text-zinc-400 dark:text-zinc-500">{timeAgo(rev.created_at)}</span>
                                                 </div>
                                                 <StarRating rating={rev.rating} size="text-xs" />
-                                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">{rev.review}</p>
+                                                <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">{rev.review}</p>
                                             </div>
                                         </div>
                                     ))
@@ -439,13 +439,13 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
 
                             {/* Review Form */}
                             {user && !isOwnProduct && userHasPurchased && (
-                                <form onSubmit={handleSubmitReview} className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-800">
+                                <form onSubmit={handleSubmitReview} className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
                                     <div className="flex items-center gap-2 mb-3">
-                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Your rating:</span>
+                                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Your rating:</span>
                                         <StarRating rating={reviewRating} onRate={setReviewRating} interactive size="text-xl" />
                                     </div>
                                     <textarea
-                                        className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-white dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors bg-white dark:bg-zinc-800 resize-none"
+                                        className="w-full border border-zinc-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-900 dark:text-white dark:placeholder-zinc-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors bg-white dark:bg-zinc-800 resize-none"
                                         rows={3}
                                         placeholder="Write your review..."
                                         value={reviewText}
@@ -468,7 +468,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                                 </div>
                             )}
                             {!user && (
-                                <p className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-800 text-center text-sm text-gray-500 dark:text-gray-400">
+                                <p className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800 text-center text-sm text-zinc-500 dark:text-zinc-400">
                                     <a href="/signup" className="text-blue-600 font-medium hover:underline">Log in</a> to write a review
                                 </p>
                             )}
@@ -477,12 +477,12 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                         {/* Vendor Section */}
                         {!isVendorPage && (
                             <div className="mt-6">
-                                <h3 className="text-base text-gray-900 dark:text-white mb-3 font-semibold">Seller Information</h3>
-                                <div className="flex justify-between items-center p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg">
+                                <h3 className="text-base text-zinc-900 dark:text-white mb-3 font-semibold">Seller Information</h3>
+                                <div className="flex justify-between items-center p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
                                     <div className="flex items-center gap-3">
                                         <Image src={product.pfp || '/placeholder.svg'} alt="Vendor" width={60} height={60} className="w-[60px] h-[60px] rounded-full object-cover" />
                                         <div className="flex flex-col">
-                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">{product.vendor_username || 'Unknown Vendor'}</h4>
+                                            <h4 className="text-sm font-semibold text-zinc-900 dark:text-white mb-0.5">{product.vendor_username || 'Unknown Vendor'}</h4>
                                             <div className="flex items-center">
                                                 <span className="text-amber-400 text-xs">★★★★★</span>
                                             </div>
@@ -496,7 +496,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                         )}
 
                         {/* Action Buttons */}
-                        <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-gray-100 dark:border-zinc-800 sticky bottom-0 bg-white dark:bg-zinc-900 pb-2 md:relative md:border-t-0 md:bg-transparent md:pb-0">
+                        <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-zinc-100 dark:border-zinc-800 sticky bottom-0 bg-white dark:bg-zinc-900 pb-2 md:relative md:border-t-0 md:bg-transparent md:pb-0">
                             <div className="flex gap-2 w-full">
                                 <button className="flex-1 py-3 px-6 bg-amber-400 text-white rounded-lg font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,184,0,0.3)] text-sm border-none cursor-pointer" onClick={handleAddToCart}>Add to Cart</button>
                                 <button
@@ -526,7 +526,7 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
                                         showToast('Vendor information not available', 'error');
                                     }
                                 }}>Contact Vendor</button>
-                                <button className="p-2.5 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 cursor-pointer transition-all hover:bg-white flex items-center justify-center shrink-0" aria-label="Share Product" onClick={handleShare}>
+                                <button className="p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 cursor-pointer transition-all hover:bg-white flex items-center justify-center shrink-0" aria-label="Share Product" onClick={handleShare}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <circle cx="18" cy="5" r="3"></circle>
                                         <circle cx="6" cy="12" r="3"></circle>

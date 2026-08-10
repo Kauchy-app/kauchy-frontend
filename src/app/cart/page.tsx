@@ -255,7 +255,7 @@ export default function CartPage(): JSX.Element {
                 {toasts.map(toast => (
                     <div
                         key={toast.id}
-                        className={`px-4 py-3 rounded-lg text-white text-sm shadow-lg animate-[slideIn_0.3s_ease] transition-opacity duration-300 ${toast.type === 'error' ? 'bg-red-500' :
+                        className={`px-4 py-3 rounded-lg text-white text-sm shadow-md animate-[slideIn_0.3s_ease] transition-opacity duration-300 ${toast.type === 'error' ? 'bg-red-500' :
                                 toast.type === 'success' ? 'bg-green-500' :
                                     'bg-blue-500'
                             }`}
@@ -276,10 +276,10 @@ export default function CartPage(): JSX.Element {
                 ) : cartItems.length === 0 ? (
                     <div className="bg-white dark:bg-zinc-900 rounded-xl p-16 text-center shadow-legacy-card flex flex-col items-center">
                         <div className="text-5xl mb-4">🛒</div>
-                        <div className="text-gray-500 dark:text-gray-400 text-lg mb-6">Your cart is empty</div>
+                        <div className="text-zinc-500 dark:text-zinc-400 text-lg mb-6">Your cart is empty</div>
                         <button
                             onClick={() => router.push('/')}
-                            className="bg-[#ffb800] text-white py-3 px-8 rounded-lg font-semibold hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
+                            className="bg-[#ffb800] text-white py-3 px-8 rounded-lg font-semibold hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
                         >
                             Continue Shopping
                         </button>
@@ -299,7 +299,7 @@ export default function CartPage(): JSX.Element {
                                     className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-legacy-card hover:shadow-legacy-hover group transition-all duration-300 grid grid-cols-[100px_1fr] md:grid-cols-[200px_1fr_auto] gap-4 cursor-pointer hover:-translate-y-1"
                                     onClick={() => handleProductClick(item.product)}
                                 >
-                                    <div className="relative w-full h-[100px] md:h-[200px] rounded-lg overflow-hidden bg-gray-50 dark:bg-zinc-800">
+                                    <div className="relative w-full h-[100px] md:h-[200px] rounded-lg overflow-hidden bg-zinc-50 dark:bg-zinc-800">
                                         <Image
                                             src={imageSrc}
                                             alt={name}
@@ -312,12 +312,12 @@ export default function CartPage(): JSX.Element {
                                     <div className="flex flex-col justify-between py-1">
                                         <div>
                                             <div className="text-base font-semibold text-[#1d1d1d] dark:text-white mb-1">{name}</div>
-                                            <div className="text-sm text-[#4b4b4b] dark:text-gray-400">{vendorName}</div>
+                                            <div className="text-sm text-[#4b4b4b] dark:text-zinc-400">{vendorName}</div>
                                         </div>
                                         <div className="text-sm text-[#ffb800] font-bold">{formatNairaFixed(price)}</div>
                                     </div>
                                     <div className="flex flex-col items-end justify-between gap-3">
-                                        <div className="flex items-center gap-2 bg-[#f4f6fa] dark:bg-zinc-950 rounded-md p-1" onClick={e => e.stopPropagation()}>
+                                        <div className="flex items-center gap-2 bg-[#f4f6fa] dark:bg-zinc-950 rounded-lg p-1" onClick={e => e.stopPropagation()}>
                                             <button
                                                 className="w-6 h-6 flex items-center justify-center bg-white dark:bg-zinc-900 rounded shadow-sm hover:shadow text-sm text-[#1d1d1d] dark:text-white"
                                                 onClick={() => updateQuantity(item.id, -1)}
@@ -334,7 +334,7 @@ export default function CartPage(): JSX.Element {
                                             >+</button>
                                         </div>
                                         <button
-                                            className="bg-[#ff4d4d] text-white px-3 py-1.5 rounded-md text-xs hover:scale-105 transition-transform duration-300"
+                                            className="bg-[#ff4d4d] text-white px-3 py-1.5 rounded-lg text-xs hover:scale-105 transition-transform duration-300"
                                             onClick={(e) => { e.stopPropagation(); removeFromCart(item.id); }}
                                         >
                                             Remove
@@ -350,11 +350,11 @@ export default function CartPage(): JSX.Element {
             {/* Cart Summary */}
             <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 sm:p-6 shadow-legacy-card h-fit sticky top-[100px]">
                 <h3 className="text-base font-semibold mb-4 text-[#1d1d1d] dark:text-white">Order Summary</h3>
-                <div className="flex justify-between mb-3 text-sm text-[#4b4b4b] dark:text-gray-400">
+                <div className="flex justify-between mb-3 text-sm text-[#4b4b4b] dark:text-zinc-400">
                     <span>Subtotal ({cartItems.length} {cartItems.length === 1 ? 'item' : 'items'})</span>
                     <span className="font-semibold text-[#1d1d1d] dark:text-white">{formatNairaFixed(subtotal)}</span>
                 </div>
-                <div className="h-[1px] bg-gray-200 dark:bg-zinc-700 my-4"></div>
+                <div className="h-[1px] bg-zinc-200 dark:bg-zinc-700 my-4"></div>
                 <div className="flex justify-between mb-6 text-lg font-bold text-[#1d1d1d] dark:text-white">
                     <span>Total</span>
                     <span>{formatNairaFixed(subtotal)}</span>
@@ -372,16 +372,16 @@ export default function CartPage(): JSX.Element {
             {showCheckoutModal && (
                 <>
                     <div className="fixed inset-0 bg-black/50 z-[9998] transition-opacity duration-300"></div>
-                    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-[95%] max-w-none md:max-w-[500px] md:w-[90%] z-[9999] p-5 sm:p-8 md:p-10 text-center transition-all duration-300">
+                    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-[95%] max-w-none md:max-w-[500px] md:w-[90%] z-[9999] p-5 sm:p-8 md:p-10 text-center transition-all duration-300">
 
                         {/* Loading */}
                         {checkoutLoading && (
                             <div className="min-h-[250px] flex flex-col items-center justify-center">
                                 <div className="mb-6">
-                                    <div className="w-[50px] h-[50px] border-4 border-gray-200 dark:border-zinc-800 border-t-blue-600 rounded-full animate-spin"></div>
+                                    <div className="w-[50px] h-[50px] border-4 border-zinc-200 dark:border-zinc-800 border-t-blue-600 rounded-full animate-spin"></div>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">Processing Order</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Please wait while we process your checkout...</p>
+                                <h3 className="text-2xl font-bold mb-3 text-zinc-900 dark:text-white">Processing Order</h3>
+                                <p className="text-sm text-zinc-600 dark:text-zinc-400">Please wait while we process your checkout...</p>
                             </div>
                         )}
 
@@ -393,33 +393,33 @@ export default function CartPage(): JSX.Element {
                                         <span className="text-3xl text-green-500">✓</span>
                                     </div>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">Order Placed!</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">{checkoutResult.message}</p>
-                                <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
-                                    <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-zinc-800">
-                                        <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Total Amount</span>
-                                        <span className="text-[13px] text-gray-900 dark:text-white font-semibold">{formatNairaFixed(checkoutResult.total_amount_naira)}</span>
+                                <h3 className="text-2xl font-bold mb-3 text-zinc-900 dark:text-white">Order Placed!</h3>
+                                <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">{checkoutResult.message}</p>
+                                <div className="bg-zinc-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
+                                    <div className="flex justify-between items-center py-2 border-b border-zinc-200 dark:border-zinc-800">
+                                        <span className="text-[13px] text-zinc-600 dark:text-zinc-400 font-medium">Total Amount</span>
+                                        <span className="text-[13px] text-zinc-900 dark:text-white font-semibold">{formatNairaFixed(checkoutResult.total_amount_naira)}</span>
                                     </div>
-                                    <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-zinc-800">
-                                        <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Orders Created</span>
-                                        <span className="text-[13px] text-gray-900 dark:text-white font-semibold">{checkoutResult.orders_created}</span>
+                                    <div className="flex justify-between items-center py-2 border-b border-zinc-200 dark:border-zinc-800">
+                                        <span className="text-[13px] text-zinc-600 dark:text-zinc-400 font-medium">Orders Created</span>
+                                        <span className="text-[13px] text-zinc-900 dark:text-white font-semibold">{checkoutResult.orders_created}</span>
                                     </div>
                                     {checkoutResult.orders.map((order, i) => (
-                                        <div key={i} className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-zinc-800 last:border-0">
-                                            <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">{order.order_id}</span>
+                                        <div key={i} className="flex justify-between items-center py-2 border-b border-zinc-200 dark:border-zinc-800 last:border-0">
+                                            <span className="text-[13px] text-zinc-600 dark:text-zinc-400 font-medium">{order.order_id}</span>
                                             <span className="text-[13px] text-amber-600 font-semibold capitalize">{order.status}</span>
                                         </div>
                                     ))}
                                 </div>
                                 <div className="flex gap-3 w-full">
                                     <button
-                                        className="flex-1 py-3 px-6 bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-gray-300 dark:hover:bg-zinc-600"
+                                        className="flex-1 py-3 px-6 bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-zinc-300 dark:hover:bg-zinc-600"
                                         onClick={() => { closeCheckoutModal(); router.push('/'); }}
                                     >
                                         Continue Shopping
                                     </button>
                                     <button
-                                        className="flex-1 py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-blue-700 hover:shadow-lg"
+                                        className="flex-1 py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-blue-700 hover:shadow-md"
                                         onClick={() => { closeCheckoutModal(); router.push('/orders'); }}
                                     >
                                         View Orders
@@ -436,39 +436,39 @@ export default function CartPage(): JSX.Element {
                                         <span className="text-3xl text-red-500">✕</span>
                                     </div>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">Checkout Failed</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{checkoutError.error}</p>
+                                <h3 className="text-2xl font-bold mb-3 text-zinc-900 dark:text-white">Checkout Failed</h3>
+                                <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">{checkoutError.error}</p>
 
                                 {checkoutError.balance_naira !== undefined && checkoutError.required_naira !== undefined && (
-                                    <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
-                                        <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-zinc-800">
-                                            <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Your Balance</span>
+                                    <div className="bg-zinc-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
+                                        <div className="flex justify-between items-center py-2 border-b border-zinc-200 dark:border-zinc-800">
+                                            <span className="text-[13px] text-zinc-600 dark:text-zinc-400 font-medium">Your Balance</span>
                                             <span className="text-[13px] text-red-500 font-semibold">{formatNairaFixed(checkoutError.balance_naira)}</span>
                                         </div>
                                         <div className="flex justify-between items-center py-2">
-                                            <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Required</span>
-                                            <span className="text-[13px] text-gray-900 dark:text-white font-semibold">{formatNairaFixed(checkoutError.required_naira)}</span>
+                                            <span className="text-[13px] text-zinc-600 dark:text-zinc-400 font-medium">Required</span>
+                                            <span className="text-[13px] text-zinc-900 dark:text-white font-semibold">{formatNairaFixed(checkoutError.required_naira)}</span>
                                         </div>
                                     </div>
                                 )}
 
                                 <div className="flex gap-3 w-full">
                                     <button
-                                        className="flex-1 py-3 px-6 bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-gray-300 dark:hover:bg-zinc-600"
+                                        className="flex-1 py-3 px-6 bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-zinc-300 dark:hover:bg-zinc-600"
                                         onClick={closeCheckoutModal}
                                     >
                                         Close
                                     </button>
                                     {checkoutError.balance_naira !== undefined ? (
                                         <button
-                                            className="flex-1 py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-blue-700 hover:shadow-lg"
+                                            className="flex-1 py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-blue-700 hover:shadow-md"
                                             onClick={() => { closeCheckoutModal(); router.push('/wallet'); }}
                                         >
                                             Add Funds
                                         </button>
                                     ) : (
                                         <button
-                                            className="flex-1 py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-blue-700 hover:shadow-lg"
+                                            className="flex-1 py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-blue-700 hover:shadow-md"
                                             onClick={() => { closeCheckoutModal(); handleCheckoutAll(); }}
                                         >
                                             Try Again

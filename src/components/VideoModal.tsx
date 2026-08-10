@@ -198,19 +198,19 @@ export default function VideoModal({ video, caption, contentId, likes = 0, views
     const currentPath = usePathname();
 
     const commentForm = (
-        <div className="mt-auto flex flex-col gap-3 flex-shrink-0 pt-3 border-t border-gray-100 dark:border-zinc-800">
+        <div className="mt-auto flex flex-col gap-3 flex-shrink-0 pt-3 border-t border-zinc-100 dark:border-zinc-800">
             <div className="flex gap-4">
                 <button
                     className={`flex items-center gap-2 px-4 py-2 border rounded-full cursor-pointer text-sm transition-all justify-center ${liked
                             ? 'bg-red-50 dark:bg-red-900/20 border-red-300 text-red-500'
-                            : 'border-[#eee] bg-white dark:bg-zinc-900 text-[#444] hover:bg-gray-50 dark:hover:bg-zinc-800 hover:border-red-200 hover:text-red-500'
+                            : 'border-[#eee] bg-white dark:bg-zinc-900 text-[#444] hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-red-200 hover:text-red-500'
                         } ${likeLoading ? 'opacity-50 pointer-events-none' : ''}`}
                     onClick={handleLikeToggle}
                 >
                     <Heart size={20} fill={liked ? 'currentColor' : 'none'} className={`transition-transform duration-300 ${liked ? 'scale-110' : ''}`} />
                     <span className="font-semibold">{likesCount}</span>
                 </button>
-                <button className="flex items-center gap-2 px-4 py-2 border border-[#eee] rounded-full bg-white dark:bg-zinc-900 cursor-pointer text-sm text-[#444] transition-all justify-center hover:bg-gray-50 dark:hover:bg-zinc-800 hover:border-blue-200 hover:text-blue-500">
+                <button className="flex items-center gap-2 px-4 py-2 border border-[#eee] rounded-full bg-white dark:bg-zinc-900 cursor-pointer text-sm text-[#444] transition-all justify-center hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-blue-200 hover:text-blue-500">
                     <MessageCircle size={20} />
                     <span className="font-semibold">{totalComments}</span>
                 </button>
@@ -222,7 +222,7 @@ export default function VideoModal({ video, caption, contentId, likes = 0, views
                         placeholder="Add a comment..."
                         value={commentText}
                         onChange={(e) => setCommentText(e.target.value)}
-                        className="flex-1 border border-gray-300 dark:border-zinc-700 rounded-full px-4 py-2 text-sm text-gray-900 dark:text-white dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors bg-gray-50 dark:bg-zinc-800 focus:bg-white dark:focus:bg-zinc-800"
+                        className="flex-1 border border-zinc-300 dark:border-zinc-700 rounded-full px-4 py-2 text-sm text-zinc-900 dark:text-white dark:placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors bg-zinc-50 dark:bg-zinc-800 focus:bg-white dark:focus:bg-zinc-800"
                     />
                     <button
                         type="submit"
@@ -238,7 +238,7 @@ export default function VideoModal({ video, caption, contentId, likes = 0, views
                     </button>
                 </form>
             ) : (
-                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
                     <a href="/signup" className="text-blue-600 font-medium hover:underline">Log in</a> to comment
                 </p>
             )}
@@ -249,7 +249,7 @@ export default function VideoModal({ video, caption, contentId, likes = 0, views
 
     return (
         <div className="fixed inset-0 bg-black/85 z-[1000] flex items-center justify-center animate-fadeIn" onClick={handleBackdropClick}>
-            <div className="flex w-[95%] md:w-[90%] max-w-[1000px] h-[90vh] md:h-[85vh] bg-black rounded-xl overflow-hidden relative shadow-2xl flex-col md:flex-row">
+            <div className="flex w-[95%] md:w-[90%] max-w-[1000px] h-[90vh] md:h-[85vh] bg-black rounded-xl overflow-hidden relative shadow-xl flex-col md:flex-row">
                 <button className="absolute top-2.5 right-2.5 md:top-4 md:right-4 z-10 bg-black/50 text-white border-none rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-all hover:bg-white/20" onClick={onClose}>
                     <X size={24} />
                 </button>
@@ -285,22 +285,22 @@ export default function VideoModal({ video, caption, contentId, likes = 0, views
 
                     {/* Comments Area (Scrollable) */}
                     <div className="flex-1 overflow-y-auto mb-4 min-h-[80px] pr-2 custom-scrollbar">
-                        <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">Comments ({totalComments})</h4>
+                        <h4 className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 mb-3">Comments ({totalComments})</h4>
                         <div className="flex flex-col gap-4">
                             {loadingComments ? (
                                 <div className="flex flex-col gap-3 animate-pulse">
                                     {[1, 2, 3].map(i => (
                                         <div key={i} className="flex gap-2">
-                                            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-zinc-700 flex-shrink-0"></div>
+                                            <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex-shrink-0"></div>
                                             <div className="flex-1 space-y-1.5">
-                                                <div className="h-3 bg-gray-200 dark:bg-zinc-700 rounded w-1/4"></div>
-                                                <div className="h-3 bg-gray-200 dark:bg-zinc-700 rounded w-3/4"></div>
+                                                <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-1/4"></div>
+                                                <div className="h-3 bg-zinc-200 dark:bg-zinc-700 rounded w-3/4"></div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             ) : comments.length === 0 ? (
-                                <p className="text-sm text-center text-gray-500 dark:text-gray-400 italic mt-4">No comments yet. Be the first to comment!</p>
+                                <p className="text-sm text-center text-zinc-500 dark:text-zinc-400 italic mt-4">No comments yet. Be the first to comment!</p>
                             ) : (
                                 comments.map(c => (
                                     <div key={c.id} className="flex gap-2 group">
@@ -309,10 +309,10 @@ export default function VideoModal({ video, caption, contentId, likes = 0, views
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-xs font-semibold text-gray-900 dark:text-white">{c.user_email?.split('@')[0] || 'User'}</span>
-                                                <span className="text-[10px] text-gray-400 dark:text-gray-500">{timeAgo(c.created_at)}</span>
+                                                <span className="text-xs font-semibold text-zinc-900 dark:text-white">{c.user_email?.split('@')[0] || 'User'}</span>
+                                                <span className="text-[10px] text-zinc-400 dark:text-zinc-500">{timeAgo(c.created_at)}</span>
                                             </div>
-                                            <span className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{c.comment}</span>
+                                            <span className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">{c.comment}</span>
                                         </div>
                                     </div>
                                 ))

@@ -288,7 +288,7 @@ export default function KauchProfile() {
   if (loading) {
     return (
       <div className="bg-[#f4f6fa] dark:bg-zinc-950 min-h-[calc(100vh-70px)] flex items-center justify-center">
-        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+        <p className="text-zinc-500 dark:text-zinc-400">Loading...</p>
       </div>
     );
   }
@@ -296,7 +296,7 @@ export default function KauchProfile() {
   if (!kauch) {
     return (
       <div className="bg-[#f4f6fa] dark:bg-zinc-950 min-h-[calc(100vh-70px)] flex flex-col items-center justify-center gap-4">
-        <p className="text-gray-600 dark:text-gray-400">Kauch not found.</p>
+        <p className="text-zinc-600 dark:text-zinc-400">Kauch not found.</p>
         <button onClick={() => router.back()} className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">Go back</button>
       </div>
     );
@@ -304,28 +304,28 @@ export default function KauchProfile() {
 
   // Shared profile card — stacks on top on mobile, lives in the sidebar on desktop.
   const profileCard = (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-8 sm:p-10">
+    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 sm:p-10">
       <div className="flex flex-col items-center text-center gap-5">
-        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-800 ring-4 ring-gray-100 dark:ring-zinc-800 shrink-0">
+        <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden bg-zinc-200 dark:bg-zinc-800 ring-4 ring-zinc-100 dark:ring-zinc-800 shrink-0">
           <Image src={kauch.avatar_url || '/placeholder.svg'} alt={kauch.name} fill sizes="48px" className="object-cover" />
         </div>
         <div className="w-full">
-          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-2">{kauch.name}</h2>
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed max-w-md mx-auto">
+          <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-white mb-2">{kauch.name}</h2>
+          <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-6 leading-relaxed max-w-md mx-auto">
             {kauch.description?.trim() || 'Discover our latest drops and shop the products tagged in every post.'}
           </p>
 
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <div className="flex items-center gap-1.5 text-sm font-medium text-gray-900 dark:text-white">
+            <div className="flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white">
               <Users size={18} className="text-blue-600" />
-              <span>{kauch.followers_count.toLocaleString()} <span className="text-gray-500 dark:text-gray-400 font-normal">Followers</span></span>
+              <span>{kauch.followers_count.toLocaleString()} <span className="text-zinc-500 dark:text-zinc-400 font-normal">Followers</span></span>
             </div>
 
             <button
               onClick={handleFollowToggle}
               className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${
                 kauch.is_following
-                  ? 'bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-zinc-700'
+                  ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-300 dark:hover:bg-zinc-700'
                   : 'bg-amber-400 text-white hover:bg-amber-500 shadow-md'
               }`}
             >
@@ -334,7 +334,7 @@ export default function KauchProfile() {
             
             <button
               onClick={handleShare}
-              className="p-2 bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors"
+              className="p-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
               title="Share Kauch Profile"
             >
               <Share2 size={20} />
@@ -349,15 +349,15 @@ export default function KauchProfile() {
     <div className="bg-[#f4f6fa] dark:bg-zinc-950 min-h-[calc(100vh-70px)] pb-20">
 
       {/* Sticky top bar */}
-      <div className="sticky top-0 z-10 bg-[#f4f6fa]/85 dark:bg-zinc-950/85 backdrop-blur border-b border-gray-200 dark:border-zinc-800">
+      <div className="sticky top-0 z-10 bg-[#f4f6fa]/85 dark:bg-zinc-950/85 backdrop-blur border-b border-zinc-200 dark:border-zinc-800">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3">
           <button
             onClick={() => router.back()}
-            className="p-2 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-full transition-colors"
+            className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-full transition-colors"
           >
-            <ArrowLeft size={22} className="text-gray-900 dark:text-white" />
+            <ArrowLeft size={22} className="text-zinc-900 dark:text-white" />
           </button>
-          <h1 className="text-lg font-bold text-gray-900 dark:text-white truncate">{kauch.name}</h1>
+          <h1 className="text-lg font-bold text-zinc-900 dark:text-white truncate">{kauch.name}</h1>
         </div>
       </div>
 
@@ -369,23 +369,23 @@ export default function KauchProfile() {
             {/* Profile card stacks here on mobile; moves to the sidebar on desktop */}
             <div className="lg:hidden mb-6">{profileCard}</div>
 
-            <h3 className="text-base font-bold text-gray-900 dark:text-white mb-4 px-1 border-b border-gray-200 dark:border-zinc-800 pb-2">Posts</h3>
+            <h3 className="text-base font-bold text-zinc-900 dark:text-white mb-4 px-1 border-b border-zinc-200 dark:border-zinc-800 pb-2">Posts</h3>
 
         {posts.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400 text-sm px-2">No posts yet.</p>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm px-2">No posts yet.</p>
         ) : (
         <div className="space-y-4">
           {posts.map((post) => (
-            <div key={post.id} className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 overflow-hidden transition-colors hover:border-gray-300 dark:hover:border-zinc-700">
+            <div key={post.id} className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden transition-colors hover:border-zinc-300 dark:hover:border-zinc-700">
 
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{timeAgo(post.created_at)}</span>
-                  <button className="text-gray-400 dark:text-gray-500 hover:text-gray-600 transition-all">
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">{timeAgo(post.created_at)}</span>
+                  <button className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 transition-all">
                     <MoreHorizontal size={20} />
                   </button>
                 </div>
-                <p className="text-gray-800 dark:text-gray-100 text-sm leading-relaxed mb-4">{post.description}</p>
+                <p className="text-zinc-800 dark:text-zinc-100 text-sm leading-relaxed mb-4">{post.description}</p>
               </div>
 
               {/* Media Container — one video, one image, or a swipeable image carousel */}
@@ -400,7 +400,7 @@ export default function KauchProfile() {
                 // a frame so every slide is the same height and nothing is cropped.
                 if (post.media_type === 'audio') {
                   return (
-                    <div className="w-full p-5 bg-gray-50 dark:bg-zinc-800/60 flex items-center gap-4">
+                    <div className="w-full p-5 bg-zinc-50 dark:bg-zinc-800/60 flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
                         <Mic size={22} className="text-white" />
                       </div>
@@ -410,7 +410,7 @@ export default function KauchProfile() {
                 }
                 if (post.media_type === 'video') {
                   return (
-                    <div className="w-full aspect-square sm:aspect-[4/5] bg-gray-100 dark:bg-zinc-800 relative overflow-hidden">
+                    <div className="w-full aspect-square sm:aspect-[4/5] bg-zinc-100 dark:bg-zinc-800 relative overflow-hidden">
                       <video src={images[0]} className="w-full h-full object-cover" controls />
                     </div>
                   );
@@ -441,12 +441,12 @@ export default function KauchProfile() {
               })()}
 
               {/* Actions Bar */}
-              <div className="px-4 py-4 flex items-center gap-6 border-b border-gray-50 dark:border-zinc-800">
+              <div className="px-4 py-4 flex items-center gap-6 border-b border-zinc-50 dark:border-zinc-800">
                 <button onClick={() => handleLike(post.id)} className="flex items-center gap-2 group">
-                  <Heart size={26} className={`transition-all ${post.is_liked_by_user ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-900'}`} />
-                  <span className={`font-medium ${post.is_liked_by_user ? 'text-red-500' : 'text-gray-600 dark:text-gray-400'}`}>{post.likes_count}</span>
+                  <Heart size={26} className={`transition-all ${post.is_liked_by_user ? 'fill-red-500 text-red-500' : 'text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900'}`} />
+                  <span className={`font-medium ${post.is_liked_by_user ? 'text-red-500' : 'text-zinc-600 dark:text-zinc-400'}`}>{post.likes_count}</span>
                 </button>
-                <button onClick={() => toggleComments(post.id)} className={`flex items-center gap-2 group transition-colors ${openComments === post.id ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900'}`}>
+                <button onClick={() => toggleComments(post.id)} className={`flex items-center gap-2 group transition-colors ${openComments === post.id ? 'text-blue-600' : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'}`}>
                   <MessageCircle size={26} className="transition-transform group-hover:scale-110" />
                   <span className="font-medium">{post.comments_count}</span>
                 </button>
@@ -464,7 +464,7 @@ export default function KauchProfile() {
                             showToast('Post link copied to clipboard!', 'success');
                         }
                     }} 
-                    className="flex items-center gap-2 group text-gray-600 dark:text-gray-400 hover:text-gray-900 transition-colors"
+                    className="flex items-center gap-2 group text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 transition-colors"
                 >
                   <Share2 size={24} className="transition-transform group-hover:scale-110" />
                 </button>
@@ -472,10 +472,10 @@ export default function KauchProfile() {
 
               {/* Comments Panel */}
               {openComments === post.id && (
-                <div className="px-4 py-4 border-b border-gray-50 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/40">
+                <div className="px-4 py-4 border-b border-zinc-50 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/40">
                   {/* Composer */}
                   {replyTo[post.id] && (
-                    <div className="flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-3 py-1.5 rounded-md text-xs mb-2">
+                    <div className="flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-3 py-1.5 rounded-lg text-xs mb-2">
                       <span>Replying to <b>@{replyTo[post.id]!.username}</b></span>
                       <button onClick={() => setReplyTo(prev => ({ ...prev, [post.id]: null }))} className="hover:text-blue-900 dark:hover:text-blue-100">
                         <X size={14} />
@@ -490,7 +490,7 @@ export default function KauchProfile() {
                       onKeyDown={(e) => { if (e.key === 'Enter') submitComment(post.id); }}
                       placeholder={!user ? 'Log in to comment' : replyTo[post.id] ? `Reply to @${replyTo[post.id]!.username}...` : 'Add a comment...'}
                       disabled={!user}
-                      className="flex-1 border border-gray-300 dark:border-zinc-700 rounded-full px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 bg-white dark:bg-zinc-800 placeholder-gray-400 dark:placeholder-gray-500 disabled:bg-gray-100 dark:disabled:bg-zinc-900"
+                      className="flex-1 border border-zinc-300 dark:border-zinc-700 rounded-full px-4 py-2 text-sm text-zinc-900 dark:text-white focus:outline-none focus:border-blue-500 bg-white dark:bg-zinc-800 placeholder-zinc-400 dark:placeholder-zinc-500 disabled:bg-zinc-100 dark:disabled:bg-zinc-900"
                     />
                     <button
                       onClick={() => submitComment(post.id)}
@@ -505,9 +505,9 @@ export default function KauchProfile() {
 
                   {/* List (threaded: top-level comments with their replies) */}
                   {commentLoading === post.id ? (
-                    <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-2">Loading comments...</p>
+                    <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-2">Loading comments...</p>
                   ) : (commentsMap[post.id]?.length ?? 0) === 0 ? (
-                    <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-2 italic">No comments yet. Be the first!</p>
+                    <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-2 italic">No comments yet. Be the first!</p>
                   ) : (
                     <div className="space-y-3 max-h-[280px] overflow-y-auto pr-1">
                       {commentsMap[post.id].filter(c => !c.parent).map(comment => {
@@ -521,20 +521,20 @@ export default function KauchProfile() {
                         };
                         const renderRow = (c: Comment, isReply: boolean) => (
                           <div key={c.id} className="flex gap-3">
-                            <div className={`relative ${isReply ? 'w-7 h-7' : 'w-8 h-8'} rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0`}>
+                            <div className={`relative ${isReply ? 'w-7 h-7' : 'w-8 h-8'} rounded-full overflow-hidden bg-zinc-200 dark:bg-zinc-700 shrink-0`}>
                               <Image src={c.user?.avatar_url || '/placeholder.svg'} alt="" fill sizes="48px" className="object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="bg-white dark:bg-zinc-900 rounded-2xl px-3 py-2 border border-gray-100 dark:border-zinc-800">
-                                <p className="text-xs font-bold text-gray-900 dark:text-white">{c.user?.username || 'User'}</p>
-                                <p className="text-sm text-gray-700 dark:text-gray-300 break-words">{c.text}</p>
+                              <div className="bg-white dark:bg-zinc-900 rounded-2xl px-3 py-2 border border-zinc-100 dark:border-zinc-800">
+                                <p className="text-xs font-bold text-zinc-900 dark:text-white">{c.user?.username || 'User'}</p>
+                                <p className="text-sm text-zinc-700 dark:text-zinc-300 break-words">{c.text}</p>
                               </div>
                               <div className="flex items-center gap-3 mt-1 ml-1">
-                                <span className="text-[11px] text-gray-400 dark:text-gray-500">{timeAgo(c.created_at)}</span>
+                                <span className="text-[11px] text-zinc-400 dark:text-zinc-500">{timeAgo(c.created_at)}</span>
                                 {user && (
                                   <button
                                     onClick={() => startReply(c, isReply)}
-                                    className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 hover:text-blue-600"
+                                    className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 hover:text-blue-600"
                                   >
                                     Reply
                                   </button>
@@ -549,15 +549,15 @@ export default function KauchProfile() {
                             {replies.length > 0 && (
                               <div className="ml-11">
                                 {!expanded ? (
-                                  <button onClick={() => toggleThread(comment.id)} className="flex items-center gap-2 text-[11px] font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                    <span className="w-6 h-px bg-gray-300 dark:bg-zinc-600" />
+                                  <button onClick={() => toggleThread(comment.id)} className="flex items-center gap-2 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200">
+                                    <span className="w-6 h-px bg-zinc-300 dark:bg-zinc-600" />
                                     View {replies.length} {replies.length > 1 ? 'replies' : 'reply'}
                                   </button>
                                 ) : (
-                                  <div className="flex flex-col gap-2 border-l-2 border-gray-200 dark:border-zinc-700 pl-3">
+                                  <div className="flex flex-col gap-2 border-l-2 border-zinc-200 dark:border-zinc-700 pl-3">
                                     {replies.map(rep => renderRow(rep, true))}
-                                    <button onClick={() => toggleThread(comment.id)} className="flex items-center gap-2 text-[11px] font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                      <span className="w-6 h-px bg-gray-300 dark:bg-zinc-600" />
+                                    <button onClick={() => toggleThread(comment.id)} className="flex items-center gap-2 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200">
+                                      <span className="w-6 h-px bg-zinc-300 dark:bg-zinc-600" />
                                       Hide replies
                                     </button>
                                   </div>
@@ -574,8 +574,8 @@ export default function KauchProfile() {
 
               {/* Tagged Products Carousel */}
               {post.tagged_products.length > 0 && (
-                <div className="p-4 bg-gray-50 dark:bg-zinc-800/50">
-                  <div className="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900 dark:text-white">
+                <div className="p-4 bg-zinc-50 dark:bg-zinc-800/50">
+                  <div className="flex items-center gap-2 mb-3 text-sm font-semibold text-zinc-900 dark:text-white">
                     <ShoppingBag size={16} className="text-blue-600" />
                     Tagged Products
                   </div>
@@ -584,13 +584,13 @@ export default function KauchProfile() {
                       <div
                         key={product.id}
                         onClick={() => router.push(`/feed?type=product&id=${product.id}`)}
-                        className="min-w-[140px] max-w-[140px] bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 overflow-hidden cursor-pointer snap-start hover:border-blue-500 transition-all shadow-sm group"
+                        className="min-w-[140px] max-w-[140px] bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden cursor-pointer snap-start hover:border-blue-500 transition-all shadow-sm group"
                       >
-                        <div className="h-[120px] bg-gray-100 dark:bg-zinc-800 relative">
+                        <div className="h-[120px] bg-zinc-100 dark:bg-zinc-800 relative">
                           <Image src={product.image_url?.[0] || '/placeholder.svg'} alt={product.product_name} fill sizes="240px" className="object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                         <div className="p-2.5">
-                          <p className="text-xs font-medium text-gray-900 dark:text-white truncate" title={product.product_name}>{product.product_name}</p>
+                          <p className="text-xs font-medium text-zinc-900 dark:text-white truncate" title={product.product_name}>{product.product_name}</p>
                           <p className="text-sm font-bold text-blue-600 mt-0.5">{formatNaira(product.price)}</p>
                         </div>
                       </div>

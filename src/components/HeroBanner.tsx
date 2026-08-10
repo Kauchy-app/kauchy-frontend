@@ -14,7 +14,7 @@ const slides = [
     buttonText: "Shop Now",
     buttonColor: "bg-yellow-400 hover:bg-yellow-500 text-blue-900",
     image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2070&auto=format&fit=crop",
-    gradient: "from-blue-900 via-blue-800 to-indigo-900"
+    gradient: "from-blue-900 via-blue-800 to-blue-900"
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ const slides = [
     buttonText: "View Collection",
     buttonColor: "bg-pink-500 hover:bg-pink-600 text-white",
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop",
-    gradient: "from-rose-900 via-purple-900 to-indigo-900"
+    gradient: "from-rose-900 via-purple-900 to-blue-900"
   },
   {
     id: 3,
@@ -40,7 +40,7 @@ const slides = [
     buttonText: "Grab Deals",
     buttonColor: "bg-red-500 hover:bg-red-600 text-white",
     image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=2070&auto=format&fit=crop",
-    gradient: "from-gray-900 via-slate-800 to-zinc-900"
+    gradient: "from-zinc-900 via-slate-800 to-zinc-900"
   }
 ];
 
@@ -100,7 +100,7 @@ export default function HeroBanner() {
 
   return (
     <div 
-      className="relative w-full h-[220px] md:h-[400px] lg:h-[450px] rounded-2xl overflow-hidden mb-8 md:mb-12 shadow-lg group cursor-grab active:cursor-grabbing transition-all duration-500 ring-1 ring-transparent hover:ring-blue-400/60 hover:shadow-[0_0_50px_rgba(59,130,246,0.4)]"
+      className="relative w-full h-[220px] md:h-[400px] lg:h-[450px] rounded-2xl overflow-hidden mb-8 md:mb-12 shadow-md group cursor-grab active:cursor-grabbing transition-all duration-500 ring-1 ring-transparent hover:ring-blue-400/60 hover:shadow-[0_0_50px_rgba(59,130,246,0.4)]"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}

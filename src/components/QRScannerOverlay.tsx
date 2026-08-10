@@ -126,7 +126,7 @@ export default function QRScannerOverlay({
 
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 pt-[env(safe-area-inset-top,16px)] pb-4 z-20">
-        <span className="text-white font-semibold text-base drop-shadow-lg">Scan QR code</span>
+        <span className="text-white font-semibold text-base drop-shadow-md">Scan QR code</span>
         <button
           onClick={handleClose}
           className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white text-xl hover:bg-white/20 transition-all active:scale-90"
@@ -138,7 +138,7 @@ export default function QRScannerOverlay({
 
       {/* Instruction text */}
       <div className="absolute top-[16%] left-0 right-0 flex flex-col items-center z-20 pointer-events-none px-6 text-center">
-        <p className="text-white/90 text-base sm:text-lg font-medium tracking-wide drop-shadow-lg">
+        <p className="text-white/90 text-base sm:text-lg font-medium tracking-wide drop-shadow-md">
           Point your camera at the QR code
         </p>
         <p className="text-white/50 text-xs sm:text-sm mt-1">
@@ -174,7 +174,7 @@ export default function QRScannerOverlay({
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <p className="text-white font-semibold mt-4 text-sm drop-shadow-lg">
+            <p className="text-white font-semibold mt-4 text-sm drop-shadow-md">
               QR Code captured!
             </p>
           </div>

@@ -92,7 +92,7 @@ export default function VoiceRecorder({
 
     return (
         <div className="flex items-center gap-2">
-            <button type="button" onClick={cancel} className="p-2 rounded-full bg-gray-100 dark:bg-zinc-800 text-red-500 hover:bg-gray-200 dark:hover:bg-zinc-700" title="Cancel">
+            <button type="button" onClick={cancel} className="p-2 rounded-full bg-zinc-100 dark:bg-zinc-800 text-red-500 hover:bg-zinc-200 dark:hover:bg-zinc-700" title="Cancel">
                 <Trash2 size={18} />
             </button>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 dark:bg-red-900/20">

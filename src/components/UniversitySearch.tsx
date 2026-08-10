@@ -21,7 +21,7 @@ interface UniversitySearchProps {
     variant?: 'default' | 'dark';
 }
 
-const API_URL = 'https://university-domains-list-api-tn4l.onrender.com/search?country=Nigeria';
+import universitiesData from '@/data/universities.json';
 
 export default function UniversitySearch({
     value,
@@ -30,26 +30,15 @@ export default function UniversitySearch({
     className = '',
     variant = 'default',
 }: UniversitySearchProps) {
-    const [universities, setUniversities] = useState<University[]>([]);
+    const [universities, setUniversities] = useState<University[]>(
+        Array.isArray(universitiesData) ? (universitiesData as University[]) : []
+    );
     const [query, setQuery] = useState(value);
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
-    const [loadingUnis, setLoadingUnis] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
-
-    // Fetch universities once on mount.
-    useEffect(() => {
-        setLoadingUnis(true);
-        fetch(API_URL)
-            .then((res) => res.json())
-            .then((data) => {
-                if (Array.isArray(data)) setUniversities(data);
-            })
-            .catch(() => {})
-            .finally(() => setLoadingUnis(false));
-    }, []);
 
     // Sync external value changes to internal query.
     useEffect(() => {
@@ -131,20 +120,20 @@ export default function UniversitySearch({
     const isDark = variant === 'dark';
 
     const inputClasses = isDark
-        ? 'w-full pl-9 pr-8 py-3.5 border border-zinc-700 rounded-xl text-sm text-white bg-zinc-800 placeholder-gray-500 focus:outline-none focus:border-amber-400 transition-all duration-300'
-        : 'w-full pl-9 pr-8 py-3.5 bg-gray-50/50 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700/50 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:bg-white dark:focus:bg-zinc-800';
+        ? 'w-full pl-9 pr-8 py-3.5 border border-zinc-700 rounded-xl text-sm text-white bg-zinc-800 placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition-all duration-300'
+        : 'w-full pl-9 pr-8 py-3.5 bg-zinc-50/50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 rounded-xl text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:bg-white dark:focus:bg-zinc-800';
 
     const dropdownClasses = isDark
         ? 'absolute z-50 left-0 right-0 mt-1 max-h-[220px] overflow-y-auto bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl'
-        : 'absolute z-50 left-0 right-0 mt-1 max-h-[220px] overflow-y-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-xl';
+        : 'absolute z-50 left-0 right-0 mt-1 max-h-[220px] overflow-y-auto bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-xl';
 
     const itemBase = isDark
-        ? 'px-3.5 py-2.5 text-sm cursor-pointer transition-colors text-gray-300'
-        : 'px-3.5 py-2.5 text-sm cursor-pointer transition-colors text-gray-700 dark:text-gray-300';
+        ? 'px-3.5 py-2.5 text-sm cursor-pointer transition-colors text-zinc-300'
+        : 'px-3.5 py-2.5 text-sm cursor-pointer transition-colors text-zinc-700 dark:text-zinc-300';
 
     const itemHighlight = isDark
         ? 'bg-zinc-700 text-white'
-        : 'bg-blue-50 dark:bg-zinc-700 text-gray-900 dark:text-white';
+        : 'bg-blue-50 dark:bg-zinc-700 text-zinc-900 dark:text-white';
 
     return (
         <div ref={wrapperRef} className={`relative ${className}`}>
@@ -165,7 +154,7 @@ export default function UniversitySearch({
                 <Search
                     size={16}
                     className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none ${
-                        isDark ? 'text-gray-500' : 'text-gray-400 dark:text-gray-500'
+                        isDark ? 'text-zinc-500' : 'text-zinc-400 dark:text-zinc-500'
                     }`}
                 />
                 <input
@@ -183,7 +172,7 @@ export default function UniversitySearch({
                     }}
                     onFocus={() => setIsOpen(true)}
                     onKeyDown={handleKeyDown}
-                    placeholder={loadingUnis ? 'Loading universities…' : 'Search university…'}
+                    placeholder="Search university…"
                     className={inputClasses}
                     role="combobox"
                     aria-expanded={isOpen}
@@ -196,8 +185,8 @@ export default function UniversitySearch({
                         type="button"
                         className={`absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full transition-colors ${
                             isDark
-                                ? 'text-gray-500 hover:text-white hover:bg-zinc-600'
-                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-700'
+                                ? 'text-zinc-500 hover:text-white hover:bg-zinc-600'
+                                : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700'
                         }`}
                         onClick={() => {
                             setQuery('');
@@ -214,7 +203,7 @@ export default function UniversitySearch({
                         size={16}
                         className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200 ${
                             isOpen ? 'rotate-180' : ''
-                        } ${isDark ? 'text-gray-500' : 'text-gray-400 dark:text-gray-500'}`}
+                        } ${isDark ? 'text-zinc-500' : 'text-zinc-400 dark:text-zinc-500'}`}
                     />
                 )}
             </div>
@@ -228,7 +217,7 @@ export default function UniversitySearch({
                 >
                     {visibleResults.length === 0 ? (
                         <li className={`${itemBase} italic opacity-60 cursor-default`}>
-                            {loadingUnis ? 'Loading…' : 'No universities found'}
+                            No universities found
                         </li>
                     ) : (
                         visibleResults.map((uni, idx) => (

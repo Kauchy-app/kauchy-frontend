@@ -79,25 +79,25 @@ function SearchContent() {
     const goKauch = (k: Kauch) => router.push(`/kauch/${k.id}`);
 
     const VendorRow = ({ v }: { v: Vendor }) => (
-        <button onClick={() => goVendor(v)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-left">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
-                {v.profile_picture ? <Image src={v.profile_picture} alt={v.username} fill sizes="48px" className="object-cover" /> : <StoreIcon size={20} className="text-gray-400" />}
+        <button onClick={() => goVendor(v)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors text-left">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-zinc-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
+                {v.profile_picture ? <Image src={v.profile_picture} alt={v.username} fill sizes="48px" className="object-cover" /> : <StoreIcon size={20} className="text-zinc-400" />}
             </div>
             <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 dark:text-white truncate">{v.username}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{(v.followers_count ?? 0).toLocaleString()} followers · {v.total_products ?? 0} products</p>
+                <p className="font-semibold text-zinc-900 dark:text-white truncate">{v.username}</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{(v.followers_count ?? 0).toLocaleString()} followers · {v.total_products ?? 0} products</p>
             </div>
         </button>
     );
 
     const KauchRow = ({ k }: { k: Kauch }) => (
-        <button onClick={() => goKauch(k)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-left">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
-                {k.avatar_url ? <Image src={k.avatar_url} alt={k.name} fill sizes="48px" className="object-cover" /> : <span className="font-bold text-gray-500">{k.name.charAt(0).toUpperCase()}</span>}
+        <button onClick={() => goKauch(k)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors text-left">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-zinc-200 dark:bg-zinc-700 shrink-0 flex items-center justify-center">
+                {k.avatar_url ? <Image src={k.avatar_url} alt={k.name} fill sizes="48px" className="object-cover" /> : <span className="font-bold text-zinc-500">{k.name.charAt(0).toUpperCase()}</span>}
             </div>
             <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 dark:text-white truncate">{k.name}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{(k.followers_count ?? 0).toLocaleString()} followers</p>
+                <p className="font-semibold text-zinc-900 dark:text-white truncate">{k.name}</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{(k.followers_count ?? 0).toLocaleString()} followers</p>
             </div>
         </button>
     );
@@ -111,7 +111,7 @@ function SearchContent() {
     const Section = ({ title, onSeeAll, children }: { title: string; onSeeAll: () => void; children: React.ReactNode }) => (
         <div className="mb-6">
             <div className="flex items-center justify-between mb-2 px-1">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-white">{title}</h3>
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-white">{title}</h3>
                 <button onClick={onSeeAll} className="text-xs font-semibold text-blue-600 hover:underline">See all</button>
             </div>
             {children}
@@ -119,28 +119,28 @@ function SearchContent() {
     );
 
     const empty = (label: string) => (
-        <p className="text-center text-sm text-gray-500 dark:text-gray-400 py-10">{label}</p>
+        <p className="text-center text-sm text-zinc-500 dark:text-zinc-400 py-10">{label}</p>
     );
 
     return (
         <div className="flex-1 w-full bg-white dark:bg-zinc-950">
             {/* Search header */}
-            <div className="sticky top-0 z-20 bg-white/90 dark:bg-zinc-950/90 backdrop-blur border-b border-gray-100 dark:border-zinc-800">
+            <div className="sticky top-0 z-20 bg-white/90 dark:bg-zinc-950/90 backdrop-blur border-b border-zinc-100 dark:border-zinc-800">
                 <div className="max-w-3xl mx-auto px-3 py-3 flex items-center gap-2">
-                    <button onClick={() => router.back()} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-200">
+                    <button onClick={() => router.back()} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-200">
                         <ArrowLeft size={20} />
                     </button>
                     <div className="relative flex-1">
-                        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                         <input
                             ref={inputRef}
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             placeholder="Search products, kauches, vendors..."
-                            className="w-full h-11 pl-10 pr-9 rounded-full border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+                            className="w-full h-11 pl-10 pr-9 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 text-sm text-zinc-900 dark:text-white focus:outline-none focus:border-blue-500"
                         />
                         {query && (
-                            <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-2" title="Clear">
+                            <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 p-2" title="Clear">
                                 <X size={18} />
                             </button>
                         )}
@@ -154,7 +154,7 @@ function SearchContent() {
                             <button
                                 key={t}
                                 onClick={() => setTab(t)}
-                                className={`flex-1 min-w-[75px] whitespace-nowrap py-3 text-[13px] sm:text-sm font-semibold border-b-2 transition-colors ${tab === t ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
+                                className={`flex-1 min-w-[75px] whitespace-nowrap py-3 text-[13px] sm:text-sm font-semibold border-b-2 transition-colors ${tab === t ? 'border-blue-600 text-blue-600' : 'border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200'}`}
                             >
                                 {t}
                             </button>
@@ -168,19 +168,19 @@ function SearchContent() {
                 {!hasQuery ? (
                     recent.length > 0 ? (
                         <div>
-                            <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-2 px-1 flex items-center gap-1.5"><Clock size={15} /> Recent</h3>
+                            <h3 className="text-sm font-bold text-zinc-900 dark:text-white mb-2 px-1 flex items-center gap-1.5"><Clock size={15} /> Recent</h3>
                             {recent.map((r, i) => (
-                                <button key={i} onClick={() => setQuery(r)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 text-left text-sm text-gray-700 dark:text-gray-300">
-                                    <Search size={16} className="text-gray-400" /> {r}
+                                <button key={i} onClick={() => setQuery(r)} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 text-left text-sm text-zinc-700 dark:text-zinc-300">
+                                    <Search size={16} className="text-zinc-400" /> {r}
                                 </button>
                             ))}
                         </div>
                     ) : (
-                        <p className="text-center text-sm text-gray-400 py-16">Search for products, kauches and vendors</p>
+                        <p className="text-center text-sm text-zinc-400 py-16">Search for products, kauches and vendors</p>
                     )
                 ) : loading ? (
                     <div className="flex justify-center py-16">
-                        <span className="w-8 h-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
+                        <span className="w-8 h-8 border-4 border-zinc-300 border-t-blue-600 rounded-full animate-spin" />
                     </div>
                 ) : (
                     <>
@@ -219,7 +219,7 @@ function SearchContent() {
 
 export default function SearchPage() {
     return (
-        <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center"><span className="w-8 h-8 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin" /></div>}>
+        <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center"><span className="w-8 h-8 border-4 border-zinc-300 border-t-blue-600 rounded-full animate-spin" /></div>}>
             <SearchContent />
         </Suspense>
     );

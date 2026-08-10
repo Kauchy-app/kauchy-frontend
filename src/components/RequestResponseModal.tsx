@@ -71,19 +71,19 @@ export default function RequestResponseModal({ isOpen, onClose, requestId, onSuc
 
     return (
         <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-            <div className="bg-white dark:bg-zinc-900 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[85vh]" onClick={e => e.stopPropagation()}>
-                <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-zinc-800 shrink-0">
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">Respond to Request</h2>
-                    <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500 transition-colors">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-lg shadow-xl overflow-hidden flex flex-col max-h-[85vh]" onClick={e => e.stopPropagation()}>
+                <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
+                    <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Respond to Request</h2>
+                    <button onClick={onClose} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 transition-colors">
                         <X size={20} />
                     </button>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Select a product from your inventory</label>
+                        <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">Select a product from your inventory</label>
                         {products.length === 0 ? (
-                            <div className="p-4 rounded-xl bg-gray-50 dark:bg-zinc-800 text-center text-sm text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-zinc-700">
+                            <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-center text-sm text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
                                 You don't have any products yet.
                             </div>
                         ) : (
@@ -92,15 +92,15 @@ export default function RequestResponseModal({ isOpen, onClose, requestId, onSuc
                                     <div 
                                         key={p.id}
                                         onClick={() => setSelectedProduct(p.id)}
-                                        className={`cursor-pointer rounded-xl border-2 p-2 transition-all ${selectedProduct === p.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/10' : 'border-gray-100 dark:border-zinc-800 hover:border-gray-200 dark:hover:border-zinc-700'}`}
+                                        className={`cursor-pointer rounded-xl border-2 p-2 transition-all ${selectedProduct === p.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/10' : 'border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700'}`}
                                     >
-                                        <div className="w-full h-24 relative rounded-lg overflow-hidden bg-gray-100 dark:bg-zinc-800 mb-2">
+                                        <div className="w-full h-24 relative rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-800 mb-2">
                                             {p.image_url && p.image_url.length > 0 && (
                                                 <Image src={p.image_url[0]} alt={p.product_name} fill className="object-cover" />
                                             )}
                                         </div>
-                                        <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{p.product_name}</p>
-                                        <p className="text-xs text-gray-500 font-semibold">₦{Number(p.price).toLocaleString()}</p>
+                                        <p className="text-sm font-bold text-zinc-900 dark:text-white truncate">{p.product_name}</p>
+                                        <p className="text-xs text-zinc-500 font-semibold">₦{Number(p.price).toLocaleString()}</p>
                                     </div>
                                 ))}
                             </div>
@@ -108,19 +108,19 @@ export default function RequestResponseModal({ isOpen, onClose, requestId, onSuc
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Add a message (Optional)</label>
+                        <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Add a message (Optional)</label>
                         <textarea 
                             rows={3}
                             placeholder="Hey! I have exactly what you're looking for..."
-                            className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 focus:ring-2 focus:ring-blue-500 outline-none transition-all dark:text-white resize-none"
+                            className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:ring-2 focus:ring-blue-500 outline-none transition-all dark:text-white resize-none"
                             value={message}
                             onChange={e => setMessage(e.target.value)}
                         />
                     </div>
                 </form>
 
-                <div className="p-6 border-t border-gray-100 dark:border-zinc-800 flex justify-end gap-3 shrink-0">
-                    <button type="button" onClick={onClose} className="px-6 py-2.5 rounded-full font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+                <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 flex justify-end gap-3 shrink-0">
+                    <button type="button" onClick={onClose} className="px-6 py-2.5 rounded-full font-semibold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
                         Cancel
                     </button>
                     <button type="submit" disabled={loading || !selectedProduct} className={`px-8 py-2.5 rounded-full font-semibold text-white transition-colors flex items-center justify-center min-w-[120px] ${!selectedProduct ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}>

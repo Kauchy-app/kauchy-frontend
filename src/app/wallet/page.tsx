@@ -294,13 +294,13 @@ export default function WalletPage() {
     if (!user) return <AuthWall reason="access your wallet" loading={loading} />;
 
     return (
-        <div className="w-full max-w-[1400px] mx-auto px-2.5 py-5 sm:px-5 sm:py-10 font-sans text-gray-900 dark:text-white">
+        <div className="w-full max-w-[1400px] mx-auto px-2.5 py-5 sm:px-5 sm:py-10 font-sans text-zinc-900 dark:text-white">
             {/* Toast Container */}
             <div className="fixed top-5 left-5 right-5 sm:left-auto sm:right-5 sm:w-auto z-[10000] flex flex-col gap-2 pointer-events-none" id="toastContainer">
                 {toasts.map(toast => (
                     <div
                         key={toast.id}
-                        className={`px-4 py-3 rounded-lg text-white text-sm shadow-lg animate-[slideIn_0.3s_ease] transition-opacity duration-300 pointer-events-auto ${toast.type === 'error' ? 'bg-red-500' :
+                        className={`px-4 py-3 rounded-lg text-white text-sm shadow-md animate-[slideIn_0.3s_ease] transition-opacity duration-300 pointer-events-auto ${toast.type === 'error' ? 'bg-red-500' :
                                 toast.type === 'success' ? 'bg-green-500' :
                                     'bg-blue-500'
                             }`}
@@ -312,7 +312,7 @@ export default function WalletPage() {
 
             <div className="flex flex-col gap-6">
                 {/* Balance Card */}
-                <div className="bg-gradient-to-br from-[#1c6ef2] to-[#1a5bcc] text-white rounded-xl p-6 sm:p-10 text-center shadow-lg shadow-[#1c6ef2]/30">
+                <div className="bg-gradient-to-br from-[#1c6ef2] to-[#1a5bcc] text-white rounded-xl p-6 sm:p-10 text-center shadow-md shadow-[#1c6ef2]/30">
                     <h2 className="text-sm mb-3 opacity-90 font-medium">Total Balance</h2>
                     <div className="text-4xl sm:text-5xl font-bold mb-3" id="balanceAmount">{formatNairaFixed(balance)}</div>
                     <div className="text-[13px] opacity-80">Available for withdrawal</div>
@@ -321,13 +321,13 @@ export default function WalletPage() {
                 {/* Action Buttons */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
-                        className="w-full py-3.5 px-5 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 bg-amber-400 text-white hover:-translate-y-0.5 hover:shadow-lg"
+                        className="w-full py-3.5 px-5 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 bg-amber-400 text-white hover:-translate-y-0.5 hover:shadow-md"
                         onClick={() => { setIsAddMoneyOpen(true); setDrawerOverlayOpen(true); setAddAmount(''); }}
                     >
                         + Add Money
                     </button>
                     <button
-                        className="w-full py-3.5 px-5 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 bg-blue-600 text-white hover:-translate-y-0.5 hover:shadow-lg"
+                        className="w-full py-3.5 px-5 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 bg-blue-600 text-white hover:-translate-y-0.5 hover:shadow-md"
                         onClick={() => { setIsWithdrawOpen(true); setDrawerOverlayOpen(true); }}
                     >
                         ↘ Withdraw
@@ -336,16 +336,16 @@ export default function WalletPage() {
 
                 {/* Transactions */}
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm">
-                    <h3 className="text-base font-semibold mb-4 text-gray-900 dark:text-white">Recent Transactions</h3>
+                    <h3 className="text-base font-semibold mb-4 text-zinc-900 dark:text-white">Recent Transactions</h3>
                     <div className="flex flex-col gap-3" id="transactionsList">
                         {transactions.length === 0 ? (
-                            <p className="text-center text-gray-600 dark:text-gray-400 p-5 text-sm">No transactions yet</p>
+                            <p className="text-center text-zinc-600 dark:text-zinc-400 p-5 text-sm">No transactions yet</p>
                         ) : (
                             transactions.map((t, i) => (
-                                <div key={i} className={`flex justify-between items-center p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg border-l-4 ${t.type === "credit" ? "border-l-green-400" : "border-l-red-500"}`}>
+                                <div key={i} className={`flex justify-between items-center p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg border-l-4 ${t.type === "credit" ? "border-l-green-400" : "border-l-red-500"}`}>
                                     <div className="flex flex-col">
-                                        <div className="text-[13px] font-semibold text-gray-900 dark:text-white">{t.type === "credit" ? "+" : "-"} {t.description}</div>
-                                        <div className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{new Date(t.date).toLocaleDateString()}</div>
+                                        <div className="text-[13px] font-semibold text-zinc-900 dark:text-white">{t.type === "credit" ? "+" : "-"} {t.description}</div>
+                                        <div className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">{new Date(t.date).toLocaleDateString()}</div>
                                     </div>
                                     <div className={`text-sm font-bold ${t.type === "credit" ? "text-green-500" : "text-red-500"}`}>
                                         {t.type === "credit" ? "+" : "-"}{formatNairaFixed(t.amount)}
@@ -375,17 +375,17 @@ export default function WalletPage() {
                     </div>
                     <div className="flex-1 p-6 overflow-y-auto">
                         <div className="mb-4.5">
-                            <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">Amount (₦)</label>
+                            <label className="block text-sm font-medium text-zinc-900 dark:text-white mb-2">Amount (₦)</label>
                             <input
                                 type="number"
                                 placeholder="0.00"
                                 value={addAmount}
                                 onChange={(e) => setAddAmount(e.target.value)}
-                                className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-800 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-gray-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
+                                className="w-full px-3.5 py-3 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
                             />
                         </div>
                         <button
-                            className="w-full py-3.5 px-5 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 bg-amber-400 text-white hover:-translate-y-0.5 hover:shadow-lg mt-2.5"
+                            className="w-full py-3.5 px-5 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 bg-amber-400 text-white hover:-translate-y-0.5 hover:shadow-md mt-2.5"
                             onClick={handleAddMoney}
                         >
                             Proceed to Payment
@@ -406,37 +406,37 @@ export default function WalletPage() {
                     </div>
                     <div className="flex-1 p-6 overflow-y-auto">
                         <div className="mb-4.5">
-                            <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">Amount (₦)</label>
+                            <label className="block text-sm font-medium text-zinc-900 dark:text-white mb-2">Amount (₦)</label>
                             <input
                                 type="number"
                                 placeholder="0.00"
                                 value={withdrawAmount}
                                 onChange={(e) => setWithdrawAmount(e.target.value)}
-                                className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-800 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-gray-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
+                                className="w-full px-3.5 py-3 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
                             />
                         </div>
                         <div className="mb-4.5">
-                            <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">Bank Account Number</label>
+                            <label className="block text-sm font-medium text-zinc-900 dark:text-white mb-2">Bank Account Number</label>
                             <input
                                 type="text"
                                 placeholder="1234567890"
                                 value={bankAccount}
                                 onChange={(e) => setBankAccount(e.target.value)}
-                                className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-800 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-gray-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
+                                className="w-full px-3.5 py-3 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
                             />
                         </div>
                         <div className="mb-4.5">
-                            <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">Bank Name</label>
+                            <label className="block text-sm font-medium text-zinc-900 dark:text-white mb-2">Bank Name</label>
                             <input
                                 type="text"
                                 placeholder="GTBank, Zenith, etc."
                                 value={routingNumber}
                                 onChange={(e) => setRoutingNumber(e.target.value)}
-                                className="w-full px-3.5 py-3 border border-gray-200 dark:border-zinc-800 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-gray-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
+                                className="w-full px-3.5 py-3 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm text-zinc-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500 transition-all duration-300 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
                             />
                         </div>
                         <button
-                            className="w-full py-3.5 px-5 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 bg-amber-400 text-white hover:-translate-y-0.5 hover:shadow-lg mt-2.5"
+                            className="w-full py-3.5 px-5 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 bg-amber-400 text-white hover:-translate-y-0.5 hover:shadow-md mt-2.5"
                             onClick={handleWithdraw}
                         >
                             Withdraw Funds
@@ -447,15 +447,15 @@ export default function WalletPage() {
 
             {/* Payment Modal */}
             <div className={`fixed inset-0 bg-black/50 z-[9998] transition-opacity duration-300 ${paymentModalOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}></div>
-            <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-[95%] max-w-none md:max-w-[500px] md:w-[90%] z-[9999] p-5 sm:p-8 md:p-10 text-center transition-all duration-300 ${paymentModalOpen ? 'scale-100 opacity-100 visible' : 'scale-95 opacity-0 invisible'}`}>
+            <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-[95%] max-w-none md:max-w-[500px] md:w-[90%] z-[9999] p-5 sm:p-8 md:p-10 text-center transition-all duration-300 ${paymentModalOpen ? 'scale-100 opacity-100 visible' : 'scale-95 opacity-0 invisible'}`}>
                 <div className="w-full">
                     {paymentState === 'loading' && (
                         <div className="min-h-[300px] flex flex-col items-center justify-center">
                             <div className="mb-6 flex justify-center">
-                                <div className="w-[50px] h-[50px] border-4 border-gray-200 dark:border-zinc-800 border-t-blue-600 rounded-full animate-spin"></div>
+                                <div className="w-[50px] h-[50px] border-4 border-zinc-200 dark:border-zinc-800 border-t-blue-600 rounded-full animate-spin"></div>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-bold mb-3 text-gray-900 dark:text-white">Processing</h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Please wait while we verify your transaction...</p>
+                            <h3 className="text-xl md:text-2xl font-bold mb-3 text-zinc-900 dark:text-white">Processing</h3>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">Please wait while we verify your transaction...</p>
                         </div>
                     )}
                     {paymentState === 'success' && (
@@ -465,20 +465,20 @@ export default function WalletPage() {
                                     <span className="text-3xl text-green-500">✓</span>
                                 </div>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-bold mb-3 text-gray-900 dark:text-white">Payment Successful!</h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Your wallet has been funded.</p>
-                            <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
-                                <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-zinc-800">
-                                    <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Amount</span>
-                                    <span className="text-[13px] text-gray-900 dark:text-white font-semibold break-all">{paymentDetails.amount}</span>
+                            <h3 className="text-xl md:text-2xl font-bold mb-3 text-zinc-900 dark:text-white">Payment Successful!</h3>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">Your wallet has been funded.</p>
+                            <div className="bg-zinc-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
+                                <div className="flex justify-between items-center py-2 border-b border-zinc-200 dark:border-zinc-800">
+                                    <span className="text-[13px] text-zinc-600 dark:text-zinc-400 font-medium">Amount</span>
+                                    <span className="text-[13px] text-zinc-900 dark:text-white font-semibold break-all">{paymentDetails.amount}</span>
                                 </div>
                                 <div className="flex justify-between items-center py-2">
-                                    <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Reference</span>
-                                    <span className="text-[13px] text-gray-900 dark:text-white font-semibold break-all">{paymentDetails.reference}</span>
+                                    <span className="text-[13px] text-zinc-600 dark:text-zinc-400 font-medium">Reference</span>
+                                    <span className="text-[13px] text-zinc-900 dark:text-white font-semibold break-all">{paymentDetails.reference}</span>
                                 </div>
                             </div>
                             <button
-                                className="w-full py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-blue-700 hover:shadow-lg"
+                                className="w-full py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-blue-700 hover:shadow-md"
                                 onClick={() => { setPaymentModalOpen(false); setPaymentState('idle'); }}
                             >
                                 Close
@@ -492,23 +492,23 @@ export default function WalletPage() {
                                     <span className="text-3xl text-red-500">✕</span>
                                 </div>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-bold mb-3 text-gray-900 dark:text-white">Payment Failed</h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">{paymentDetails.message}</p>
-                            <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
+                            <h3 className="text-xl md:text-2xl font-bold mb-3 text-zinc-900 dark:text-white">Payment Failed</h3>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">{paymentDetails.message}</p>
+                            <div className="bg-zinc-50 dark:bg-zinc-800 rounded-lg p-4 mb-6 text-left w-full">
                                 <div className="flex justify-between items-center py-2">
-                                    <span className="text-[13px] text-gray-600 dark:text-gray-400 font-medium">Reference</span>
-                                    <span className="text-[13px] text-gray-900 dark:text-white font-semibold break-all">{paymentDetails.reference || 'N/A'}</span>
+                                    <span className="text-[13px] text-zinc-600 dark:text-zinc-400 font-medium">Reference</span>
+                                    <span className="text-[13px] text-zinc-900 dark:text-white font-semibold break-all">{paymentDetails.reference || 'N/A'}</span>
                                 </div>
                             </div>
                             <div className="flex gap-3 w-full">
                                 <button
-                                    className="flex-1 py-3 px-6 bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-gray-300 dark:hover:bg-zinc-600"
+                                    className="flex-1 py-3 px-6 bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-zinc-300 dark:hover:bg-zinc-600"
                                     onClick={() => { setPaymentModalOpen(false); setPaymentState('idle'); }}
                                 >
                                     Close
                                 </button>
                                 <button
-                                    className="flex-1 py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-blue-700 hover:shadow-lg"
+                                    className="flex-1 py-3 px-6 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-blue-700 hover:shadow-md"
                                     onClick={retryPayment}
                                 >
                                     Try Again

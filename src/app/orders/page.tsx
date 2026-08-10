@@ -283,20 +283,20 @@ function OrdersPageContent() {
             >
                 <div className="p-4 border-b border-[#e5e7eb] dark:border-zinc-800 bg-white dark:bg-zinc-900 shrink-0 flex justify-between items-center">
                     <h2 className="text-lg font-semibold text-[#1d1d1d] dark:text-white">Orders</h2>
-                    <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-[#4b4b4b] dark:text-gray-400 hover:text-[#1d1d1d]">
+                    <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-[#4b4b4b] dark:text-zinc-400 hover:text-[#1d1d1d]">
                         ✕
                     </button>
                 </div>
                 <div className="flex-1 overflow-y-auto">
                     {loading ? (
-                        <div className="p-4 text-center text-[#4b4b4b] dark:text-gray-400">Loading orders...</div>
+                        <div className="p-4 text-center text-[#4b4b4b] dark:text-zinc-400">Loading orders...</div>
                     ) : orders.length === 0 ? (
-                        <div className="p-4 text-center text-[#4b4b4b] dark:text-gray-400">No orders found.</div>
+                        <div className="p-4 text-center text-[#4b4b4b] dark:text-zinc-400">No orders found.</div>
                     ) : (
                         orders.map(order => (
                             <div
                                 key={order.id}
-                                className={`p-4 border-b border-gray-100 dark:border-zinc-800 cursor-pointer transition-colors duration-200 hover:bg-[#f4f6fa] dark:hover:bg-zinc-800! ${selectedOrder?.id === order.id ? 'bg-[#f4f6fa] dark:bg-zinc-950 border-l-[3px] border-l-[#1c6ef2]' : ''}`}
+                                className={`p-4 border-b border-zinc-100 dark:border-zinc-800 cursor-pointer transition-colors duration-200 hover:bg-[#f4f6fa] dark:hover:bg-zinc-800! ${selectedOrder?.id === order.id ? 'bg-[#f4f6fa] dark:bg-zinc-950 border-l-[3px] border-l-[#1c6ef2]' : ''}`}
                                 onClick={() => handleOrderClick(order)}
                             >
                                 <div className="flex justify-between mb-1.5 items-center">
@@ -304,11 +304,11 @@ function OrdersPageContent() {
                                         {!order.is_read && (
                                             <div className="w-2 h-2 rounded-full bg-[#1c6ef2]"></div>
                                         )}
-                                        <span className={`font-semibold text-sm ${!order.is_read ? 'text-[#1d1d1d] dark:text-white' : 'text-gray-600 dark:text-gray-300'}`}>{order.id}</span>
+                                        <span className={`font-semibold text-sm ${!order.is_read ? 'text-[#1d1d1d] dark:text-white' : 'text-zinc-600 dark:text-zinc-300'}`}>{order.id}</span>
                                     </div>
-                                    <span className="text-[11px] text-[#4b4b4b] dark:text-gray-400">{new Date(order.created_at).toLocaleDateString()}</span>
+                                    <span className="text-[11px] text-[#4b4b4b] dark:text-zinc-400">{new Date(order.created_at).toLocaleDateString()}</span>
                                 </div>
-                                <div className="text-xs text-[#4b4b4b] dark:text-gray-400 mb-2 leading-snug">
+                                <div className="text-xs text-[#4b4b4b] dark:text-zinc-400 mb-2 leading-snug">
                                     <div className="truncate">Buyer: {order.buyer_username}</div>
                                     <div className="truncate">Vendor: {order.vendor_username}</div>
                                 </div>
@@ -334,7 +334,7 @@ function OrdersPageContent() {
                 {!isSidebarOpen && (
                     <button
                         onClick={toggleSidebar}
-                        className="fixed top-[82px] left-3 z-[60] p-2.5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 rounded-lg shadow-lg lg:hidden text-[#1d1d1d] dark:text-white hover:bg-gray-50 dark:hover:bg-zinc-700 active:scale-95 transition-all"
+                        className="fixed top-[82px] left-3 z-[60] p-2.5 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-600 rounded-lg shadow-md lg:hidden text-[#1d1d1d] dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-700 active:scale-95 transition-all"
                         aria-label="Open orders list"
                     >
                         <Menu size={22} />
@@ -364,17 +364,17 @@ function OrdersPageContent() {
 
                             {/* Order Info Card */}
                             <div className="w-full max-w-[600px] bg-[#f4f6fa] dark:bg-zinc-950 p-5 rounded-xl border border-[#e5e7eb] dark:border-zinc-800">
-                                <h3 className="text-base font-semibold text-[#1d1d1d] dark:text-white border-b border-gray-300 dark:border-zinc-700 pb-2 mb-4">Order Info</h3>
+                                <h3 className="text-base font-semibold text-[#1d1d1d] dark:text-white border-b border-zinc-300 dark:border-zinc-700 pb-2 mb-4">Order Info</h3>
                                 <div className="flex justify-between mb-3 text-sm">
-                                    <span className="font-medium text-[#4b4b4b] dark:text-gray-400">Order ID</span>
+                                    <span className="font-medium text-[#4b4b4b] dark:text-zinc-400">Order ID</span>
                                     <span className="font-semibold text-[#1d1d1d] dark:text-white">{selectedOrder.id}</span>
                                 </div>
                                 <div className="flex justify-between mb-3 text-sm">
-                                    <span className="font-medium text-[#4b4b4b] dark:text-gray-400">Date</span>
+                                    <span className="font-medium text-[#4b4b4b] dark:text-zinc-400">Date</span>
                                     <span className="font-semibold text-[#1d1d1d] dark:text-white">{new Date(selectedOrder.created_at).toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between mb-3 text-sm">
-                                    <span className="font-medium text-[#4b4b4b] dark:text-gray-400">Total Amount</span>
+                                    <span className="font-medium text-[#4b4b4b] dark:text-zinc-400">Total Amount</span>
                                     <span className="font-semibold text-[#1d1d1d] dark:text-white">{formatNairaFixed(selectedOrder.amount)}</span>
                                 </div>
                             </div>
@@ -382,7 +382,7 @@ function OrdersPageContent() {
                             {/* Items Card */}
                             {selectedOrder.items && selectedOrder.items.length > 0 && (
                                 <div className="w-full max-w-[600px] bg-[#f4f6fa] dark:bg-zinc-950 p-5 rounded-xl border border-[#e5e7eb] dark:border-zinc-800">
-                                    <h3 className="text-base font-semibold text-[#1d1d1d] dark:text-white border-b border-gray-300 dark:border-zinc-700 pb-2 mb-4">Items Ordered</h3>
+                                    <h3 className="text-base font-semibold text-[#1d1d1d] dark:text-white border-b border-zinc-300 dark:border-zinc-700 pb-2 mb-4">Items Ordered</h3>
                                     <div className="space-y-3">
                                         {selectedOrder.items.map((item: any) => (
                                             <div key={item.id} className="flex justify-between text-sm">
@@ -404,13 +404,13 @@ function OrdersPageContent() {
 
                             {/* Parties Card */}
                             <div className="w-full max-w-[600px] bg-[#f4f6fa] dark:bg-zinc-950 p-5 rounded-xl border border-[#e5e7eb] dark:border-zinc-800">
-                                <h3 className="text-base font-semibold text-[#1d1d1d] dark:text-white border-b border-gray-300 dark:border-zinc-700 pb-2 mb-4">Parties</h3>
+                                <h3 className="text-base font-semibold text-[#1d1d1d] dark:text-white border-b border-zinc-300 dark:border-zinc-700 pb-2 mb-4">Parties</h3>
                                 <div className="flex justify-between mb-3 text-sm">
-                                    <span className="font-medium text-[#4b4b4b] dark:text-gray-400">Buyer</span>
+                                    <span className="font-medium text-[#4b4b4b] dark:text-zinc-400">Buyer</span>
                                     <span className="font-semibold text-[#1d1d1d] dark:text-white">{selectedOrder.buyer_username}</span>
                                 </div>
                                 <div className="flex justify-between mb-3 text-sm">
-                                    <span className="font-medium text-[#4b4b4b] dark:text-gray-400">Vendor</span>
+                                    <span className="font-medium text-[#4b4b4b] dark:text-zinc-400">Vendor</span>
                                     <span className="font-semibold text-[#1d1d1d] dark:text-white">{selectedOrder.vendor_username}</span>
                                 </div>
                             </div>
@@ -420,7 +420,7 @@ function OrdersPageContent() {
                                 <div className="flex bg-[#f4f6fa] dark:bg-zinc-950 p-1 rounded-lg mb-4 w-full justify-center gap-1 border border-[#e5e7eb] dark:border-zinc-800">
                                     {(!currentUserName || selectedOrder.buyer_username !== currentUserName) && (
                                         <button
-                                            className={`px-6 py-2 rounded-md text-sm font-semibold transition-all ${activeTab === 'qrcode' ? 'bg-white dark:bg-zinc-900 text-[#1c6ef2] shadow-sm' : 'text-[#4b4b4b] dark:text-gray-400 hover:bg-white/50'}`}
+                                            className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'qrcode' ? 'bg-white dark:bg-zinc-900 text-[#1c6ef2] shadow-sm' : 'text-[#4b4b4b] dark:text-zinc-400 hover:bg-white/50'}`}
                                             onClick={() => setActiveTab('qrcode')}
                                         >
                                             QR Code
@@ -428,7 +428,7 @@ function OrdersPageContent() {
                                     )}
                                     {(!currentUserName || selectedOrder.vendor_username !== currentUserName) && (
                                         <button
-                                            className={`px-6 py-2 rounded-md text-sm font-semibold transition-all ${activeTab === 'camera' ? 'bg-white dark:bg-zinc-900 text-[#1c6ef2] shadow-sm' : 'text-[#4b4b4b] dark:text-gray-400 hover:bg-white/50'}`}
+                                            className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'camera' ? 'bg-white dark:bg-zinc-900 text-[#1c6ef2] shadow-sm' : 'text-[#4b4b4b] dark:text-zinc-400 hover:bg-white/50'}`}
                                             onClick={() => setActiveTab('camera')}
                                         >
                                             Scan Camera
@@ -436,7 +436,7 @@ function OrdersPageContent() {
                                     )}
                                 </div>
 
-                                <div className="w-full max-w-[300px] aspect-square bg-[#f4f6fa] dark:bg-zinc-950 rounded-2xl border-2 border-dashed border-gray-300 dark:border-zinc-700 flex flex-col items-center justify-center relative p-5">
+                                <div className="w-full max-w-[300px] aspect-square bg-[#f4f6fa] dark:bg-zinc-950 rounded-2xl border-2 border-dashed border-zinc-300 dark:border-zinc-700 flex flex-col items-center justify-center relative p-5">
                                     {activeTab === 'qrcode' ? (
                                         (selectedOrder.status === 'completed' || selectedOrder.status === 'expired') ? (
                                             <div className="flex flex-col items-center justify-center gap-3 w-full h-full text-center animate-fadeIn">
@@ -452,7 +452,7 @@ function OrdersPageContent() {
                                                 <p className="text-sm font-semibold text-[#1d1d1d] dark:text-white">
                                                     {selectedOrder.status === 'completed' ? 'Order Completed' : 'Order Expired'}
                                                 </p>
-                                                <p className="text-xs text-[#4b4b4b] dark:text-gray-400 max-w-[220px]">
+                                                <p className="text-xs text-[#4b4b4b] dark:text-zinc-400 max-w-[220px]">
                                                     {selectedOrder.status === 'completed'
                                                         ? 'This order has been scanned and verified. Payment has been released.'
                                                         : 'This order expired and the buyer was refunded.'}
@@ -469,18 +469,18 @@ function OrdersPageContent() {
                                                         className="object-contain p-2"
                                                     />
                                                 </div>
-                                                <p className="text-xs text-[#4b4b4b] dark:text-gray-400 mt-4 text-center">Scan this code to verify</p>
+                                                <p className="text-xs text-[#4b4b4b] dark:text-zinc-400 mt-4 text-center">Scan this code to verify</p>
                                             </div>
                                         )
                                     ) : (
-                                        <div className="flex flex-col items-center gap-4 text-[#4b4b4b] dark:text-gray-400 animate-fadeIn w-full h-full justify-center">
+                                        <div className="flex flex-col items-center gap-4 text-[#4b4b4b] dark:text-zinc-400 animate-fadeIn w-full h-full justify-center">
                                             {scanResult ? (
                                                 <>
                                                     {validationStatus === 'loading' ? (
                                                         <>
-                                                            <div className="w-14 h-14 border-4 border-gray-200 dark:border-zinc-800 border-t-[#1c6ef2] rounded-full animate-spin mb-2"></div>
+                                                            <div className="w-14 h-14 border-4 border-zinc-200 dark:border-zinc-800 border-t-[#1c6ef2] rounded-full animate-spin mb-2"></div>
                                                             <p className="text-sm font-semibold text-[#1d1d1d] dark:text-white">Validating...</p>
-                                                            <p className="text-xs text-[#4b4b4b] dark:text-gray-400 text-center mt-1">{validationMessage}</p>
+                                                            <p className="text-xs text-[#4b4b4b] dark:text-zinc-400 text-center mt-1">{validationMessage}</p>
                                                         </>
                                                     ) : validationStatus === 'success' ? (
                                                         <>
@@ -490,7 +490,7 @@ function OrdersPageContent() {
                                                                 </svg>
                                                             </div>
                                                             <p className="text-sm font-semibold text-[#155724]">Validation Successful!</p>
-                                                            <p className="text-xs text-[#4b4b4b] dark:text-gray-400 text-center max-w-[220px] mt-1">{validationMessage}</p>
+                                                            <p className="text-xs text-[#4b4b4b] dark:text-zinc-400 text-center max-w-[220px] mt-1">{validationMessage}</p>
                                                             <button
                                                                 onClick={() => { setScanResult(null); setValidationStatus('idle'); setIsScannerOpen(true); }}
                                                                 className="text-[#1c6ef2] text-xs font-semibold hover:underline mt-4"
@@ -504,7 +504,7 @@ function OrdersPageContent() {
                                                                 <span className="text-3xl text-red-500">✕</span>
                                                             </div>
                                                             <p className="text-sm font-semibold text-red-600">Validation Failed</p>
-                                                            <p className="text-xs text-[#4b4b4b] dark:text-gray-400 text-center max-w-[220px] mt-1">{validationMessage}</p>
+                                                            <p className="text-xs text-[#4b4b4b] dark:text-zinc-400 text-center max-w-[220px] mt-1">{validationMessage}</p>
                                                             <button
                                                                 onClick={() => { setScanResult(null); setValidationStatus('idle'); setIsScannerOpen(true); }}
                                                                 className="text-[#1c6ef2] text-xs font-semibold hover:underline mt-4"
@@ -527,10 +527,10 @@ function OrdersPageContent() {
                                                         </svg>
                                                     </div>
                                                     <p className="text-sm font-semibold text-[#1d1d1d] dark:text-white">Scan QR Code</p>
-                                                    <p className="text-xs text-[#4b4b4b] dark:text-gray-400 text-center">Open the scanner to verify this order</p>
+                                                    <p className="text-xs text-[#4b4b4b] dark:text-zinc-400 text-center">Open the scanner to verify this order</p>
                                                     <button
                                                         onClick={() => setIsScannerOpen(true)}
-                                                        className="bg-[#1c6ef2] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-[#1c6ef2]/25 transition-all active:scale-95 flex items-center gap-2"
+                                                        className="bg-[#1c6ef2] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:shadow-md hover:shadow-[#1c6ef2]/25 transition-all active:scale-95 flex items-center gap-2"
                                                     >
                                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                             <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
@@ -545,11 +545,11 @@ function OrdersPageContent() {
 
                                 {/* Vendor Respond Buttons */}
                                 {currentUserName && selectedOrder.vendor_username === currentUserName && selectedOrder.status === 'pending' && (
-                                    <div className="flex flex-col items-center w-full max-w-[400px] mt-6 gap-3 pt-6 border-t border-gray-200 dark:border-zinc-800">
-                                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 font-medium">Respond to this Order:</p>
+                                    <div className="flex flex-col items-center w-full max-w-[400px] mt-6 gap-3 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+                                        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">Respond to this Order:</p>
                                         <button
                                             onClick={() => handleVendorResponse(selectedOrder.id, 'accept')}
-                                            className="w-full bg-[#1c6ef2] text-white px-6 py-3 rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-[#1c6ef2]/25 transition-all active:scale-95 flex items-center justify-center gap-2"
+                                            className="w-full bg-[#1c6ef2] text-white px-6 py-3 rounded-xl text-sm font-semibold hover:shadow-md hover:shadow-[#1c6ef2]/25 transition-all active:scale-95 flex items-center justify-center gap-2"
                                         >
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                 <polyline points="20 6 9 17 4 12" />
@@ -574,8 +574,8 @@ function OrdersPageContent() {
                                 )}
 
                                 {/* Raise a dispute */}
-                                <div className="w-full max-w-[400px] mt-6 pt-6 border-t border-gray-200 dark:border-zinc-800 flex flex-col items-center">
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Having an issue with this order?</p>
+                                <div className="w-full max-w-[400px] mt-6 pt-6 border-t border-zinc-200 dark:border-zinc-800 flex flex-col items-center">
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-2">Having an issue with this order?</p>
                                     <button
                                         onClick={() => { setDisputeMessage(''); setDisputeOpen(true); }}
                                         className="flex items-center gap-2 text-sm font-semibold text-red-600 hover:text-red-700 transition-colors"
@@ -593,7 +593,7 @@ function OrdersPageContent() {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-[#4b4b4b] dark:text-gray-400">
+                    <div className="flex flex-col items-center justify-center h-full text-[#4b4b4b] dark:text-zinc-400">
                         <div className="text-6xl mb-4">📦</div>
                         <p className="text-lg">Select an order to view details</p>
                     </div>
@@ -604,9 +604,9 @@ function OrdersPageContent() {
             {disputeOpen && (
                 <div className="fixed inset-0 z-[9998] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/50" onClick={() => setDisputeOpen(false)} />
-                    <div className="relative z-10 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fadeIn">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">Raise a Dispute</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    <div className="relative z-10 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6 animate-fadeIn">
+                        <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Raise a Dispute</h3>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
                             {selectedOrder ? `Order #${selectedOrder.id} — describe the issue below.` : 'Describe your issue and our team will review it.'}
                         </p>
                         <textarea
@@ -614,12 +614,12 @@ function OrdersPageContent() {
                             onChange={(e) => setDisputeMessage(e.target.value)}
                             rows={4}
                             placeholder="Describe the issue with this order..."
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg text-sm text-gray-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-gray-500 focus:outline-none focus:border-[#1c6ef2] resize-none"
+                            className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg text-sm text-zinc-900 dark:text-white bg-white dark:bg-zinc-800 dark:placeholder-zinc-500 focus:outline-none focus:border-[#1c6ef2] resize-none"
                         />
                         <div className="flex gap-3 mt-4">
                             <button
                                 onClick={() => setDisputeOpen(false)}
-                                className="flex-1 py-2.5 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors"
+                                className="flex-1 py-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 text-sm font-semibold hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
                             >
                                 Cancel
                             </button>

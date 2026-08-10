@@ -81,23 +81,23 @@ export default async function SharedPostPage({ params }: { params: { id: string 
   const kauchName = post.kauch?.name || 'Kauch';
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 text-gray-900 dark:text-white flex flex-col items-center px-4 py-8">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-md">
         {/* Kauch header */}
         <Link
           href={post.kauch ? `/kauch/${post.kauch.id}` : '/'}
           className="flex items-center gap-3 mb-4"
         >
-          <span className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-200 dark:bg-zinc-800 shrink-0 flex items-center justify-center">
+          <span className="relative w-10 h-10 rounded-full overflow-hidden bg-zinc-200 dark:bg-zinc-800 shrink-0 flex items-center justify-center">
             {post.kauch?.avatar_url
               ? <Image src={post.kauch.avatar_url} alt={kauchName} fill sizes="48px" className="object-cover" />
-              : <span className="font-bold text-gray-500 dark:text-gray-300">{kauchName.charAt(0).toUpperCase()}</span>}
+              : <span className="font-bold text-zinc-500 dark:text-zinc-300">{kauchName.charAt(0).toUpperCase()}</span>}
           </span>
           <span className="font-bold">{kauchName}</span>
         </Link>
 
         {/* Media */}
-        <div className="rounded-2xl overflow-hidden bg-gray-100 dark:bg-zinc-900 mb-4">
+        <div className="rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 mb-4">
           {post.media_type === 'video' && images[0] ? (
             <video src={images[0]} className="w-full aspect-square object-cover" controls playsInline />
           ) : images.length > 0 ? (
@@ -124,9 +124,9 @@ export default async function SharedPostPage({ params }: { params: { id: string 
 
         {/* Caption + counts */}
         {post.description && (
-          <p className="text-sm text-gray-600 dark:text-gray-200 leading-relaxed mb-3">{post.description}</p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-200 leading-relaxed mb-3">{post.description}</p>
         )}
-        <p className="text-xs text-gray-500 mb-6">
+        <p className="text-xs text-zinc-500 mb-6">
           {post.likes_count} likes · {post.comments_count} comments
         </p>
 
@@ -141,7 +141,7 @@ export default async function SharedPostPage({ params }: { params: { id: string 
           {post.kauch && (
             <Link
               href={`/kauch/${post.kauch.id}`}
-              className="flex-1 text-center py-3 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 rounded-full font-semibold transition-colors"
+              className="flex-1 text-center py-3 bg-zinc-100 dark:bg-white/10 hover:bg-zinc-200 dark:hover:bg-white/20 rounded-full font-semibold transition-colors"
             >
               View {kauchName}
             </Link>

@@ -207,8 +207,8 @@ function FeedContent() {
     if (loading) {
         return (
             <div className="w-full h-[100dvh] bg-black flex items-center justify-center text-white flex-col gap-4">
-                <div className="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div>
-                <p className="font-semibold tracking-widest text-sm uppercase text-gray-400">Loading Feed</p>
+                <div className="w-12 h-12 border-4 border-zinc-600 border-t-white rounded-full animate-spin"></div>
+                <p className="font-semibold tracking-widest text-sm uppercase text-zinc-400">Loading Feed</p>
             </div>
         );
     }
@@ -261,10 +261,10 @@ function FeedContent() {
                             
                             {/* Brief Info Overlay at bottom */}
                             <div className="absolute bottom-6 left-4 right-20 z-20 text-white drop-shadow-md pointer-events-none flex flex-col justify-end">
-                                <h2 className="text-xl sm:text-2xl font-bold mb-1 line-clamp-1 drop-shadow-lg">
+                                <h2 className="text-xl sm:text-2xl font-bold mb-1 line-clamp-1 drop-shadow-md">
                                     {feedObj.type === 'product' ? feedObj.item.product_name : (feedObj.item.vendor_username || 'Vendor')}
                                 </h2>
-                                <p className="text-[15px] sm:text-base text-gray-200 line-clamp-2 drop-shadow-md leading-snug">
+                                <p className="text-[15px] sm:text-base text-zinc-200 line-clamp-2 drop-shadow-md leading-snug">
                                     {feedObj.type === 'product' ? (feedObj.item.description || feedObj.item.category) : feedObj.item.caption}
                                 </p>
                                 {feedObj.type === 'product' && (
@@ -285,14 +285,14 @@ function FeedContent() {
                         if (window.history.length > 2) router.back();
                         else router.push('/');
                     }} 
-                    className="w-10 h-10 sm:w-12 sm:h-12 bg-black/40 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-black/60 transition-all pointer-events-auto shadow-lg"
+                    className="w-10 h-10 sm:w-12 sm:h-12 bg-black/40 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-black/60 transition-all pointer-events-auto shadow-md"
                 >
                     <X size={22} />
                 </button>
 
                 <button 
                     onClick={() => setSidebarOpen(true)}
-                    className="h-10 sm:h-12 px-4 sm:px-5 bg-black/40 backdrop-blur-md text-white rounded-full flex items-center justify-center gap-2 hover:bg-black/60 transition-all pointer-events-auto border border-white/20 shadow-lg animate-pulse"
+                    className="h-10 sm:h-12 px-4 sm:px-5 bg-black/40 backdrop-blur-md text-white rounded-full flex items-center justify-center gap-2 hover:bg-black/60 transition-all pointer-events-auto border border-white/20 shadow-md animate-pulse"
                 >
                     <Info size={22} />
                     <span className="text-sm font-semibold tracking-wide">Info</span>
@@ -323,8 +323,8 @@ export default function FeedPage() {
     return (
         <Suspense fallback={
             <div className="w-full h-[100dvh] bg-black flex items-center justify-center text-white flex-col gap-4">
-                <div className="w-12 h-12 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div>
-                <p className="font-semibold tracking-widest text-sm uppercase text-gray-400">Loading Feed</p>
+                <div className="w-12 h-12 border-4 border-zinc-600 border-t-white rounded-full animate-spin"></div>
+                <p className="font-semibold tracking-widest text-sm uppercase text-zinc-400">Loading Feed</p>
             </div>
         }>
             <FeedContent />
@@ -435,7 +435,7 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
             {/* Play/Pause indicator overlay */}
             {!isPlaying && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none z-30">
-                    <div className="w-20 h-20 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white pl-2 border border-white/20 shadow-2xl">
+                    <div className="w-20 h-20 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white pl-2 border border-white/20 shadow-xl">
                         <Play size={40} />
                     </div>
                 </div>

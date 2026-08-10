@@ -60,7 +60,7 @@ export default function BookmarksPage() {
     if (authLoading || loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-950">
-                <div className="w-10 h-10 border-[3px] border-gray-300 dark:border-zinc-700 border-t-indigo-500 rounded-full animate-spin" />
+                <div className="w-10 h-10 border-[3px] border-zinc-300 dark:border-zinc-700 border-t-blue-500 rounded-full animate-spin" />
             </div>
         );
     }
@@ -72,27 +72,27 @@ export default function BookmarksPage() {
                 <div className="flex items-center gap-3 mb-8">
                     <button
                         onClick={() => router.back()}
-                        className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-200 transition-colors"
+                        className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-200 transition-colors"
                     >
                         <ArrowLeft size={20} />
                     </button>
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <h1 className="text-2xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                             <Bookmark size={24} className="text-amber-400" fill="currentColor" />
                             Saved Posts
                         </h1>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{posts.length} bookmarked post{posts.length !== 1 ? 's' : ''}</p>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{posts.length} bookmarked post{posts.length !== 1 ? 's' : ''}</p>
                     </div>
                 </div>
 
                 {posts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+                    <div className="flex flex-col items-center justify-center py-20 text-zinc-400">
                         <Bookmark size={48} className="mb-4 opacity-40" />
                         <p className="text-lg font-medium">No saved posts yet</p>
                         <p className="text-sm mt-1">Long-press a post in the feed to save it</p>
                         <button
                             onClick={() => router.push('/')}
-                            className="mt-6 px-5 py-2.5 bg-indigo-600 text-white rounded-full text-sm font-semibold hover:bg-indigo-700 transition-colors"
+                            className="mt-6 px-5 py-2.5 bg-blue-600 text-white rounded-full text-sm font-semibold hover:bg-blue-700 transition-colors"
                         >
                             Browse Feed
                         </button>
@@ -105,12 +105,12 @@ export default function BookmarksPage() {
                                 <div
                                     key={post.id}
                                     onClick={() => router.push(`/kauch/post/${post.id}`)}
-                                    className="relative bg-gray-100 dark:bg-zinc-900 rounded-xl overflow-hidden cursor-pointer group transition-all hover:scale-[1.02] aspect-[3/4]"
+                                    className="relative bg-zinc-100 dark:bg-zinc-900 rounded-xl overflow-hidden cursor-pointer group transition-all hover:scale-[1.02] aspect-[3/4]"
                                 >
                                     {thumb ? (
                                         <Image src={thumb} alt="" fill sizes="(max-width: 768px) 50vw, 240px" className="object-cover" />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-zinc-800 text-gray-400">
+                                        <div className="w-full h-full flex items-center justify-center bg-zinc-200 dark:bg-zinc-800 text-zinc-400">
                                             <Bookmark size={32} />
                                         </div>
                                     )}

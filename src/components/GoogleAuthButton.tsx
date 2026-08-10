@@ -94,7 +94,7 @@ export default function GoogleAuthButton({ next }: { next?: string | null }) {
                 ref={buttonRef} 
                 className={`overflow-hidden rounded-full [&>div]:!bg-transparent ${loading ? 'opacity-60 pointer-events-none' : ''}`} 
             />
-            {loading && <p className="text-xs text-gray-400">Signing you in…</p>}
+            {loading && <p className="text-xs text-zinc-400">Signing you in…</p>}
             {error && <p className="text-xs text-red-500">{error}</p>}
         </div>
     );

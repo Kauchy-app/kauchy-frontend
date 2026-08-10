@@ -28,42 +28,20 @@ export default function Navbar() {
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
-    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
     // Dynamic data states
     const { walletBalance, cartCount, profileAvatar } = useUserData();
-    const { notifications, unreadCount, markRead, markAllRead, deleteNotification, clearAll } = useNotifications();
+    const { unreadCount } = useNotifications();
 
     const [searchQuery, setSearchQuery] = useState('');
 
     // Close dropdowns when clicking outside
     const profileRef = useRef<HTMLDivElement>(null);
-    const notificationRef = useRef<HTMLDivElement>(null);
-
-    const handleNotificationClick = (notif: any) => {
-        // Mark as read
-        markRead(notif.id);
-
-        // Hide popup
-        setIsNotificationsOpen(false);
-
-        // Redirect if there's a link (we pass link from backend for orders and likes)
-        if (notif.link) {
-            router.push(notif.link);
-        } else if (notif.notification_type === 'message') {
-            router.push('/chat');
-        } else if (notif.notification_type === 'order') {
-            router.push('/orders');
-        }
-    };
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
                 setIsProfileOpen(false);
-            }
-            if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
-                setIsNotificationsOpen(false);
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -86,7 +64,7 @@ export default function Navbar() {
     // (it's `hidden md:flex`) and these two bars are the navigation instead.
     const hideHeaderOnDesktop = 'md:hidden';
     const hideBottomNavOnDesktop = 'md:hidden';
-    const isChatMobile = pathname === '/chat'; // On chat, hide the top header; the page is a full-height messenger
+    const hideTopHeader = pathname === '/chat' || pathname === '/search'; // Hide the global top header on pages that have their own full-screen/dedicated headers
     const navIconClass = isDarkNav ? 'text-gray-200 hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100';
     const bnActive = isDarkNav ? 'text-blue-500' : 'text-blue-600';
     const bnInactive = isDarkNav ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900';
@@ -98,8 +76,8 @@ export default function Navbar() {
 
     return (
         <>
-            {/* TOP HEADER — hidden on chat page (full-height messenger) */}
-            {!isChatMobile && (
+            {/* TOP HEADER — hidden on specific pages */}
+            {!hideTopHeader && (
                 <header className={`fixed top-0 left-0 right-0 backdrop-blur-md border-b z-[100] py-[12px] px-[20px] shadow-legacy-nav h-[70px] ${hideHeaderOnDesktop} ${isDarkNav ? 'bg-black border-gray-800' : 'bg-[#f4f6fa] border-gray-200'}`}>
                     <div className={`${isFullWidthPage ? '' : 'max-w-[1400px]'} mx-auto flex items-center justify-between gap-5 h-full`}>
                         {/* Left Section: Logo */}
@@ -123,6 +101,11 @@ export default function Navbar() {
                                         placeholder="Search products..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && searchQuery.trim()) {
+                                                router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                                            }
+                                        }}
                                     />
                                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
                                 </div>
@@ -164,72 +147,12 @@ export default function Navbar() {
                                         </Link>
                                     </div>
 
-                                    {/* Notifications Dropdown */}
-                                    <div className="relative" ref={notificationRef}>
-                                        <button className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors relative ${navIconClass}`} onClick={() => { setIsNotificationsOpen(!isNotificationsOpen); setIsProfileOpen(false); }} title="Notifications">
+                                    {/* Notifications Link */}
+                                    <div className="relative">
+                                        <Link href="/notifications" className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors relative ${navIconClass}`} title="Notifications">
                                             <Bell size={22} />
                                             {unreadCount > 0 && <span className={`absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full border-2 ${isDarkNav ? 'border-black' : 'border-white dark:border-black'}`}>{unreadCount}</span>}
-                                        </button>
-                                        {isNotificationsOpen && (
-                                            <div className={`${isDarkNav ? 'dark' : ''} fixed inset-x-0 top-[70px] sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-80 bg-white dark:bg-zinc-900 sm:rounded-xl shadow-xl border-b sm:border border-gray-100 dark:border-zinc-800 overflow-hidden z-[200] animate-fadeIn`}>
-                                                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800">
-                                                    <h3 className="text-sm font-bold text-gray-900 dark:text-white">Notifications</h3>
-                                                    <div className="flex items-center gap-2">
-                                                        {unreadCount > 0 && (
-                                                            <button
-                                                                onClick={() => {
-                                                                    markAllRead();
-                                                                }}
-                                                                className="text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
-                                                            >
-                                                                Mark all read
-                                                            </button>
-                                                        )}
-                                                        {notifications.length > 0 && (
-                                                            <>
-                                                                {unreadCount > 0 && <span className="text-gray-300 dark:text-zinc-600">|</span>}
-                                                                <button
-                                                                    onClick={() => {
-                                                                        clearAll();
-                                                                    }}
-                                                                    className="text-xs font-medium text-red-500 hover:text-red-700 transition-colors"
-                                                                >
-                                                                    Clear all
-                                                                </button>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <div className="max-h-[60vh] sm:max-h-[300px] overflow-y-auto">
-                                                    {notifications.length === 0 ? (
-                                                        <p className="p-6 text-center text-gray-500 dark:text-gray-400 text-sm">No notifications</p>
-                                                    ) : (
-                                                        notifications.map((notif) => (
-                                                            <div key={notif.id} className={`group relative p-4 border-b border-gray-100 dark:border-zinc-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors ${notif.is_read ? 'opacity-60' : 'bg-blue-50/30 dark:bg-blue-900/10'}`} onClick={() => handleNotificationClick(notif)}>
-                                                                <button
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        deleteNotification(notif.id);
-                                                                    }}
-                                                                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-400 hover:text-red-500 transition-all"
-                                                                    title="Remove"
-                                                                >
-                                                                    <X size={14} />
-                                                                </button>
-                                                                <div className="flex items-start gap-2 pr-4">
-                                                                    <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${notif.is_read ? 'bg-transparent' : 'bg-blue-500'}`} />
-                                                                    <div className="flex-1 min-w-0">
-                                                                        <p className="text-xs font-semibold text-[#1c6ef2] mb-0.5">{notif.title}</p>
-                                                                        <p className="text-sm text-gray-800 dark:text-gray-200 mb-1 leading-snug">{notif.message}</p>
-                                                                        <span className="text-xs text-gray-500 dark:text-gray-400">{new Date(notif.created_at).toLocaleDateString()}</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
+                                        </Link>
                                     </div>
 
                                     {/* Profile Dropdown */}

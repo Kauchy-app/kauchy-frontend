@@ -123,7 +123,7 @@ function SearchContent() {
     );
 
     return (
-        <div className="min-h-[calc(100vh-135px)] md:min-h-screen bg-white dark:bg-zinc-950">
+        <div className="flex-1 w-full bg-white dark:bg-zinc-950">
             {/* Search header */}
             <div className="sticky top-0 z-20 bg-white/90 dark:bg-zinc-950/90 backdrop-blur border-b border-gray-100 dark:border-zinc-800">
                 <div className="max-w-3xl mx-auto px-3 py-3 flex items-center gap-2">
@@ -140,8 +140,8 @@ function SearchContent() {
                             className="w-full h-11 pl-10 pr-9 rounded-full border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
                         />
                         {query && (
-                            <button onClick={() => setQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                                <X size={16} />
+                            <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-2" title="Clear">
+                                <X size={18} />
                             </button>
                         )}
                     </div>
@@ -149,12 +149,12 @@ function SearchContent() {
 
                 {/* Tabs */}
                 {hasQuery && (
-                    <div className="max-w-3xl mx-auto flex px-2">
+                    <div className="max-w-3xl mx-auto flex px-2 overflow-x-auto hide-scrollbar">
                         {TABS.map(t => (
                             <button
                                 key={t}
                                 onClick={() => setTab(t)}
-                                className={`flex-1 py-2.5 text-sm font-semibold border-b-2 transition-colors ${tab === t ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
+                                className={`flex-1 min-w-[75px] whitespace-nowrap py-3 text-[13px] sm:text-sm font-semibold border-b-2 transition-colors ${tab === t ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
                             >
                                 {t}
                             </button>

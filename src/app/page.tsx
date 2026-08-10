@@ -53,6 +53,7 @@ function FeedContent() {
     // The per-post fields `is_bookmarked_by_user` and `bookmarks_count` come from the feed response.
     // Which post id currently shows the double-tap heart burst.
     const [burstId, setBurstId] = useState<number | null>(null);
+    const [expandedCaptions, setExpandedCaptions] = useState<Record<string, boolean>>({});
 
     // Gesture bookkeeping shared across slides.
     const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -440,9 +441,17 @@ function FeedContent() {
                                     >
                                         {feedObj.item.vendor_username || 'Vendor'}
                                     </h2>
-                                    <p className="text-[15px] sm:text-base text-zinc-200 line-clamp-2 drop-shadow-md leading-snug">
-                                        {feedObj.item.caption}
-                                    </p>
+                                    <div className="pointer-events-auto cursor-pointer" onClick={(e) => {
+                                        e.stopPropagation();
+                                        setExpandedCaptions(prev => ({ ...prev, [feedObj.item.id]: !prev[feedObj.item.id] }));
+                                    }}>
+                                        <p className={`text-[15px] sm:text-base text-zinc-200 drop-shadow-md leading-snug ${expandedCaptions[feedObj.item.id] ? '' : 'line-clamp-2'}`}>
+                                            {feedObj.item.caption}
+                                        </p>
+                                        {!expandedCaptions[feedObj.item.id] && feedObj.item.caption && feedObj.item.caption.length > 80 && (
+                                            <span className="text-sm text-zinc-400 font-medium">read more</span>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* TikTok-style Vertical Action Buttons (Bottom Right) */}

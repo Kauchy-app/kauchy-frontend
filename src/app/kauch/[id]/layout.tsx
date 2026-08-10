@@ -23,11 +23,18 @@ export async function generateMetadata(
   { params }: { params: { id: string } }
 ): Promise<Metadata> {
   const kauch = await getKauch(params.id);
+  const profileUrl = `https://kauchy.com/kauch/${params.id}`;
   
   if (!kauch) {
     return {
       title: 'Kauch Profile',
-      description: 'View this profile on Kauchy'
+      description: 'View this profile on Kauchy',
+      openGraph: {
+        title: 'Kauch Profile',
+        description: 'View this profile on Kauchy',
+        url: profileUrl,
+        type: 'profile',
+      }
     };
   }
 
@@ -42,6 +49,7 @@ export async function generateMetadata(
       title,
       description,
       type: 'profile',
+      url: profileUrl,
       images: [{ url: image }],
     },
     twitter: {

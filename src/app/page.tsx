@@ -531,18 +531,18 @@ function FeedContent() {
                                                     <button
                                                         key={product.id || product._id}
                                                         onClick={(e) => { e.stopPropagation(); openProduct(product, feedObj.item.products); }}
-                                                        className="shrink-0 w-[170px] flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-xl p-1.5 shadow-md hover:bg-white active:scale-[0.98] transition-all text-left"
+                                                        className="shrink-0 w-[170px] flex items-center gap-2 bg-zinc-900/60 backdrop-blur-md border border-white/10 rounded-xl p-1.5 shadow-lg hover:bg-zinc-800/80 active:scale-[0.98] transition-all text-left group"
                                                     >
                                                         <Image
                                                             src={product.image_url?.[0] || '/placeholder.svg'}
                                                             alt={product.product_name}
                                                             width={48}
                                                             height={48}
-                                                            className="w-12 h-12 rounded-lg object-cover shrink-0 bg-zinc-100"
+                                                            className="w-12 h-12 rounded-lg object-cover shrink-0 bg-zinc-800"
                                                         />
                                                         <div className="min-w-0 flex-1 pr-1">
-                                                            <p className="text-[11px] font-semibold text-zinc-900 line-clamp-1">{product.product_name}</p>
-                                                            <p className="text-sm font-bold text-blue-600">{formatNaira(product.price)}</p>
+                                                            <p className="text-[11px] font-semibold text-zinc-100 line-clamp-1 group-hover:text-white transition-colors">{product.product_name}</p>
+                                                            <p className="text-sm font-bold text-blue-400">{formatNaira(product.price)}</p>
                                                         </div>
                                                     </button>
                                                 ))}

@@ -55,10 +55,10 @@ export default function LeftNav() {
         <aside className="group hidden md:flex fixed top-0 left-0 h-screen w-[72px] hover:w-[240px] bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 z-[100] flex-col py-4 transition-[width] duration-300 ease-in-out overflow-hidden">
             {/* Logo: icon when collapsed, full wordmark when expanded */}
             <Link href="/" className="flex items-center h-[48px] px-4 mb-6 shrink-0" title="Home">
-                <img src="/logo.png" alt="Kauchy" className="h-9 w-9 object-contain group-hover:hidden" />
+                <img src="/lightmodelogo.png" alt="Kauchy" className="h-9 w-9 object-contain group-hover:hidden" />
                 <div className="hidden group-hover:flex w-[144px] h-[48px] overflow-hidden items-center">
                     <img
-                        src="/logo.png"
+                        src="/lightmodelogo.png"
                         alt="Kauchy"
                         className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none dark:hidden"
                     />

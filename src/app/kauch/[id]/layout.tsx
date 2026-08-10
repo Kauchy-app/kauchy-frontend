@@ -33,7 +33,7 @@ export async function generateMetadata(
 
   const title = `${kauch.name} on Kauchy`;
   const description = kauch.description || `Discover the latest drops from ${kauch.name} on Kauchy.`;
-  const image = kauch.avatar_url || '/logo.png';
+  const image = kauch.avatar_url || '/lightmodelogo.png';
 
   return {
     title,

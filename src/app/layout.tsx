@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: "Kauchy",
     images: [
       {
-        url: "/logo.png",
+        url: "/lightmodelogo.png",
         width: 800,
         height: 600,
         alt: "Kauchy Logo"
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kauchy",
     description: "Your business deserves more than 'DM to order.' Welcome to Kauchy. Scroll the feed, chat with friends, and trade securely.",
-    images: ["/logo.png"],
+    images: ["/lightmodelogo.png"],
   },
   robots: {
     index: true,
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="icon" href="/lightmodelogo.png" type="image/png" />
       </head>
       <body className={`${inter.variable} font-sans`}>
         <ToastProvider>

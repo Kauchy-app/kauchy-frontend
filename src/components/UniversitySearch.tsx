@@ -21,7 +21,7 @@ interface UniversitySearchProps {
     variant?: 'default' | 'dark';
 }
 
-const API_URL = 'https://university-domains-list-api-tn4l.onrender.com/search?country=Nigeria';
+import universitiesData from '@/data/universities.json';
 
 export default function UniversitySearch({
     value,
@@ -30,26 +30,15 @@ export default function UniversitySearch({
     className = '',
     variant = 'default',
 }: UniversitySearchProps) {
-    const [universities, setUniversities] = useState<University[]>([]);
+    const [universities, setUniversities] = useState<University[]>(
+        Array.isArray(universitiesData) ? (universitiesData as University[]) : []
+    );
     const [query, setQuery] = useState(value);
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
-    const [loadingUnis, setLoadingUnis] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
-
-    // Fetch universities once on mount.
-    useEffect(() => {
-        setLoadingUnis(true);
-        fetch(API_URL)
-            .then((res) => res.json())
-            .then((data) => {
-                if (Array.isArray(data)) setUniversities(data);
-            })
-            .catch(() => {})
-            .finally(() => setLoadingUnis(false));
-    }, []);
 
     // Sync external value changes to internal query.
     useEffect(() => {
@@ -183,7 +172,7 @@ export default function UniversitySearch({
                     }}
                     onFocus={() => setIsOpen(true)}
                     onKeyDown={handleKeyDown}
-                    placeholder={loadingUnis ? 'Loading universities…' : 'Search university…'}
+                    placeholder="Search university…"
                     className={inputClasses}
                     role="combobox"
                     aria-expanded={isOpen}
@@ -228,7 +217,7 @@ export default function UniversitySearch({
                 >
                     {visibleResults.length === 0 ? (
                         <li className={`${itemBase} italic opacity-60 cursor-default`}>
-                            {loadingUnis ? 'Loading…' : 'No universities found'}
+                            No universities found
                         </li>
                     ) : (
                         visibleResults.map((uni, idx) => (

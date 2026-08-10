@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import GoogleAuthButton from '@/components/GoogleAuthButton';
 import UniversitySearch from '@/components/UniversitySearch';
+import OTPInput from '@/components/OTPInput';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function SignupPage() {
@@ -249,16 +250,12 @@ export default function SignupPage() {
                         {step === 1.5 && (
                             <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
                                 <div>
-                                    <label className={labelClass}>OTP Code</label>
-                                    <input
-                                        type="text"
-                                        name="otp"
-                                        value={otp}
-                                        onChange={(e) => { setOtp(e.target.value); setError(''); }}
-                                        placeholder="Enter 6-digit code"
-                                        className={inputClass + " text-center tracking-widest text-2xl font-bold"}
-                                        maxLength={6}
-                                        autoFocus
+                                    <label className={labelClass + " text-center"}>Enter OTP Code</label>
+                                    <OTPInput 
+                                        length={6} 
+                                        value={otp} 
+                                        onChange={(val) => { setOtp(val); setError(''); }} 
+                                        disabled={loading}
                                     />
                                 </div>
 

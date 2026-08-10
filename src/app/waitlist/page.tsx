@@ -63,7 +63,7 @@ export default function WaitlistPage() {
         
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm mb-8 backdrop-blur-md hover:bg-white/10 transition-colors cursor-default">
           <Sparkles className="w-4 h-4 text-[#ffb800]" />
-          <span className="text-gray-200 font-medium">Coming Soon. Be the first to try.</span>
+          <span className="text-zinc-200 font-medium">Coming Soon. Be the first to try.</span>
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-[1.15]">
@@ -73,7 +73,7 @@ export default function WaitlistPage() {
           </span>
         </h1>
 
-        <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-lg md:text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
           Join the exclusive waitlist to get early access to Upstart. Experience seamless campus shopping, instant deliveries, and unparalleled vendor tooling.
         </p>
 
@@ -83,10 +83,10 @@ export default function WaitlistPage() {
             <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-6 flex flex-col items-center text-center transition-all duration-500">
               <CheckCircle2 className="w-12 h-12 text-green-400 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">You're on the list!</h3>
-              <p className="text-gray-400 text-sm">We'll notify you as soon as early access opens.</p>
+              <p className="text-zinc-400 text-sm">We'll notify you as soon as early access opens.</p>
               <button 
                 onClick={() => setStatus('idle')}
-                className="mt-6 text-sm text-gray-400 hover:text-white transition-colors underline-offset-4 hover:underline"
+                className="mt-6 text-sm text-zinc-400 hover:text-white transition-colors underline-offset-4 hover:underline"
               >
                 Join with another email
               </button>
@@ -94,13 +94,13 @@ export default function WaitlistPage() {
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 relative">
               <div className="relative flex-1">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400 pointer-events-none" />
                 <input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c6ef2]/50 focus:border-[#1c6ef2]/50 transition-all backdrop-blur-sm"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#1c6ef2]/50 focus:border-[#1c6ef2]/50 transition-all backdrop-blur-sm"
                   required
                   disabled={status === 'loading'}
                 />
@@ -125,7 +125,7 @@ export default function WaitlistPage() {
             <p className="text-red-400 text-sm mt-3 animate-pulse font-medium">{errorMessage}</p>
           )}
 
-          <div className="mt-8 text-sm text-gray-400 flex items-center justify-center gap-4">
+          <div className="mt-8 text-sm text-zinc-400 flex items-center justify-center gap-4">
             <div className="flex -space-x-2">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className={`w-8 h-8 rounded-full border-2 border-[#0a0a0a] bg-gradient-to-br ${
@@ -133,7 +133,7 @@ export default function WaitlistPage() {
                   i === 1 ? 'from-[#ffb800] to-yellow-500' :
                   i === 2 ? 'from-blue-400 to-[#1c6ef2]' :
                   'from-yellow-400 to-[#ffb800]'
-                } flex items-center justify-center shadow-lg`}>
+                } flex items-center justify-center shadow-md`}>
                   <span className="text-[10px] font-bold text-white opacity-90">{i * 2 + 1}</span>
                 </div>
               ))}
@@ -145,7 +145,7 @@ export default function WaitlistPage() {
 
       {/* Footer */}
       <footer className="relative z-10 w-full text-center py-6 border-t border-white/5 mt-auto bg-black/20 backdrop-blur-sm">
-        <p className="text-sm text-gray-500">© 2026 Upstart Platform. All rights reserved.</p>
+        <p className="text-sm text-zinc-500">© 2026 Upstart Platform. All rights reserved.</p>
       </footer>
     </div>
   );

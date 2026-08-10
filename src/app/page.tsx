@@ -341,18 +341,18 @@ function FeedContent() {
 
     if (loading) {
         return (
-            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex items-center justify-center text-gray-900 dark:text-white flex-col gap-4">
-                <div className="w-12 h-12 border-4 border-gray-200 dark:border-gray-600 border-t-gray-900 dark:border-t-white rounded-full animate-spin"></div>
-                <p className="font-semibold tracking-widest text-sm uppercase text-gray-500 dark:text-gray-400">Loading Feed</p>
+            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex items-center justify-center text-zinc-900 dark:text-white flex-col gap-4">
+                <div className="w-12 h-12 border-4 border-zinc-200 dark:border-zinc-600 border-t-zinc-900 dark:border-t-white rounded-full animate-spin"></div>
+                <p className="font-semibold tracking-widest text-sm uppercase text-zinc-500 dark:text-zinc-400">Loading Feed</p>
             </div>
         );
     }
 
     if (feedItems.length === 0) {
         return (
-            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex flex-col items-center justify-center text-gray-900 dark:text-white gap-4">
+            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex flex-col items-center justify-center text-zinc-900 dark:text-white gap-4">
                 <p>No content available.</p>
-                <button onClick={() => router.back()} className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-black rounded-full font-bold">Go Back</button>
+                <button onClick={() => router.back()} className="px-6 py-2 bg-zinc-900 dark:bg-white text-white dark:text-black rounded-full font-bold">Go Back</button>
             </div>
         );
     }
@@ -406,7 +406,7 @@ function FeedContent() {
                     const isCarousel = feedObj.item.media_type === 'image' && mediaImages.length > 1;
                     const frameClass = !isCarousel
                         ? 'md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw]'
-                        : 'md:w-auto md:h-[94%] md:aspect-[9/16] overflow-hidden md:rounded-2xl md:shadow-2xl';
+                        : 'md:w-auto md:h-[94%] md:aspect-[9/16] overflow-hidden md:rounded-2xl md:shadow-xl';
 
                     return (
                         <SwiperSlide key={`kauch-${feedObj.item.id}-${index}`} virtualIndex={index}>
@@ -423,7 +423,7 @@ function FeedContent() {
                                 {/* Double-tap heart burst */}
                                 {burstId === feedObj.item.id && (
                                     <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
-                                        <Heart size={120} className="text-white like-burst drop-shadow-2xl" fill="currentColor" />
+                                        <Heart size={120} className="text-white like-burst drop-shadow-xl" fill="currentColor" />
                                     </div>
                                 )}
 
@@ -432,7 +432,7 @@ function FeedContent() {
 
                                 {/* Brief Info Overlay at bottom left */}
                                 <div className={`absolute ${bottomOffset} left-4 right-16 z-20 text-white drop-shadow-md pointer-events-none flex flex-col justify-end pr-2`}>
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-1 line-clamp-1 drop-shadow-lg w-fit pointer-events-auto cursor-pointer hover:underline"
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-1 line-clamp-1 drop-shadow-md w-fit pointer-events-auto cursor-pointer hover:underline"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             if (feedObj.item.kauch_id) router.push(`/kauch/${feedObj.item.kauch_id}`);
@@ -440,7 +440,7 @@ function FeedContent() {
                                     >
                                         {feedObj.item.vendor_username || 'Vendor'}
                                     </h2>
-                                    <p className="text-[15px] sm:text-base text-gray-200 line-clamp-2 drop-shadow-md leading-snug">
+                                    <p className="text-[15px] sm:text-base text-zinc-200 line-clamp-2 drop-shadow-md leading-snug">
                                         {feedObj.item.caption}
                                     </p>
                                 </div>
@@ -452,11 +452,11 @@ function FeedContent() {
                                         className="relative mb-2 cursor-pointer group hover:scale-105 transition-transform"
                                         onClick={(e) => { e.stopPropagation(); if (feedObj.item.kauch_id) router.push(`/kauch/${feedObj.item.kauch_id}`); }}
                                     >
-                                        <div className="relative w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-zinc-800 shadow-lg">
+                                        <div className="relative w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-zinc-800 shadow-md">
                                             {feedObj.item.vendor_avatar ? (
                                                 <Image src={feedObj.item.vendor_avatar} alt="Vendor" fill sizes="48px" className="object-cover" />
                                             ) : (
-                                                <UserCircle className="w-full h-full text-gray-400" />
+                                                <UserCircle className="w-full h-full text-zinc-400" />
                                             )}
                                         </div>
                                         <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center border-2 border-black">
@@ -465,7 +465,7 @@ function FeedContent() {
                                     </div>
 
                                     {/* Like Button */}
-                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-lg group" onClick={(e) => { e.stopPropagation(); handleLike(feedObj.item.id); }}>
+                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-md group" onClick={(e) => { e.stopPropagation(); handleLike(feedObj.item.id); }}>
                                         <div className={`p-2 rounded-full transition-all group-hover:bg-white/10 ${feedObj.item.is_liked_by_user ? 'text-red-500' : 'text-white'}`}>
                                             <Heart size={30} fill={feedObj.item.is_liked_by_user ? "currentColor" : "none"} className={feedObj.item.is_liked_by_user ? "scale-110" : ""} />
                                         </div>
@@ -473,7 +473,7 @@ function FeedContent() {
                                     </button>
 
                                     {/* Comment Button */}
-                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-lg group" onClick={(e) => { e.stopPropagation(); setSidebarOpen(true); }}>
+                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-md group" onClick={(e) => { e.stopPropagation(); setSidebarOpen(true); }}>
                                         <div className="p-2 rounded-full transition-all group-hover:bg-white/10">
                                             <MessageCircle size={30} className="scale-x-[-1]" />
                                         </div>
@@ -481,7 +481,7 @@ function FeedContent() {
                                     </button>
 
                                     {/* Share Button */}
-                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-lg group" onClick={(e) => { e.stopPropagation(); handleShare(feedObj.item); }}>
+                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-md group" onClick={(e) => { e.stopPropagation(); handleShare(feedObj.item); }}>
                                         <div className="p-2 rounded-full transition-all group-hover:bg-white/10">
                                             <Share2 size={30} />
                                         </div>
@@ -489,7 +489,7 @@ function FeedContent() {
                                     </button>
 
                                     {/* Bookmark Button (also triggered by long-press on the media) */}
-                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-lg group" onClick={(e) => { e.stopPropagation(); toggleBookmark(feedObj); }}>
+                                    <button className="flex flex-col items-center gap-1 text-white drop-shadow-md group" onClick={(e) => { e.stopPropagation(); toggleBookmark(feedObj); }}>
                                         <div className={`p-2 rounded-full transition-all group-hover:bg-white/10 ${feedObj.item.is_bookmarked_by_user ? 'text-amber-400' : 'text-white'}`}>
                                             <Bookmark size={30} fill={feedObj.item.is_bookmarked_by_user ? 'currentColor' : 'none'} />
                                         </div>
@@ -522,17 +522,17 @@ function FeedContent() {
                                                     <button
                                                         key={product.id || product._id}
                                                         onClick={(e) => { e.stopPropagation(); openProduct(product, feedObj.item.products); }}
-                                                        className="shrink-0 w-[170px] flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-xl p-1.5 shadow-lg hover:bg-white active:scale-[0.98] transition-all text-left"
+                                                        className="shrink-0 w-[170px] flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-xl p-1.5 shadow-md hover:bg-white active:scale-[0.98] transition-all text-left"
                                                     >
                                                         <Image
                                                             src={product.image_url?.[0] || '/placeholder.svg'}
                                                             alt={product.product_name}
                                                             width={48}
                                                             height={48}
-                                                            className="w-12 h-12 rounded-lg object-cover shrink-0 bg-gray-100"
+                                                            className="w-12 h-12 rounded-lg object-cover shrink-0 bg-zinc-100"
                                                         />
                                                         <div className="min-w-0 flex-1 pr-1">
-                                                            <p className="text-[11px] font-semibold text-gray-900 line-clamp-1">{product.product_name}</p>
+                                                            <p className="text-[11px] font-semibold text-zinc-900 line-clamp-1">{product.product_name}</p>
                                                             <p className="text-sm font-bold text-blue-600">{formatNaira(product.price)}</p>
                                                         </div>
                                                     </button>
@@ -597,17 +597,17 @@ function FeedContent() {
                             <button
                                 key={product.id || product._id}
                                 onClick={() => { setProductSheetOpen(false); openProduct(product, activeItem.item.products); }}
-                                className="w-full flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-white active:scale-[0.99] transition-all text-left"
+                                className="w-full flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-xl p-2 shadow-md hover:bg-white active:scale-[0.99] transition-all text-left"
                             >
                                 <Image
                                     src={product.image_url?.[0] || '/placeholder.svg'}
                                     alt={product.product_name}
                                     width={64}
                                     height={64}
-                                    className="w-16 h-16 rounded-lg object-cover shrink-0 bg-gray-100"
+                                    className="w-16 h-16 rounded-lg object-cover shrink-0 bg-zinc-100"
                                 />
                                 <div className="min-w-0 flex-1">
-                                    <p className="text-sm font-semibold text-gray-900 line-clamp-2">{product.product_name}</p>
+                                    <p className="text-sm font-semibold text-zinc-900 line-clamp-2">{product.product_name}</p>
                                     <p className="text-base font-bold text-blue-600 mt-0.5">{formatNaira(product.price)}</p>
                                 </div>
                             </button>
@@ -625,7 +625,7 @@ function FeedContent() {
                         onContextMenu={(e) => { e.preventDefault(); setCtxMenu(null); }}
                     />
                     <div
-                        className="fixed z-[140] w-52 bg-zinc-900/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl py-1.5 text-white animate-fadeIn"
+                        className="fixed z-[140] w-52 bg-zinc-900/95 backdrop-blur-md border border-white/10 rounded-xl shadow-xl py-1.5 text-white animate-fadeIn"
                         style={{ left: ctxMenu.x, top: ctxMenu.y }}
                     >
                         <button onClick={() => { handleLike(ctxMenu.item.id); setCtxMenu(null); }} className="w-full flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-white/10 transition-colors">
@@ -661,9 +661,9 @@ function FeedContent() {
 export default function FeedPage() {
     return (
         <Suspense fallback={
-            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex items-center justify-center text-gray-900 dark:text-white flex-col gap-4">
-                <div className="w-12 h-12 border-4 border-gray-200 dark:border-gray-600 border-t-gray-900 dark:border-t-white rounded-full animate-spin"></div>
-                <p className="font-semibold tracking-widest text-sm uppercase text-gray-500 dark:text-gray-400">Loading Feed</p>
+            <div className="w-full h-full min-h-[calc(100dvh-135px)] bg-white dark:bg-black flex items-center justify-center text-zinc-900 dark:text-white flex-col gap-4">
+                <div className="w-12 h-12 border-4 border-zinc-200 dark:border-zinc-600 border-t-zinc-900 dark:border-t-white rounded-full animate-spin"></div>
+                <p className="font-semibold tracking-widest text-sm uppercase text-zinc-500 dark:text-zinc-400">Loading Feed</p>
             </div>
         }>
             <FeedContent />
@@ -708,8 +708,8 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
         // Voice-note post: a centered audio card on the dark feed background.
         return (
             <div className="w-full h-full flex items-center justify-center p-6 md:w-[440px] md:h-auto">
-                <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center gap-5 border border-white/10">
-                    <div className="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center shadow-lg">
+                <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-2xl p-8 flex flex-col items-center gap-5 border border-white/10">
+                    <div className="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center shadow-md">
                         <Mic size={44} className="text-white" />
                     </div>
                     <p className="text-white/80 text-sm font-semibold uppercase tracking-wide">Voice note</p>
@@ -728,7 +728,7 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
 
         if (images.length === 0) {
             return (
-                <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-zinc-900 text-gray-500 text-sm">No media</div>
+                <div className="w-full h-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-900 text-zinc-500 text-sm">No media</div>
             );
         }
 
@@ -744,7 +744,7 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
                         fill
                         sizes="100vw"
                         priority
-                        className="object-contain md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw] md:rounded-2xl md:shadow-2xl"
+                        className="object-contain md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw] md:rounded-2xl md:shadow-xl"
                     />
                 </div>
             );
@@ -759,7 +759,7 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
             <video
                 ref={videoRef}
                 src={mediaSrc}
-                className="w-full h-full object-cover md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw] md:object-contain md:rounded-2xl md:shadow-2xl"
+                className="w-full h-full object-cover md:w-auto md:h-auto md:max-h-[92vh] md:max-w-[88vw] md:object-contain md:rounded-2xl md:shadow-xl"
                 loop
                 playsInline
                 muted={false}
@@ -768,7 +768,7 @@ function ContentFeedView({ content, isActive }: { content: any, isActive: boolea
             {/* Play/Pause indicator overlay */}
             {!isPlaying && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none z-30">
-                    <div className="w-20 h-20 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white pl-2 border border-white/20 shadow-2xl">
+                    <div className="w-20 h-20 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white pl-2 border border-white/20 shadow-xl">
                         <Play size={40} />
                     </div>
                 </div>

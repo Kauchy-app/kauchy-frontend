@@ -97,39 +97,39 @@ export default function AnalyticsPage() {
     const tooltipBorder = isDark ? '#27272a' : '#e5e7eb';
 
     return (
-        <div className="p-4 sm:p-8 bg-gray-50 dark:bg-zinc-950 min-h-screen">
-            <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">Analytics Dashboard</h1>
+        <div className="p-4 sm:p-8 bg-zinc-50 dark:bg-zinc-950 min-h-screen">
+            <h1 className="text-3xl font-bold mb-6 text-zinc-800 dark:text-zinc-100">Analytics Dashboard</h1>
 
             {loading ? (
                 <div className="flex items-center justify-center py-32">
-                    <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+                    <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />
                 </div>
             ) : (
             <>
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow hover:shadow-lg transition">
-                    <h3 className="text-gray-500 dark:text-gray-400 font-medium">Total Revenue</h3>
+                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow hover:shadow-md transition">
+                    <h3 className="text-zinc-500 dark:text-zinc-400 font-medium">Total Revenue</h3>
                     <p className="text-3xl font-bold text-blue-600">{money(stats.total_revenue)}</p>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow hover:shadow-lg transition">
-                    <h3 className="text-gray-500 dark:text-gray-400 font-medium">Items Sold</h3>
+                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow hover:shadow-md transition">
+                    <h3 className="text-zinc-500 dark:text-zinc-400 font-medium">Items Sold</h3>
                     <p className="text-3xl font-bold text-blue-600">{(Number(stats.total_sales_quantity) || 0).toLocaleString()}</p>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow hover:shadow-lg transition">
-                    <h3 className="text-gray-500 dark:text-gray-400 font-medium">Profile Views</h3>
+                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow hover:shadow-md transition">
+                    <h3 className="text-zinc-500 dark:text-zinc-400 font-medium">Profile Views</h3>
                     <p className="text-3xl font-bold text-blue-600">{(Number(stats.total_views) || 0).toLocaleString()}</p>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow hover:shadow-lg transition">
-                    <h3 className="text-gray-500 dark:text-gray-400 font-medium">Rating</h3>
+                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow hover:shadow-md transition">
+                    <h3 className="text-zinc-500 dark:text-zinc-400 font-medium">Rating</h3>
                     <p className="text-3xl font-bold text-yellow-500">★ {stats.rating ? parseFloat(stats.rating).toFixed(1) : "N/A"}</p>
                 </div>
             </div>
 
             {/* Charts Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow border border-gray-100 dark:border-zinc-800">
-                    <h3 className="font-bold text-lg mb-6 text-gray-700 dark:text-gray-300">Top Products by Units Sold</h3>
+                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow border border-zinc-100 dark:border-zinc-800">
+                    <h3 className="font-bold text-lg mb-6 text-zinc-700 dark:text-zinc-300">Top Products by Units Sold</h3>
                     <div style={{ width: '100%', height: 260 }}>
                         {barChartData.length > 0 ? (
                             <ResponsiveContainer>
@@ -146,12 +146,12 @@ export default function AnalyticsPage() {
                                 </BarChart>
                             </ResponsiveContainer>
                         ) : (
-                            <div className="flex items-center justify-center h-full text-gray-500">No data yet</div>
+                            <div className="flex items-center justify-center h-full text-zinc-500">No data yet</div>
                         )}
                     </div>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow border border-gray-100 dark:border-zinc-800">
-                    <h3 className="font-bold text-lg mb-6 text-gray-700 dark:text-gray-300">Revenue by Product</h3>
+                <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow border border-zinc-100 dark:border-zinc-800">
+                    <h3 className="font-bold text-lg mb-6 text-zinc-700 dark:text-zinc-300">Revenue by Product</h3>
                     <div style={{ width: '100%', height: 260 }}>
                         {totalPieValue > 0 ? (
                             <ResponsiveContainer>
@@ -178,7 +178,7 @@ export default function AnalyticsPage() {
                                 </PieChart>
                             </ResponsiveContainer>
                         ) : (
-                            <div className="flex items-center justify-center h-full text-gray-500">No data yet</div>
+                            <div className="flex items-center justify-center h-full text-zinc-500">No data yet</div>
                         )}
                     </div>
                 </div>
@@ -187,10 +187,10 @@ export default function AnalyticsPage() {
             {/* Lists Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow">
-                    <h3 className="font-bold text-lg mb-4 text-gray-700 dark:text-gray-300">Top Products</h3>
+                    <h3 className="font-bold text-lg mb-4 text-zinc-700 dark:text-zinc-300">Top Products</h3>
                     <div className="overflow-auto max-h-60">
                         <table className="w-full text-left">
-                            <thead className="bg-gray-100 dark:bg-zinc-800 font-medium text-gray-600 dark:text-gray-400">
+                            <thead className="bg-zinc-100 dark:bg-zinc-800 font-medium text-zinc-600 dark:text-zinc-400">
                                 <tr>
                                     <th className="p-2">Name</th>
                                     <th className="p-2">Sold</th>
@@ -199,7 +199,7 @@ export default function AnalyticsPage() {
                             </thead>
                             <tbody>
                                 {topProducts.map((p: any, i) => (
-                                    <tr key={i} className="border-b border-gray-100 dark:border-zinc-800 last:border-0 hover:bg-gray-50 dark:hover:bg-zinc-800">
+                                    <tr key={i} className="border-b border-zinc-100 dark:border-zinc-800 last:border-0 hover:bg-zinc-50 dark:hover:bg-zinc-800">
                                         <td className="p-2 truncate max-w-[150px]">{p.product_name || p.name}</td>
                                         <td className="p-2">{p.units_sold}</td>
                                         <td className="p-2 text-right">{money(p.revenue)}</td>
@@ -207,7 +207,7 @@ export default function AnalyticsPage() {
                                 ))}
                                 {topProducts.length === 0 && (
                                     <tr>
-                                        <td colSpan={3} className="p-4 text-center text-gray-500 dark:text-gray-400">No data found</td>
+                                        <td colSpan={3} className="p-4 text-center text-zinc-500 dark:text-zinc-400">No data found</td>
                                     </tr>
                                 )}
                             </tbody>
@@ -216,7 +216,7 @@ export default function AnalyticsPage() {
                 </div>
 
                 <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg shadow">
-                    <h3 className="font-bold text-lg mb-4 text-gray-700 dark:text-gray-300">Recent Orders</h3>
+                    <h3 className="font-bold text-lg mb-4 text-zinc-700 dark:text-zinc-300">Recent Orders</h3>
                     <div className="overflow-auto max-h-60">
                         {recentOrders.map((order, i) => {
                             const status = (order.status || '').toString();
@@ -224,15 +224,15 @@ export default function AnalyticsPage() {
                             const isPending = status === 'pending';
                             const isFailed = status === 'expired';
                             return (
-                                <div key={order.id ?? i} className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-zinc-800 last:border-0">
+                                <div key={order.id ?? i} className="flex justify-between items-center py-2 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
                                     <div>
-                                        <p className="font-medium text-gray-800 dark:text-gray-100">{order.buyer_username || 'Unknown'}</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        <p className="font-medium text-zinc-800 dark:text-zinc-100">{order.buyer_username || 'Unknown'}</p>
+                                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
                                             {order.created_at ? new Date(order.created_at).toLocaleDateString() : ''} • {order.id}
                                         </p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="font-bold text-gray-800 dark:text-gray-100">{money(order.amount)}</p>
+                                        <p className="font-bold text-zinc-800 dark:text-zinc-100">{money(order.amount)}</p>
                                         <span className={`text-xs px-2 py-0.5 rounded-full capitalize ${isDone ? 'bg-green-100 dark:bg-green-900/20 text-green-700' :
                                             isPending ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700' :
                                                 isFailed ? 'bg-red-100 dark:bg-red-900/20 text-red-700' :
@@ -243,7 +243,7 @@ export default function AnalyticsPage() {
                             );
                         })}
                         {recentOrders.length === 0 && (
-                            <p className="p-4 text-center text-gray-500 dark:text-gray-400">No recent orders</p>
+                            <p className="p-4 text-center text-zinc-500 dark:text-zinc-400">No recent orders</p>
                         )}
                     </div>
                 </div>

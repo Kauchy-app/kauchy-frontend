@@ -109,13 +109,13 @@ export default function Home(): JSX.Element {
         {/* Search */}
         <div className="mb-6 mt-2">
           <div className="relative max-w-2xl">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full h-[46px] pl-11 pr-4 rounded-full border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm transition-all focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-zinc-800"
+              className="w-full h-[46px] pl-11 pr-4 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 text-sm transition-all focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-zinc-800"
             />
           </div>
         </div>
@@ -124,7 +124,7 @@ export default function Home(): JSX.Element {
         {products.length > 0 && currentCategory === 'all' && !searchQuery.trim() && (
           <section className="mb-12">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                 <span className="text-red-500">⚡</span> Flash Sales
               </h2>
               <button className="text-blue-600 font-medium hover:underline text-sm">View All</button>
@@ -141,7 +141,7 @@ export default function Home(): JSX.Element {
 
         <section className="mb-16">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">
               {searchQuery.trim()
                 ? `Results for "${searchQuery.trim()}"`
                 : currentCategory === 'all' ? 'Just For You' : categories.find(c => c.id === currentCategory)?.label || 'Products'}
@@ -151,15 +151,15 @@ export default function Home(): JSX.Element {
             {loading ? (
               Array(8).fill(0).map((_, i) => (
                 <div key={i} className="bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm animate-pulse">
-                  <div className="h-[180px] bg-gray-200 dark:bg-zinc-800"></div>
+                  <div className="h-[180px] bg-zinc-200 dark:bg-zinc-800"></div>
                   <div className="p-4 space-y-3">
-                    <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-3/4"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-zinc-800 rounded w-1/2"></div>
+                    <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-3/4"></div>
+                    <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-1/2"></div>
                   </div>
                 </div>
               ))
             ) : filteredProducts.length === 0 ? (
-              <p className="col-span-full text-center text-gray-500 dark:text-gray-400">No products found.</p>
+              <p className="col-span-full text-center text-zinc-500 dark:text-zinc-400">No products found.</p>
             ) : (
               currentItems.map(product => (
                 <ProductCard key={product.id} product={product} onClick={handleProductClick} />
@@ -170,7 +170,7 @@ export default function Home(): JSX.Element {
           {filteredProducts.length > itemsPerPage && (
             <div className="flex items-center justify-center gap-3 mt-10 py-5">
               <button
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg text-gray-900 dark:text-white text-sm font-medium transition-all duration-200 hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 dark:disabled:bg-zinc-800"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-zinc-100 dark:disabled:bg-zinc-800"
                 disabled={currentPage === 1}
                 onClick={() => paginate(currentPage - 1)}
               >
@@ -180,7 +180,7 @@ export default function Home(): JSX.Element {
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                   <button
                     key={number}
-                    className={`min-w-[38px] h-[38px] flex items-center justify-center px-2.5 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg text-gray-900 dark:text-white text-sm font-medium transition-all duration-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:border-blue-600 ${currentPage === number ? '!bg-blue-600 !text-white !border-blue-600' : ''
+                    className={`min-w-[38px] h-[38px] flex items-center justify-center px-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-blue-600 ${currentPage === number ? '!bg-blue-600 !text-white !border-blue-600' : ''
                       }`}
                     onClick={() => paginate(number)}
                   >
@@ -189,7 +189,7 @@ export default function Home(): JSX.Element {
                 ))}
               </div>
               <button
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg text-gray-900 dark:text-white text-sm font-medium transition-all duration-200 hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 dark:disabled:bg-zinc-800"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm font-medium transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-zinc-100 dark:disabled:bg-zinc-800"
                 disabled={currentPage === totalPages}
                 onClick={() => paginate(currentPage + 1)}
               >

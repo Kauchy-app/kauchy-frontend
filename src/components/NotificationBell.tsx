@@ -20,7 +20,7 @@ export default function NotificationBell({ collapsed = true }: { collapsed?: boo
         <Link
             href="/notifications"
             title="Notifications"
-            className={`${itemBase} ${active ? 'bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white'}`}
+            className={`${itemBase} ${active ? 'bg-zinc-100 dark:bg-white/10 text-zinc-900 dark:text-white' : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white'}`}
         >
             <span className="relative shrink-0">
                 <Bell size={24} />

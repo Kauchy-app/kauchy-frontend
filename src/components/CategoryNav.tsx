@@ -19,7 +19,7 @@ export default function CategoryNav({ categories, currentCategory, onSelectCateg
       case 'furniture': return { icon: <Armchair className="w-6 h-6" />, color: 'bg-emerald-100 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white', active: 'bg-emerald-600 text-white shadow-md' };
       case 'clothing': return { icon: <Shirt className="w-6 h-6" />, color: 'bg-pink-100 text-pink-600 group-hover:bg-pink-600 group-hover:text-white', active: 'bg-pink-600 text-white shadow-md' };
       case 'sports': return { icon: <Dumbbell className="w-6 h-6" />, color: 'bg-red-100 text-red-600 group-hover:bg-red-600 group-hover:text-white', active: 'bg-red-600 text-white shadow-md' };
-      default: return { icon: <LayoutGrid className="w-6 h-6" />, color: 'bg-gray-100 text-gray-600 group-hover:bg-gray-600 group-hover:text-white', active: 'bg-gray-600 text-white shadow-md' };
+      default: return { icon: <LayoutGrid className="w-6 h-6" />, color: 'bg-zinc-100 text-zinc-600 group-hover:bg-zinc-600 group-hover:text-white', active: 'bg-zinc-600 text-white shadow-md' };
     }
   };
 
@@ -42,7 +42,7 @@ export default function CategoryNav({ categories, currentCategory, onSelectCateg
               >
                 {details.icon}
               </div>
-              <span className={`text-sm font-medium transition-colors duration-300 ${isActive ? 'text-gray-900 dark:text-white font-bold' : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white'}`}>
+              <span className={`text-sm font-medium transition-colors duration-300 ${isActive ? 'text-zinc-900 dark:text-white font-bold' : 'text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white'}`}>
                 {cat.label}
               </span>
             </button>

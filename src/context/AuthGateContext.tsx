@@ -61,11 +61,11 @@ export function AuthGateProvider({ children }: { children: React.ReactNode }) {
                         role="dialog"
                         aria-modal="true"
                         aria-label="Sign in required"
-                        className="relative w-full sm:w-[420px] bg-zinc-900 border border-zinc-800 rounded-t-3xl sm:rounded-2xl shadow-2xl p-6 sm:p-8 animate-fadeIn"
+                        className="relative w-full sm:w-[420px] bg-zinc-900 border border-zinc-800 rounded-t-3xl sm:rounded-2xl shadow-xl p-6 sm:p-8 animate-fadeIn"
                     >
                         <button
                             onClick={close}
-                            className="absolute top-4 right-4 p-2 rounded-full text-gray-400 hover:bg-zinc-800 hover:text-white transition-colors"
+                            className="absolute top-4 right-4 p-2 rounded-full text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
                             aria-label="Close"
                         >
                             <X size={20} />
@@ -77,7 +77,7 @@ export function AuthGateProvider({ children }: { children: React.ReactNode }) {
                                 <img src="/darkmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl mb-2 object-contain hidden dark:block" />
                             </>
                             <h2 className="text-xl font-bold text-white">Join Kauchy</h2>
-                            <p className="text-sm text-gray-400 leading-relaxed max-w-[300px]">
+                            <p className="text-sm text-zinc-400 leading-relaxed max-w-[300px]">
                                 Create a free account or log in{reason ? ` to ${reason}` : ''} and unlock the full campus marketplace.
                             </p>
                         </div>
@@ -131,7 +131,7 @@ export function AuthWall({ reason, loading }: { reason?: string; loading?: boole
 
     if (loading) {
         return (
-            <div className="min-h-[60vh] flex items-center justify-center text-gray-500 dark:text-gray-400">
+            <div className="min-h-[60vh] flex items-center justify-center text-zinc-500 dark:text-zinc-400">
                 Loading…
             </div>
         );
@@ -143,7 +143,7 @@ export function AuthWall({ reason, loading }: { reason?: string; loading?: boole
                 <img src="/lightmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl object-contain opacity-80 dark:hidden" />
                 <img src="/darkmodelogo.png" alt="Kauchy" className="w-12 h-12 rounded-xl object-contain opacity-80 hidden dark:block" />
             </>
-            <p className="text-gray-600 dark:text-gray-300 max-w-[300px]">
+            <p className="text-zinc-600 dark:text-zinc-300 max-w-[300px]">
                 Sign in{reason ? ` to ${reason}` : ''} to continue.
             </p>
             <button

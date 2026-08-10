@@ -219,28 +219,28 @@ export default function CreateKauchContent() {
   if (!user) return <AuthWall reason="create a post" loading={authLoading} />;
 
   return (
-    <div className="bg-gray-50 min-h-screen dark:bg-zinc-950 pb-20 pt-24 px-4">
+    <div className="bg-zinc-50 min-h-screen dark:bg-zinc-950 pb-20 pt-24 px-4">
       <div className="max-w-3xl mx-auto">
 
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <button onClick={() => router.back()} className="p-2 bg-white dark:bg-zinc-900 shadow-sm hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-full transition-colors border border-gray-100 dark:border-zinc-800">
-            <ArrowLeft size={20} className="text-gray-900 dark:text-white" />
+          <button onClick={() => router.back()} className="p-2 bg-white dark:bg-zinc-900 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-full transition-colors border border-zinc-100 dark:border-zinc-800">
+            <ArrowLeft size={20} className="text-zinc-900 dark:text-white" />
           </button>
-          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Vendor Kauch Studio</h1>
+          <h1 className="text-2xl font-extrabold text-zinc-900 dark:text-white">Vendor Kauch Studio</h1>
         </div>
 
         {/* Tabs */}
-        <div className="flex space-x-1 bg-white dark:bg-zinc-900 p-1 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 mb-6">
+        <div className="flex space-x-1 bg-white dark:bg-zinc-900 p-1 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-800 mb-6">
           <button
             onClick={() => setActiveTab('post')}
-            className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${activeTab === 'post' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800'}`}
+            className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${activeTab === 'post' ? 'bg-blue-600 text-white shadow-md' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
           >
             Create Post
           </button>
           <button
             onClick={() => setActiveTab('kauches')}
-            className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${activeTab === 'kauches' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800'}`}
+            className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${activeTab === 'kauches' ? 'bg-blue-600 text-white shadow-md' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
           >
             Manage Kauches
           </button>
@@ -248,17 +248,17 @@ export default function CreateKauchContent() {
 
         {/* CREATE POST TAB */}
         {activeTab === 'post' && (
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6 sm:p-8">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6">New Feed Post</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 p-6 sm:p-8">
+            <h2 className="text-lg font-bold text-zinc-900 dark:text-white mb-6">New Feed Post</h2>
 
             <form onSubmit={handleCreatePost} className="space-y-6">
               {/* Select Kauch */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Post to Kauch *</label>
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Post to Kauch *</label>
                 <select
                   value={selectedKauchId}
                   onChange={(e) => setSelectedKauchId(Number(e.target.value))}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                   required
                 >
                   <option value="" disabled>Select a Kauch</option>
@@ -273,22 +273,22 @@ export default function CreateKauchContent() {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description *</label>
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Description *</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Write an engaging caption..."
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all min-h-[120px] resize-y"
+                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all min-h-[120px] resize-y"
                   required
                 />
               </div>
 
               {/* Media Upload */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center justify-between">
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2 flex items-center justify-between">
                   <span>Media — one video, multiple images, or a voice note *</span>
                   {mediaFiles.length > 0 && (
-                    <span className="text-xs font-normal text-gray-500">
+                    <span className="text-xs font-normal text-zinc-500">
                       {isVideoPost ? '1 video' : isAudioPost ? 'voice note' : `${mediaFiles.length} image${mediaFiles.length > 1 ? 's' : ''}`}
                     </span>
                   )}
@@ -296,12 +296,12 @@ export default function CreateKauchContent() {
 
                 {/* Voice note recorded → audio preview only (a voice post is voice-only) */}
                 {isAudioPost ? (
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800">
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
                     <audio src={URL.createObjectURL(mediaFiles[0])} controls className="flex-1 min-w-0" />
                     <button
                       type="button"
                       onClick={() => removeMediaAt(0)}
-                      className="p-2 rounded-full bg-gray-100 dark:bg-zinc-800 text-red-500 hover:bg-gray-200 dark:hover:bg-zinc-700 shrink-0"
+                      className="p-2 rounded-full bg-zinc-100 dark:bg-zinc-800 text-red-500 hover:bg-zinc-200 dark:hover:bg-zinc-700 shrink-0"
                       title="Remove voice note"
                     >
                       <X size={18} />
@@ -312,19 +312,19 @@ export default function CreateKauchContent() {
                     {/* Dropzone for image/video */}
                     <div
                       onClick={() => mediaInputRef.current?.click()}
-                      className="w-full border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl p-8 flex flex-col items-center justify-center bg-gray-50 dark:bg-zinc-950 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-colors cursor-pointer group"
+                      className="w-full border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl p-8 flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-pointer group"
                     >
-                      <div className="flex items-center gap-4 mb-3 text-gray-400 group-hover:text-blue-500 transition-colors">
+                      <div className="flex items-center gap-4 mb-3 text-zinc-400 group-hover:text-blue-500 transition-colors">
                         <ImageIcon size={32} />
-                        <span className="text-gray-300">|</span>
+                        <span className="text-zinc-300">|</span>
                         <Video size={32} />
                       </div>
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
                         {mediaFiles.length === 0
                           ? 'Click to upload'
                           : isVideoPost ? 'Replace video' : 'Add more images'}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">MP4, JPG, PNG (Max 50MB each)</p>
+                      <p className="text-xs text-zinc-500 mt-1">MP4, JPG, PNG (Max 50MB each)</p>
                       <input
                         ref={mediaInputRef}
                         type="file"
@@ -338,18 +338,18 @@ export default function CreateKauchContent() {
                     {/* Or record a voice note (only when no image/video chosen yet) */}
                     {mediaFiles.length === 0 && (
                       <div className="mt-3 flex items-center gap-3">
-                        <div className="flex-1 h-px bg-gray-200 dark:bg-zinc-800" />
-                        <span className="text-xs text-gray-400">or</span>
-                        <div className="flex-1 h-px bg-gray-200 dark:bg-zinc-800" />
+                        <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
+                        <span className="text-xs text-zinc-400">or</span>
+                        <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
                       </div>
                     )}
                     {mediaFiles.length === 0 && (
-                      <div className="mt-3 flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800">
+                      <div className="mt-3 flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
                         <VoiceRecorder
                           onRecorded={(file) => setMediaFiles([file])}
                           className="w-11 h-11 bg-blue-600 text-white hover:bg-blue-700"
                         />
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Record a voice note</span>
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">Record a voice note</span>
                       </div>
                     )}
 
@@ -360,7 +360,7 @@ export default function CreateKauchContent() {
                           const url = URL.createObjectURL(file);
                           const isVid = file.type.startsWith('video');
                           return (
-                            <div key={`${file.name}-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-zinc-800 group">
+                            <div key={`${file.name}-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-800 group">
                               {isVid ? (
                                 <video src={url} className="w-full h-full object-cover" muted />
                               ) : (
@@ -391,28 +391,28 @@ export default function CreateKauchContent() {
 
               {/* Tag Products */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center justify-between">
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2 flex items-center justify-between">
                   <span>Tag Products (Optional)</span>
-                  <span className="text-xs font-normal text-gray-500">{selectedProducts.length} selected</span>
+                  <span className="text-xs font-normal text-zinc-500">{selectedProducts.length} selected</span>
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-zinc-700">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto p-1 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700">
                   {myProducts.length === 0 && (
-                    <p className="text-sm text-gray-500 col-span-full">You have no products to tag yet.</p>
+                    <p className="text-sm text-zinc-500 col-span-full">You have no products to tag yet.</p>
                   )}
                   {myProducts.map(product => (
                     <div
                       key={product.id}
                       onClick={() => toggleProductSelection(product.id)}
-                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedProducts.includes(product.id) ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-gray-300 dark:hover:border-zinc-700'}`}
+                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedProducts.includes(product.id) ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-300 dark:hover:border-zinc-700'}`}
                     >
-                      <div className="relative w-12 h-12 rounded-lg bg-gray-100 dark:bg-zinc-800 overflow-hidden shrink-0">
+                      <div className="relative w-12 h-12 rounded-lg bg-zinc-100 dark:bg-zinc-800 overflow-hidden shrink-0">
                         <Image src={product.image_url?.[0] || '/placeholder.svg'} alt="" fill sizes="48px" className="object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{product.product_name}</p>
+                        <p className="text-sm font-medium text-zinc-900 dark:text-white truncate">{product.product_name}</p>
                         <p className="text-xs font-bold text-blue-600 mt-0.5">{formatNaira(product.price)}</p>
                       </div>
-                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${selectedProducts.includes(product.id) ? 'border-blue-500 bg-blue-500 text-white' : 'border-gray-300 dark:border-zinc-600'}`}>
+                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${selectedProducts.includes(product.id) ? 'border-blue-500 bg-blue-500 text-white' : 'border-zinc-300 dark:border-zinc-600'}`}>
                         {selectedProducts.includes(product.id) && <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                       </div>
                     </div>
@@ -424,7 +424,7 @@ export default function CreateKauchContent() {
                 <button
                   type="submit"
                   disabled={myKauches.length === 0 || postSubmitting}
-                  className="w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-xl font-bold text-lg shadow-md hover:shadow-lg transition-all"
+                  className="w-full py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-400 disabled:cursor-not-allowed text-white rounded-xl font-bold text-lg shadow-md hover:shadow-md transition-all"
                 >
                   {postSubmitting ? 'Publishing...' : 'Publish Post'}
                 </button>
@@ -447,44 +447,44 @@ export default function CreateKauchContent() {
                 <button
                   onClick={() => setShowCreateKauch(true)}
                   disabled={myKauches.length >= 2}
-                  className="shrink-0 flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-xl font-bold shadow-sm transition-all"
+                  className="shrink-0 flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-400 text-white rounded-xl font-bold shadow-sm transition-all"
                 >
                   <Plus size={20} /> New Kauch
                 </button>
               </div>
             ) : (
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6 sm:p-8 animate-fadeIn relative">
-                <button onClick={() => setShowCreateKauch(false)} className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 dark:hover:text-white">
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 p-6 sm:p-8 animate-fadeIn relative">
+                <button onClick={() => setShowCreateKauch(false)} className="absolute top-6 right-6 text-zinc-400 hover:text-zinc-600 dark:hover:text-white">
                   <X size={24} />
                 </button>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Create New Kauch</h2>
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">Create New Kauch</h2>
                 <form onSubmit={handleCreateKauch} className="space-y-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Kauch Name *</label>
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Kauch Name *</label>
                     <input
                       type="text"
                       value={newKauchName}
                       onChange={(e) => setNewKauchName(e.target.value)}
                       placeholder="e.g. Sneakerheads Hub"
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description *</label>
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Description *</label>
                     <textarea
                       value={newKauchDesc}
                       onChange={(e) => setNewKauchDesc(e.target.value)}
                       placeholder="What is this community about?"
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none min-h-[100px]"
+                      className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none min-h-[100px]"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Avatar (Optional)</label>
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Avatar (Optional)</label>
                     <input
                       type="file"
-                      className="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl text-sm"
+                      className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm"
                       accept="image/*"
                       onChange={(e) => setAvatarFile(e.target.files?.[0] ?? null)}
                     />
@@ -493,7 +493,7 @@ export default function CreateKauchContent() {
                     <button
                       type="submit"
                       disabled={kauchSubmitting}
-                      className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-xl font-bold shadow-md transition-all"
+                      className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-400 text-white rounded-xl font-bold shadow-md transition-all"
                     >
                       {kauchSubmitting ? 'Creating...' : 'Create Kauch'}
                     </button>
@@ -503,25 +503,25 @@ export default function CreateKauchContent() {
             )}
 
             {/* List Kauches */}
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center justify-between">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 p-6">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-6 flex items-center justify-between">
                 <span>My Kauches</span>
-                <span className="text-sm font-medium px-3 py-1 bg-gray-100 dark:bg-zinc-800 rounded-full">{myKauches.length} / 2</span>
+                <span className="text-sm font-medium px-3 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full">{myKauches.length} / 2</span>
               </h3>
 
               <div className="space-y-4">
                 {myKauches.length === 0 && (
-                  <p className="text-sm text-gray-500">You haven't created any Kauches yet.</p>
+                  <p className="text-sm text-zinc-500">You haven't created any Kauches yet.</p>
                 )}
                 {myKauches.map(kauch => (
-                  <div key={kauch.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 dark:border-zinc-800 hover:border-gray-300 dark:hover:border-zinc-600 transition-colors bg-gray-50/50 dark:bg-zinc-950/50">
+                  <div key={kauch.id} className="flex items-center justify-between p-4 rounded-xl border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors bg-zinc-50/50 dark:bg-zinc-950/50">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-zinc-800 flex items-center justify-center text-xl font-bold text-gray-500">
+                      <div className="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-xl font-bold text-zinc-500">
                         {kauch.name.charAt(0)}
                       </div>
                       <div>
-                        <h4 className="font-bold text-gray-900 dark:text-white">{kauch.name}</h4>
-                        <p className="text-xs text-gray-500 mt-0.5">{(kauch.followers_count ?? 0).toLocaleString()} followers</p>
+                        <h4 className="font-bold text-zinc-900 dark:text-white">{kauch.name}</h4>
+                        <p className="text-xs text-zinc-500 mt-0.5">{(kauch.followers_count ?? 0).toLocaleString()} followers</p>
                       </div>
                     </div>
                     <button

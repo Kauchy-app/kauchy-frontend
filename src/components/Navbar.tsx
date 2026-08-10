@@ -65,9 +65,9 @@ export default function Navbar() {
     const hideHeaderOnDesktop = 'md:hidden';
     const hideBottomNavOnDesktop = 'md:hidden';
     const hideTopHeader = pathname === '/chat' || pathname === '/search'; // Hide the global top header on pages that have their own full-screen/dedicated headers
-    const navIconClass = isDarkNav ? 'text-gray-200 hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100';
+    const navIconClass = isDarkNav ? 'text-zinc-200 hover:bg-white/10' : 'text-zinc-700 hover:bg-zinc-100';
     const bnActive = isDarkNav ? 'text-blue-500' : 'text-blue-600';
-    const bnInactive = isDarkNav ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900';
+    const bnInactive = isDarkNav ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-zinc-900';
 
     const isMarketplace = pathname === '/marketplace';
     const dynamicLink = isMarketplace ? '/' : '/marketplace';
@@ -78,7 +78,7 @@ export default function Navbar() {
         <>
             {/* TOP HEADER — hidden on specific pages */}
             {!hideTopHeader && (
-                <header className={`fixed top-0 left-0 right-0 backdrop-blur-md border-b z-[100] py-[12px] px-[20px] shadow-legacy-nav h-[70px] ${hideHeaderOnDesktop} ${isDarkNav ? 'bg-black border-gray-800' : 'bg-[#f4f6fa] border-gray-200'}`}>
+                <header className={`fixed top-0 left-0 right-0 backdrop-blur-md border-b z-[100] py-[12px] px-[20px] shadow-legacy-nav h-[70px] ${hideHeaderOnDesktop} ${isDarkNav ? 'bg-black border-zinc-800' : 'bg-[#f4f6fa] border-zinc-200'}`}>
                     <div className={`${isFullWidthPage ? '' : 'max-w-[1400px]'} mx-auto flex items-center justify-between gap-5 h-full`}>
                         {/* Left Section: Logo */}
                         <div className="shrink-0 flex items-center">
@@ -97,7 +97,7 @@ export default function Navbar() {
                                 <div className="relative w-full">
                                     <input
                                         type="text"
-                                        className={`w-full h-[44px] pl-4 pr-10 rounded-full border text-sm transition-all focus:outline-none focus:border-blue-600 ${isDarkNav ? 'border-gray-700 bg-white/10 text-white placeholder:text-gray-400 focus:bg-white/15' : 'border-gray-200 bg-gray-50 text-gray-900 focus:bg-white'}`}
+                                        className={`w-full h-[44px] pl-4 pr-10 rounded-full border text-sm transition-all focus:outline-none focus:border-blue-600 ${isDarkNav ? 'border-zinc-700 bg-white/10 text-white placeholder:text-zinc-400 focus:bg-white/15' : 'border-zinc-200 bg-zinc-50 text-zinc-900 focus:bg-white'}`}
                                         placeholder="Search products..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -107,7 +107,7 @@ export default function Navbar() {
                                             }
                                         }}
                                     />
-                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">🔍</span>
                                 </div>
                             </div>
                         )}
@@ -126,7 +126,7 @@ export default function Navbar() {
                                     {/* Analytics - Vendor Only */}
                                     {isVendor && (
                                         <div className="hidden md:block">
-                                            <Link href="/analytics" className={`flex items-center gap-2 px-3 py-2 font-medium hover:text-blue-600 transition-colors ${isDarkNav ? 'text-gray-200' : 'text-gray-700'}`} title="Analytics">
+                                            <Link href="/analytics" className={`flex items-center gap-2 px-3 py-2 font-medium hover:text-blue-600 transition-colors ${isDarkNav ? 'text-zinc-200' : 'text-zinc-700'}`} title="Analytics">
                                                 <span>📊 Analytics</span>
                                             </Link>
                                         </div>
@@ -157,24 +157,24 @@ export default function Navbar() {
 
                                     {/* Profile Dropdown */}
                                     <div className="relative hidden md:block" ref={profileRef}>
-                                        <button className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${isDarkNav ? 'bg-white/10 text-gray-100 hover:bg-white/20' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} onClick={() => setIsProfileOpen(!isProfileOpen)} title="Profile">
+                                        <button className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${isDarkNav ? 'bg-white/10 text-zinc-100 hover:bg-white/20' : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'}`} onClick={() => setIsProfileOpen(!isProfileOpen)} title="Profile">
                                             <User size={20} />
                                         </button>
                                         {isProfileOpen && (
-                                            <div className="absolute right-0 mt-3 w-48 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-100 dark:border-zinc-800 overflow-hidden z-50 animate-fadeIn py-1">
+                                            <div className="absolute right-0 mt-3 w-48 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-zinc-100 dark:border-zinc-800 overflow-hidden z-50 animate-fadeIn py-1">
                                                 {pathname !== '/profile' && (
-                                                    <Link href="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-blue-600">View Profile</Link>
+                                                    <Link href="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-blue-600">View Profile</Link>
                                                 )}
                                                 {isVendor && pathname !== '/inventory' && (
-                                                    <Link href="/inventory" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-blue-600">My Inventory</Link>
+                                                    <Link href="/inventory" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-blue-600">My Inventory</Link>
                                                 )}
                                                 {pathname !== '/orders' && (
-                                                    <Link href="/orders" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-blue-600">Orders</Link>
+                                                    <Link href="/orders" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-blue-600">Orders</Link>
                                                 )}
                                                 {pathname !== '/chat' && (
-                                                    <Link href="/chat" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-blue-600">Messages</Link>
+                                                    <Link href="/chat" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-blue-600">Messages</Link>
                                                 )}
-                                                <div className="h-px bg-gray-100 dark:bg-zinc-800 my-1"></div>
+                                                <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-1"></div>
                                                 <button onClick={() => { setIsProfileOpen(false); logout(); }} className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10">Logout</button>
                                             </div>
                                         )}
@@ -182,7 +182,7 @@ export default function Navbar() {
                                 </>
                             ) : (
                                 <div className="flex items-center gap-2 sm:gap-3 ml-1 sm:ml-2">
-                                    <Link href="/signup" className={`text-sm font-semibold hover:text-blue-600 px-2 sm:px-3 py-2 whitespace-nowrap ${isDarkNav ? 'text-gray-200' : 'text-gray-700'}`}>Login</Link>
+                                    <Link href="/signup" className={`text-sm font-semibold hover:text-blue-600 px-2 sm:px-3 py-2 whitespace-nowrap ${isDarkNav ? 'text-zinc-200' : 'text-zinc-700'}`}>Login</Link>
                                     <Link href="/signup" className="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-4 sm:px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all whitespace-nowrap">Sign Up</Link>
                                 </div>
                             )}
@@ -192,7 +192,7 @@ export default function Navbar() {
             )}
 
             {/* BOTTOM NAVIGATION BAR */}
-            <nav className={`fixed bottom-0 left-0 right-0 border-t z-[100] pb-safe ${hideBottomNavOnDesktop} ${isDarkNav ? 'bg-black border-gray-800 shadow-[0_-4px_10px_rgba(0,0,0,0.4)]' : 'bg-white border-gray-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]'}`}>
+            <nav className={`fixed bottom-0 left-0 right-0 border-t z-[100] pb-safe ${hideBottomNavOnDesktop} ${isDarkNav ? 'bg-black border-zinc-800 shadow-[0_-4px_10px_rgba(0,0,0,0.4)]' : 'bg-white border-zinc-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]'}`}>
                 <div className="max-w-[800px] mx-auto flex items-center justify-around h-[65px] px-2">
                     <Link href="/" className={`flex flex-col items-center justify-center w-[60px] h-full transition-colors ${pathname === '/' ? bnActive : bnInactive}`}>
                         <Home size={22} className="mb-0.5" />
@@ -221,7 +221,7 @@ export default function Navbar() {
                         className={`flex flex-col items-center justify-center w-[60px] h-full transition-colors ${pathname === '/account' ? bnActive : bnInactive}`}
                     >
                         {profileAvatar ? (
-                            <span className={`w-6 h-6 rounded-full overflow-hidden mb-0.5 bg-gray-200 dark:bg-zinc-700 ${pathname === '/account' ? 'ring-2 ring-blue-500' : ''}`}>
+                            <span className={`w-6 h-6 rounded-full overflow-hidden mb-0.5 bg-zinc-200 dark:bg-zinc-700 ${pathname === '/account' ? 'ring-2 ring-blue-500' : ''}`}>
                                 <Image src={profileAvatar} alt="Profile" width={24} height={24} className="w-full h-full object-cover" />
                             </span>
                         ) : (

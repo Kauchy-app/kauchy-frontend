@@ -129,8 +129,8 @@ export default function ProfilePage() {
     if (!user) return <AuthWall reason="view your profile" loading={authLoading} />;
     if (loading && !profile) return <LoadingModal />;
 
-    const inputBase = "w-full px-3.5 py-3 rounded-xl text-sm text-gray-900 dark:text-white transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500/60 border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-sm dark:placeholder-gray-500";
-    const inputDisabled = "w-full px-3.5 py-3 rounded-xl text-sm text-gray-500 dark:text-gray-400 border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.03] dark:bg-white/[0.02] cursor-not-allowed";
+    const inputBase = "w-full px-3.5 py-3 rounded-xl text-sm text-zinc-900 dark:text-white transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/15 focus:border-blue-500/60 border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-sm dark:placeholder-zinc-500";
+    const inputDisabled = "w-full px-3.5 py-3 rounded-xl text-sm text-zinc-500 dark:text-zinc-400 border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.03] dark:bg-white/[0.02] cursor-not-allowed";
 
     return (
         <main className="relative min-h-[calc(100dvh-135px)] md:min-h-screen chat-bg overflow-hidden">
@@ -138,14 +138,14 @@ export default function ProfilePage() {
                 {loading && <LoadingModal />}
 
                 {/* Profile Header Card */}
-                <div className="relative rounded-3xl overflow-hidden border border-black/5 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-xl shadow-sm">
-                    <div className="h-28 bg-gradient-to-r from-indigo-500 via-violet-500 to-blue-500 relative">
+                <div className="relative rounded-2xl overflow-hidden border border-black/5 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] backdrop-blur-xl shadow-sm">
+                    <div className="h-28 bg-gradient-to-r from-blue-500 via-violet-500 to-blue-500 relative">
                         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(600px_200px_at_20%_0%,rgba(255,255,255,0.4),transparent_60%)]" />
                     </div>
                     <div className="px-6 pb-6 -mt-14 flex flex-col items-center text-center">
                         <div className="relative">
                             <div
-                                className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-white dark:ring-zinc-900 bg-gray-100 dark:bg-zinc-800 shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105"
+                                className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-white dark:ring-zinc-900 bg-zinc-100 dark:bg-zinc-800 shadow-md cursor-pointer transition-transform duration-300 hover:scale-105"
                                 onClick={() => document.getElementById('photoInput')?.click()}
                             >
                                 <Image
@@ -159,16 +159,16 @@ export default function ProfilePage() {
                             <button
                                 onClick={() => document.getElementById('photoInput')?.click()}
                                 aria-label="Change photo"
-                                className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-indigo-500 hover:bg-indigo-600 text-white flex items-center justify-center shadow-md ring-2 ring-white dark:ring-zinc-900 transition-colors"
+                                className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center shadow-md ring-2 ring-white dark:ring-zinc-900 transition-colors"
                             >
                                 <Camera size={16} />
                             </button>
                             <input type="file" id="photoInput" hidden onChange={handlePhotoChange} accept="image/*" />
                         </div>
 
-                        <h1 className="mt-3 text-2xl font-bold text-gray-900 dark:text-white">{profile?.username}</h1>
+                        <h1 className="mt-3 text-2xl font-bold text-zinc-900 dark:text-white">{profile?.username}</h1>
                         {profile?.role && (
-                            <span className="inline-block mt-1.5 bg-indigo-500/10 dark:bg-indigo-400/10 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20 dark:border-indigo-400/20 px-3 py-0.5 rounded-full text-xs font-semibold capitalize">
+                            <span className="inline-block mt-1.5 bg-blue-500/10 dark:bg-blue-400/10 text-blue-600 dark:text-blue-300 border border-blue-500/20 dark:border-blue-400/20 px-3 py-0.5 rounded-full text-xs font-semibold capitalize">
                                 {profile.role}
                             </span>
                         )}
@@ -176,13 +176,13 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Account Information Card */}
-                <div className="rounded-3xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6 shadow-sm">
+                <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6 shadow-sm">
                     <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Account Information</h2>
+                        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">Account Information</h2>
                         {!isEditing && (
                             <button
                                 onClick={startEdit}
-                                className="flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-300 bg-indigo-500/10 dark:bg-indigo-400/10 border border-indigo-500/20 dark:border-indigo-400/20 px-3 py-1.5 rounded-lg hover:bg-indigo-500/15 transition-colors"
+                                className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-400/10 border border-blue-500/20 dark:border-blue-400/20 px-3 py-1.5 rounded-lg hover:bg-blue-500/15 transition-colors"
                             >
                                 <Pencil size={13} /> Edit
                             </button>
@@ -190,29 +190,29 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="mb-4">
-                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                            <UserIcon size={14} className="text-gray-400" /> Username
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 mb-2">
+                            <UserIcon size={14} className="text-zinc-400" /> Username
                         </label>
                         <input type="text" className={inputDisabled} value={profile?.username || ''} disabled />
                     </div>
 
                     <div className="mb-4">
-                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                            <Mail size={14} className="text-gray-400" /> Email
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 mb-2">
+                            <Mail size={14} className="text-zinc-400" /> Email
                         </label>
                         <input type="email" className={inputDisabled} value={profile?.email || ''} disabled />
                     </div>
 
                     <div className="mb-4">
-                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                            <Phone size={14} className="text-gray-400" /> Phone Number
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 mb-2">
+                            <Phone size={14} className="text-zinc-400" /> Phone Number
                         </label>
                         <input type="text" className={inputDisabled} value={profile?.phone || ''} disabled />
                     </div>
 
                     <div className="mb-4">
-                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                            <Pencil size={14} className="text-gray-400" /> Bio
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 mb-2">
+                            <Pencil size={14} className="text-zinc-400" /> Bio
                         </label>
                         {isEditing ? (
                             <textarea
@@ -222,15 +222,15 @@ export default function ProfilePage() {
                                 onChange={e => setEditForm({ ...editForm, bio: e.target.value })}
                             />
                         ) : (
-                            <p className="w-full px-3.5 py-3 rounded-xl text-sm text-gray-600 dark:text-gray-300 border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.03] dark:bg-white/[0.02] min-h-[88px] leading-relaxed whitespace-pre-wrap">
-                                {profile?.bio || <span className="text-gray-400 dark:text-gray-500">No bio added yet.</span>}
+                            <p className="w-full px-3.5 py-3 rounded-xl text-sm text-zinc-600 dark:text-zinc-300 border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.03] dark:bg-white/[0.02] min-h-[88px] leading-relaxed whitespace-pre-wrap">
+                                {profile?.bio || <span className="text-zinc-400 dark:text-zinc-500">No bio added yet.</span>}
                             </p>
                         )}
                     </div>
 
                     <div className="mb-1">
-                        <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                            <GraduationCap size={14} className="text-gray-400" /> University
+                        <label className="flex items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 mb-2">
+                            <GraduationCap size={14} className="text-zinc-400" /> University
                         </label>
                         {isEditing ? (
                             <UniversitySearch
@@ -245,13 +245,13 @@ export default function ProfilePage() {
                     {isEditing && (
                         <div className="flex flex-col-reverse sm:flex-row gap-3 mt-5">
                             <button
-                                className="flex-1 py-3 px-6 rounded-xl text-sm font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-gray-700 dark:text-gray-200 hover:bg-black/[0.07] dark:hover:bg-white/[0.1] transition-colors"
+                                className="flex-1 py-3 px-6 rounded-xl text-sm font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-zinc-700 dark:text-zinc-200 hover:bg-black/[0.07] dark:hover:bg-white/[0.1] transition-colors"
                                 onClick={() => setIsEditing(false)}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="flex-1 py-3 px-6 rounded-xl text-sm font-semibold bg-indigo-500 text-white hover:bg-indigo-600 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/25 transition-all"
+                                className="flex-1 py-3 px-6 rounded-xl text-sm font-semibold bg-blue-500 text-white hover:bg-blue-600 hover:-translate-y-0.5 hover:shadow-md hover:shadow-blue-500/25 transition-all"
                                 onClick={handleSave}
                             >
                                 Save Changes
@@ -261,18 +261,18 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Preferences Card */}
-                <div className="rounded-3xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6 shadow-sm">
-                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Preferences</h2>
+                <div className="rounded-2xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-xl p-5 sm:p-6 shadow-sm">
+                    <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Preferences</h2>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 dark:bg-indigo-400/10 flex items-center justify-center shrink-0">
+                            <div className="w-9 h-9 rounded-xl bg-blue-500/10 dark:bg-blue-400/10 flex items-center justify-center shrink-0">
                                 {mounted && currentTheme === 'dark'
                                     ? <Sun size={18} className="text-amber-500" />
-                                    : <Moon size={18} className="text-indigo-600 dark:text-indigo-300" />}
+                                    : <Moon size={18} className="text-blue-600 dark:text-blue-300" />}
                             </div>
                             <div>
-                                <p className="text-sm font-semibold text-gray-800 dark:text-white">Dark Mode</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">Toggle dark mode appearance</p>
+                                <p className="text-sm font-semibold text-zinc-800 dark:text-white">Dark Mode</p>
+                                <p className="text-xs text-zinc-500 dark:text-zinc-400">Toggle dark mode appearance</p>
                             </div>
                         </div>
                         {mounted && (
@@ -281,7 +281,7 @@ export default function ProfilePage() {
                                 role="switch"
                                 aria-checked={currentTheme === 'dark'}
                                 aria-label="Toggle dark mode"
-                                className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${currentTheme === 'dark' ? 'bg-indigo-500' : 'bg-gray-300'}`}
+                                className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${currentTheme === 'dark' ? 'bg-blue-500' : 'bg-zinc-300'}`}
                             >
                                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${currentTheme === 'dark' ? 'translate-x-5' : ''}`} />
                             </button>

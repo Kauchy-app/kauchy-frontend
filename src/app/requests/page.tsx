@@ -69,8 +69,8 @@ export default function RequestsPage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Requests Board</h1>
-                        <p className="text-gray-500 dark:text-gray-400 mt-1">Can't find what you're looking for? Request it and let vendors come to you.</p>
+                        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Requests Board</h1>
+                        <p className="text-zinc-500 dark:text-zinc-400 mt-1">Can't find what you're looking for? Request it and let vendors come to you.</p>
                     </div>
                     {user && (
                         <button 
@@ -87,7 +87,7 @@ export default function RequestsPage() {
                 <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
                     <button 
                         onClick={() => setCategoryFilter('')}
-                        className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${!categoryFilter ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-zinc-800 dark:text-gray-300 dark:hover:bg-zinc-700'}`}
+                        className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${!categoryFilter ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'}`}
                     >
                         All Categories
                     </button>
@@ -95,7 +95,7 @@ export default function RequestsPage() {
                         <button
                             key={cat}
                             onClick={() => setCategoryFilter(cat)}
-                            className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${categoryFilter === cat ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-zinc-800 dark:text-gray-300 dark:hover:bg-zinc-700'}`}
+                            className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${categoryFilter === cat ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'}`}
                         >
                             {cat}
                         </button>
@@ -105,29 +105,29 @@ export default function RequestsPage() {
                 {/* Feed */}
                 {loading ? (
                     <div className="flex justify-center py-20">
-                        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+                        <div className="w-10 h-10 border-4 border-zinc-200 border-t-blue-600 rounded-full animate-spin"></div>
                     </div>
                 ) : requests.length === 0 ? (
-                    <div className="text-center py-20 bg-gray-50 dark:bg-zinc-800/50 rounded-3xl">
-                        <Search className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">No requests found</h3>
-                        <p className="text-gray-500 dark:text-gray-400 mt-2">Be the first to post a product request in this category!</p>
+                    <div className="text-center py-20 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl">
+                        <Search className="mx-auto h-12 w-12 text-zinc-400 mb-4" />
+                        <h3 className="text-lg font-bold text-zinc-900 dark:text-white">No requests found</h3>
+                        <p className="text-zinc-500 dark:text-zinc-400 mt-2">Be the first to post a product request in this category!</p>
                     </div>
                 ) : (
                     <div className="grid gap-4">
                         {requests.map(req => (
-                            <div key={req.id} className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+                            <div key={req.id} className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md transition-shadow">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="flex items-center gap-3">
                                         <Image 
                                             src={req.customer_avatar || 'https://via.placeholder.com/40'} 
                                             alt={req.customer_username} 
                                             width={40} height={40} 
-                                            className="rounded-full bg-gray-100 object-cover"
+                                            className="rounded-full bg-zinc-100 object-cover"
                                         />
                                         <div>
-                                            <p className="font-semibold text-gray-900 dark:text-white leading-tight">@{req.customer_username}</p>
-                                            <p className="text-xs text-gray-500">{new Date(req.created_at).toLocaleDateString()}</p>
+                                            <p className="font-semibold text-zinc-900 dark:text-white leading-tight">@{req.customer_username}</p>
+                                            <p className="text-xs text-zinc-500">{new Date(req.created_at).toLocaleDateString()}</p>
                                         </div>
                                     </div>
                                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 text-xs font-semibold">
@@ -136,8 +136,8 @@ export default function RequestsPage() {
                                     </span>
                                 </div>
                                 
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{req.item_name}</h3>
-                                <p className="text-gray-600 dark:text-gray-300 mb-4 whitespace-pre-wrap">{req.description}</p>
+                                <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">{req.item_name}</h3>
+                                <p className="text-zinc-600 dark:text-zinc-300 mb-4 whitespace-pre-wrap">{req.description}</p>
                                 
                                 {req.budget && (
                                     <div className="inline-block px-3 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 font-medium text-sm rounded-lg mb-4">
@@ -146,13 +146,13 @@ export default function RequestsPage() {
                                 )}
                                 
                                 {req.image_url && (
-                                    <div className="relative w-full h-48 md:h-64 mb-4 rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800">
+                                    <div className="relative w-full h-48 md:h-64 mb-4 rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800">
                                         <Image src={req.image_url} alt="Reference" fill className="object-cover" />
                                     </div>
                                 )}
 
-                                <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-zinc-800 mt-2">
-                                    <div className="flex items-center gap-2 text-gray-500 font-medium text-sm">
+                                <div className="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800 mt-2">
+                                    <div className="flex items-center gap-2 text-zinc-500 font-medium text-sm">
                                         <MessageSquare size={18} />
                                         <span>{req.responses_count} responses</span>
                                     </div>

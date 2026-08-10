@@ -17,6 +17,7 @@ function VendorProfileContent() {
 
     const [vendor, setVendor] = useState<any | null>(null);
     const [products, setProducts] = useState<any[]>([]);
+    const [kauches, setKauches] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     
     // Digital Menu States
@@ -67,6 +68,13 @@ function VendorProfileContent() {
                         window.history.replaceState({}, document.title, window.location.pathname + "?vendorId=" + vendorId);
                     }
                 }
+            }
+            
+            // Fetch Vendor Kauches
+            const resKauches = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/kauch/vendor/${vendorId}/`, { headers });
+            if (resKauches.ok) {
+                const data = await resKauches.json();
+                setKauches(Array.isArray(data) ? data : []);
             }
 
         } catch (e) {
@@ -177,6 +185,30 @@ function VendorProfileContent() {
                                 </div>
                             </div>
                         </div>
+                        
+                        {/* Vendor Kauches */}
+                        {kauches.length > 0 && (
+                            <div className="flex flex-col gap-4 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                                <h3 className="text-base font-semibold text-zinc-900 dark:text-white">Communities</h3>
+                                <div className="flex flex-wrap gap-4">
+                                    {kauches.map(kauch => (
+                                        <div 
+                                            key={kauch.id} 
+                                            className="flex items-center gap-3 bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg cursor-pointer transition-all hover:bg-zinc-100 dark:hover:bg-zinc-700 hover:shadow-sm"
+                                            onClick={() => router.push(`/kauch/${kauch.id}`)}
+                                        >
+                                            <div className="w-12 h-12 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden shrink-0">
+                                                <Image src={kauch.avatar_url || '/placeholder.svg'} width={48} height={48} className="object-cover w-full h-full" alt={kauch.name} />
+                                            </div>
+                                            <div>
+                                                <div className="text-sm font-semibold text-zinc-900 dark:text-white">{kauch.name}</div>
+                                                <div className="text-xs text-zinc-500 dark:text-zinc-400">{kauch.followers_count} followers</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Menu Controls */}

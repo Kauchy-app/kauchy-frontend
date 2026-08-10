@@ -47,6 +47,8 @@ interface Kauch {
   avatar_url: string | null;
   followers_count: number;
   is_following: boolean;
+  owner_id: number;
+  owner_username: string;
 }
 
 const API = process.env.NEXT_PUBLIC_API_URL;
@@ -314,6 +316,16 @@ export default function KauchProfile() {
           <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-6 leading-relaxed max-w-md mx-auto">
             {kauch.description?.trim() || 'Discover our latest drops and shop the products tagged in every post.'}
           </p>
+          
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <span className="text-sm text-zinc-500 dark:text-zinc-400">Owned by</span>
+            <button 
+              onClick={() => router.push(`/vendor-profile?vendorId=${kauch.owner_id}`)}
+              className="text-sm font-semibold text-blue-600 hover:underline transition-all"
+            >
+              @{kauch.owner_username}
+            </button>
+          </div>
 
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <div className="flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white">

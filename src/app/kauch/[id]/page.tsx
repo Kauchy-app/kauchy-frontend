@@ -47,7 +47,7 @@ interface Kauch {
   avatar_url: string | null;
   followers_count: number;
   is_following: boolean;
-  owner_id: number;
+  owner_id: string;
   owner_username: string;
 }
 
@@ -346,7 +346,7 @@ export default function KauchProfile() {
     }
   };
 
-  const isOwner = user?.user?.id === kauch.owner_id;
+  const isOwner = user?.user?.id && kauch.owner_id && String(user.user.id) === String(kauch.owner_id);
 
   const handleDeletePost = async () => {
     if (!postToDelete) return;

@@ -4,10 +4,11 @@ interface OTPInputProps {
     length?: number;
     value: string;
     onChange: (value: string) => void;
+    onComplete?: (value: string) => void;
     disabled?: boolean;
 }
 
-export default function OTPInput({ length = 6, value, onChange, disabled = false }: OTPInputProps) {
+export default function OTPInput({ length = 6, value, onChange, onComplete, disabled = false }: OTPInputProps) {
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -18,6 +19,10 @@ export default function OTPInput({ length = 6, value, onChange, disabled = false
         otpArray[index] = val.substring(val.length - 1); // take the last character typed
         const newOtp = otpArray.join('');
         onChange(newOtp);
+
+        if (newOtp.length === length && onComplete) {
+            onComplete(newOtp);
+        }
 
         // move to next input if there is a value
         if (val && index < length - 1) {
@@ -37,6 +42,11 @@ export default function OTPInput({ length = 6, value, onChange, disabled = false
         const pastedData = e.clipboardData.getData('text/plain').replace(/\D/g, '').slice(0, length);
         if (pastedData) {
             onChange(pastedData);
+            
+            if (pastedData.length === length && onComplete) {
+                onComplete(pastedData);
+            }
+
             // Focus the next empty input, or the last one if full
             const nextIndex = Math.min(pastedData.length, length - 1);
             inputRefs.current[nextIndex]?.focus();

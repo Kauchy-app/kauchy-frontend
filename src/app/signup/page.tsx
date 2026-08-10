@@ -70,16 +70,17 @@ export default function SignupPage() {
         }
     };
 
-    const verifyOTP = async () => {
+    const verifyOTP = async (otpString?: string) => {
+        const codeToVerify = otpString || otp;
         setError('');
-        if (!otp || otp.length !== 6) return setError('Please enter a valid 6-digit OTP');
+        if (!codeToVerify || codeToVerify.length !== 6) return setError('Please enter a valid 6-digit OTP');
 
         setLoading(true);
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-otp/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email, otp })
+                body: JSON.stringify({ email: formData.email, otp: codeToVerify })
             });
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
@@ -255,6 +256,7 @@ export default function SignupPage() {
                                         length={6} 
                                         value={otp} 
                                         onChange={(val) => { setOtp(val); setError(''); }} 
+                                        onComplete={(val) => verifyOTP(val)}
                                         disabled={loading}
                                     />
                                 </div>

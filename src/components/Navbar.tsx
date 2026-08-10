@@ -84,8 +84,8 @@ export default function Navbar() {
                         <div className="shrink-0 flex items-center">
                             <Link href="/" className="flex items-center gap-2 no-underline font-bold text-blue-600 text-lg w-[144px] h-[48px] overflow-hidden" title="Home">
                                 <img
-                                    src="/darkmodelogo.png"
-                                    alt="Upstart"
+                                    src={isDarkNav ? "/darkmodelogo.png" : "/lightmodelogo.png"}
+                                    alt="Kauchy"
                                     className="h-[140px] w-auto object-cover object-[30%_40%] max-w-none"
                                 />
                             </Link>

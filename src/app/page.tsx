@@ -606,18 +606,18 @@ function FeedContent() {
                             <button
                                 key={product.id || product._id}
                                 onClick={() => { setProductSheetOpen(false); openProduct(product, activeItem.item.products); }}
-                                className="w-full flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-xl p-2 shadow-md hover:bg-white active:scale-[0.99] transition-all text-left"
+                                className="w-full flex items-center gap-3 bg-zinc-900/60 backdrop-blur-md border border-white/10 rounded-xl p-2 shadow-lg hover:bg-zinc-800/80 active:scale-[0.99] transition-all text-left group"
                             >
                                 <Image
                                     src={product.image_url?.[0] || '/placeholder.svg'}
                                     alt={product.product_name}
                                     width={64}
                                     height={64}
-                                    className="w-16 h-16 rounded-lg object-cover shrink-0 bg-zinc-100"
+                                    className="w-16 h-16 rounded-lg object-cover shrink-0 bg-zinc-800"
                                 />
                                 <div className="min-w-0 flex-1">
-                                    <p className="text-sm font-semibold text-zinc-900 line-clamp-2">{product.product_name}</p>
-                                    <p className="text-base font-bold text-blue-600 mt-0.5">{formatNaira(product.price)}</p>
+                                    <p className="text-sm font-semibold text-zinc-100 line-clamp-2 group-hover:text-white transition-colors">{product.product_name}</p>
+                                    <p className="text-base font-bold text-blue-400 mt-0.5">{formatNaira(product.price)}</p>
                                 </div>
                             </button>
                         ))}

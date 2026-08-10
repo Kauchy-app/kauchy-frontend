@@ -90,7 +90,10 @@ export default function GoogleAuthButton({ next }: { next?: string | null }) {
 
     return (
         <div className="flex flex-col items-center gap-2">
-            <div ref={buttonRef} className={loading ? 'opacity-60 pointer-events-none' : ''} />
+            <div 
+                ref={buttonRef} 
+                className={`overflow-hidden rounded-full [&>div]:!bg-transparent ${loading ? 'opacity-60 pointer-events-none' : ''}`} 
+            />
             {loading && <p className="text-xs text-gray-400">Signing you in…</p>}
             {error && <p className="text-xs text-red-500">{error}</p>}
         </div>

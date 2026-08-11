@@ -16,13 +16,15 @@ export async function generateMetadata(
     };
   }
 
-  try {
-    const res = await fetch(`${API}/account/user/${vendorId}/`, { next: { revalidate: 60 } });
+    try {
+    const res = await fetch(`${API}/auth/user/${vendorId}/`, { next: { revalidate: 60 } });
     if (res.ok) {
-      const vendor = await res.json();
+      const vendorData = await res.json();
+      const vendor = vendorData.info || vendorData;
+      
       const title = `${vendor.username} on Kauchy`;
       const description = vendor.bio || `Shop amazing products from ${vendor.username} on Kauchy!`;
-      const image = vendor.profile_url || '/lightmodelogo.png';
+      const image = vendor.profile_url || vendor.pfp || '/lightmodelogo.png';
 
       return {
         title,

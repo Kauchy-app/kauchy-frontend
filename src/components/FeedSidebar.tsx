@@ -360,7 +360,7 @@ export default function FeedSidebar({ isOpen, onClose, type, item, addToCart, co
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: `Check out this ${type} on Upstart`,
+                    title: `Check out this ${type} on Kauchy`,
                     url: shareUrl.toString(),
                 });
                 showToast('Shared successfully!', 'success');

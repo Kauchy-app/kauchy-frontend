@@ -117,7 +117,7 @@ function VendorProfileContent() {
         if (navigator.share) {
             navigator.share({
                 title: vendor?.info?.username || 'Vendor Profile',
-                text: `Check out ${vendor?.info?.username}'s store on Upstart!`,
+                text: `Check out ${vendor?.info?.username}'s store on Kauchy!`,
                 url: window.location.href,
             }).catch(console.error);
         } else {

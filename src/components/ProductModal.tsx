@@ -282,8 +282,8 @@ export default function ProductModal({ product, onClose, addToCart }: ProductMod
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: `Check out ${product.product_name} on Upstart`,
-                    text: `I found this amazing ${product.product_name} on Upstart. Check it out!`,
+                    title: `Check out ${product.product_name} on Kauchy`,
+                    text: `I found this amazing ${product.product_name} on Kauchy. Check it out!`,
                     url: shareUrl.toString(),
                 });
                 showToast('Product shared successfully!', 'success');
